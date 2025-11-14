@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.stage.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.stage.Stage?>
 
-<Stage xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<Stage xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <scene>
         <Scene>
-            <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);">
+            <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);">
             <children>
-               <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="304.0" layoutX="479.0" layoutY="208.0" stroke="#444444" strokeType="INSIDE" width="323.0" />
-               <Circle fill="DODGERBLUE" layoutX="641.0" layoutY="277.0" radius="27.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.topAnchor="250.0" />
-               <Ellipse fill="#f4f4f4" layoutX="641.0" layoutY="271.0" radiusX="10.0" radiusY="12.0" stroke="BLACK" strokeType="INSIDE" />
-               <QuadCurve controlX="3.75" controlY="-25.0" endX="21.5" endY="-9.0" fill="#f4f4f4" layoutX="638.0" layoutY="305.0" startX="-15.25" startY="-9.0" stroke="BLACK" strokeType="INSIDE" />
-               <QuadCurve controlX="3.75" controlY="-25.0" endX="21.5" endY="-9.0" fill="#f4f4f4" layoutX="638.0" layoutY="313.0" rotate="180.0" startX="-15.25" startY="-9.000133514404297" stroke="BLACK" strokeType="INSIDE" />
-               <Label layoutX="543.0" layoutY="329.0" prefHeight="17.0" prefWidth="202.0" text="Chrono Sync" textAlignment="CENTER">
+               <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="532.0" layoutX="674.0" layoutY="263.0" stroke="#444444" strokeType="INSIDE" width="583.0" />
+               <Label alignment="CENTER" layoutX="672.0" layoutY="451.0" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
                   <font>
-                     <Font name="Roboto Light" size="12.0" />
+                     <Font name="System Bold" size="30.0" />
                   </font></Label>
+               <Label alignment="CENTER" layoutX="797.0" layoutY="496.0" text="Ingresa tus credenciales para acceder al sistema">
+                  <font>
+                     <Font size="16.0" />
+                  </font></Label>
+               <ImageView fitHeight="189.0" fitWidth="205.0" layoutX="862.0" layoutY="274.0">
+                  <image>
+                     <Image url="@../../../../../../../../Downloads/iconoPNG.png" />
+                  </image>
+               </ImageView>
+               <Label layoutX="728.0" layoutY="575.0" text="Correo Electrónico">
+                  <font>
+                     <Font name="System Bold" size="16.0" />
+                  </font>
+               </Label>
+               <Label layoutX="728.0" layoutY="642.0" text="Contraseña">
+                  <font>
+                     <Font name="System Bold" size="16.0" />
+                  </font>
+               </Label>
+               <TextField layoutX="728.0" layoutY="594.0" prefHeight="25.0" prefWidth="468.0" />
+               <TextField layoutX="728.0" layoutY="661.0" prefHeight="25.0" prefWidth="468.0" />
             </children></AnchorPane>
         </Scene>
     </scene>
