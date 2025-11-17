@@ -5,6 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.chronosync.proyecto.bd.ConexionBD;
+import org.chronosync.proyecto.bd.CrearTablas;
+
+import java.sql.SQLException;
 
 public class App extends Application {
 
@@ -16,6 +19,13 @@ public class App extends Application {
 
     public static void main(String[] args) {
         // launch();
-        ConexionBD.conexion();
+        try {
+            ConexionBD.obtenerConexion();
+            CrearTablas.crearTablas();
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        } finally {
+            ConexionBD.cerrarConexion();
+        }
     }
 }
