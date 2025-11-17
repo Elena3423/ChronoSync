@@ -16,11 +16,11 @@
             <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);">
             <children>
                <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="532.0" layoutX="674.0" layoutY="263.0" stroke="#444444" strokeType="INSIDE" width="583.0" />
-               <Label alignment="CENTER" layoutX="672.0" layoutY="451.0" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
+               <Label alignment="CENTER" layoutX="672.0" layoutY="473.0" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
                   <font>
                      <Font name="System Bold" size="30.0" />
                   </font></Label>
-               <Label alignment="CENTER" layoutX="797.0" layoutY="496.0" text="Ingresa tus credenciales para acceder al sistema">
+               <Label alignment="CENTER" layoutX="797.0" layoutY="518.0" text="Ingresa tus credenciales para acceder al sistema">
                   <font>
                      <Font size="16.0" />
                   </font></Label>
@@ -29,18 +29,28 @@
                      <Image url="@../../../../../../../../Downloads/iconoPNG.png" />
                   </image>
                </ImageView>
-               <Label layoutX="728.0" layoutY="575.0" text="Correo Electrónico">
+               <Label layoutX="732.0" layoutY="566.0" text="Correo Electrónico">
                   <font>
                      <Font name="System Bold" size="16.0" />
                   </font>
                </Label>
-               <Label layoutX="728.0" layoutY="642.0" text="Contraseña">
+               <Label layoutX="732.0" layoutY="633.0" text="Contraseña">
                   <font>
                      <Font name="System Bold" size="16.0" />
                   </font>
                </Label>
-               <TextField layoutX="728.0" layoutY="594.0" prefHeight="25.0" prefWidth="468.0" />
-               <TextField layoutX="728.0" layoutY="661.0" prefHeight="25.0" prefWidth="468.0" />
+               <TextField layoutX="732.0" layoutY="588.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+               <TextField layoutX="732.0" layoutY="655.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+               <ImageView fitHeight="166.0" fitWidth="170.0" layoutX="881.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../img/iconoPNG.png" />
+                  </image>
+               </ImageView>
+               <Label alignment="CENTER" layoutX="864.0" layoutY="696.0" text="No estás registrado? Registrate" textAlignment="CENTER" textFill="#3a7bd5" underline="true">
+                  <font>
+                     <Font size="16.0" />
+                  </font>
+               </Label>
             </children></AnchorPane>
         </Scene>
     </scene>
