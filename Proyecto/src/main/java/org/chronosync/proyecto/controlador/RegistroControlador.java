@@ -73,7 +73,7 @@ public class RegistroControlador {
 
     private void volverLogin(MouseEvent e) {
         Stage stage = (Stage) txtCuentaExiste.getScene().getWindow();
-        CargadorUtil.cambiarEscena(stage, "/fxml/login  .fxml");
+        CargadorUtil.cambiarEscena(stage, "/fxml/login.fxml");
     }
 
     private void showAlert(String t, String c) {

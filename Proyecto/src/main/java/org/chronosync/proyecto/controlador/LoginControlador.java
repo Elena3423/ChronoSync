@@ -45,14 +45,14 @@ public class LoginControlador {
         // Si el email no existe en ningún usuario, se muestra una alerta
         Usuario u = usuarioDAO.obtenerPorEmail(email);
         if (u == null) {
-            verAlerta("Error", "Usuario o contraseña incorrectos");
+            verAlerta("Error", "Email incorrecto");
             return;
         }
 
         // Si la contraseña no coincide con la contraseña guardada, se muestra una alerta
         String hash = HashUtil.sha256(password);
         if (!hash.equals(u.getPassword())) {
-            verAlerta("Error", "Usuario o contraseña incorrectos");
+            verAlerta("Error", "Contraseña incorrecta");
             return;
         }
 

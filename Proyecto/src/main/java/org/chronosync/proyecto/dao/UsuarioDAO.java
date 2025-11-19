@@ -49,7 +49,7 @@ public class UsuarioDAO {
      * @return Usuario encontrado o null si no existe
      */
     public Usuario obtenerPorEmail(String email) {
-        String sql = "SELECT * FROM usuarios WHERE email = ?";
+        String sql = "SELECT * FROM usuarios WHERE LOWER(email) = LOWER(?)";
         Usuario usuario = null;
 
         // Obtenemos la conexión
