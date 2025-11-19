@@ -23,8 +23,8 @@ public class CrearTablas {
         String sqlNegocio = "CREATE TABLE IF NOT EXISTS negocio ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "nombre TEXT NOT NULL, "
-                + "direccion TEXT NOT NULL, "
-                + "telefono TEXT NOT NULL, "
+                + "direccion TEXT, "
+                + "telefono TEXT, "
                 + "email TEXT NOT NULL UNIQUE CHECK (email LIKE '%@%.%')"
                 + ");";
 

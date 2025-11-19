@@ -1,36 +1,37 @@
 package org.chronosync.proyecto.modelo;
 
 public class Usuario {
-    // Atributos
-    private int id;
+
+    // Atributos según la tabla SQL
+    private Integer id;
     private String nombre;
     private String apellidos;
     private String email;
     private String password;
-    private int activo;
+    private boolean activo;
     private Integer rolId;
     private Integer negocioId;
 
     /**
-     * Constructor vacio (requerido en ciertos frameworks y uso general)
+     * Constructor vacio
      */
     public Usuario() {}
 
     /**
-     * Constructor para crear un usuario nuevo (sin rol ni negocio)
+     * Constructor sin ID, para inserciones
      */
     public Usuario(String nombre, String apellidos, String email, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.email = email;
         this.password = password;
-        this.activo = 0;
+        this.activo = false;
     }
 
     /**
-     * Constructor completo, útil para cargar usuarios desde la base de datos
+     * Constructor completo
      */
-    public Usuario(int id, String nombre, String apellidos, String email, String password, int activo, Integer rolId, Integer negocioId) {
+    public Usuario(Integer id, String nombre, String apellidos, String email, String password, boolean activo, Integer rolId, Integer negocioId) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -42,11 +43,11 @@ public class Usuario {
     }
 
     // Getters y Setters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -82,11 +83,11 @@ public class Usuario {
         this.password = password;
     }
 
-    public int getActivo() {
+    public boolean isActivo() {
         return activo;
     }
 
-    public void setActivo(int activo) {
+    public void setActivo(boolean activo) {
         this.activo = activo;
     }
 
