@@ -12,8 +12,6 @@ import org.chronosync.proyecto.modelo.Usuario;
 import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.HashUtil;
 
-import java.io.IOException;
-
 public class RegistroControlador {
 
     @FXML private TextField fieldNombre;
@@ -75,7 +73,7 @@ public class RegistroControlador {
 
     private void volverLogin(MouseEvent e) {
         Stage stage = (Stage) txtCuentaExiste.getScene().getWindow();
-        CargadorUtil.cambiarEscena(stage, "/src/main/resources/fxml/login.fxml");
+        CargadorUtil.cambiarEscena(stage, "/fxml/login  .fxml");
     }
 
     private void showAlert(String t, String c) {
