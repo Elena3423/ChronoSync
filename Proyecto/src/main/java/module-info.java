@@ -7,4 +7,6 @@ module org.chronosync.proyecto {
 
     opens org.chronosync.proyecto to javafx.fxml;
     exports org.chronosync.proyecto;
+
+    opens org.chronosync.proyecto.controlador to javafx.fxml;
 }

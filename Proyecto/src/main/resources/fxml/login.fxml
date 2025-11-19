@@ -1,57 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Scene?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.stage.Stage?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<Stage xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <scene>
-        <Scene>
-            <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);">
-            <children>
-               <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="532.0" layoutX="674.0" layoutY="263.0" stroke="#444444" strokeType="INSIDE" width="583.0" />
-               <Label alignment="CENTER" layoutX="672.0" layoutY="473.0" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
-                  <font>
-                     <Font name="System Bold" size="30.0" />
-                  </font></Label>
-               <Label alignment="CENTER" layoutX="797.0" layoutY="518.0" text="Ingresa tus credenciales para acceder al sistema">
-                  <font>
-                     <Font size="16.0" />
-                  </font></Label>
-               <ImageView fitHeight="189.0" fitWidth="205.0" layoutX="862.0" layoutY="274.0">
-                  <image>
-                     <Image url="@../../../../../../../../Downloads/iconoPNG.png" />
-                  </image>
-               </ImageView>
-               <Label layoutX="732.0" layoutY="566.0" text="Correo Electrónico">
-                  <font>
-                     <Font name="System Bold" size="16.0" />
-                  </font>
-               </Label>
-               <Label layoutX="732.0" layoutY="633.0" text="Contraseña">
-                  <font>
-                     <Font name="System Bold" size="16.0" />
-                  </font>
-               </Label>
-               <TextField layoutX="732.0" layoutY="588.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
-               <TextField layoutX="732.0" layoutY="655.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
-               <ImageView fitHeight="166.0" fitWidth="170.0" layoutX="881.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../img/iconoPNG.png" />
-                  </image>
-               </ImageView>
-               <Label alignment="CENTER" layoutX="864.0" layoutY="696.0" text="No estás registrado? Registrate" textAlignment="CENTER" textFill="#3a7bd5" underline="true">
-                  <font>
-                     <Font size="16.0" />
-                  </font>
-               </Label>
-            </children></AnchorPane>
-        </Scene>
-    </scene>
-</Stage>
+<AnchorPane fx:id="fondo" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.LoginControlador">
+    <children>
+        <Rectangle fx:id="boxBlanca" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="532.0" layoutX="674.0" layoutY="263.0" stroke="#444444" strokeType="INSIDE" width="583.0" />
+        <Label fx:id="txtTitulo" alignment="CENTER" layoutX="672.0" layoutY="473.0" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="30.0" />
+            </font></Label>
+        <Label fx:id="txtSubtitulo" alignment="CENTER" layoutX="797.0" layoutY="518.0" text="Ingresa tus credenciales para acceder al sistema">
+            <font>
+                <Font size="16.0" />
+            </font></Label>
+        <ImageView fitHeight="189.0" fitWidth="205.0" layoutX="862.0" layoutY="274.0">
+            <image>
+                <Image url="@../../../../../../../../Downloads/iconoPNG.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="lblEmail" layoutX="732.0" layoutY="566.0" text="Correo Electrónico">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="lblPassword" layoutX="732.0" layoutY="633.0" text="Contraseña">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <TextField fx:id="fieldEmail" layoutX="732.0" layoutY="588.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+        <ImageView fx:id="imgLogo" fitHeight="166.0" fitWidth="170.0" layoutX="881.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../img/iconoPNG.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="txtCuentaNoExiste" alignment="CENTER" layoutX="864.0" layoutY="696.0" text="No estás registrado? Registrate" textAlignment="CENTER" textFill="#3a7bd5" underline="true">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="fieldPassword" layoutX="732.0" layoutY="655.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+    </children>
+</AnchorPane>
