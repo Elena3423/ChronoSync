@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.chronosync.proyecto.bd.ConexionBD;
-import org.chronosync.proyecto.bd.CrearTablas;
+
 import java.io.IOException;
 
 public class App extends Application {
@@ -15,11 +15,8 @@ public class App extends Application {
 
         try {
             ConexionBD.obtenerConexion();
-            CrearTablas.crearTablas();
         } catch (Exception ex) {
             System.out.println("Error en la conexión o creación de tablas: " + ex.getMessage());
-        } finally {
-            ConexionBD.cerrarConexion();
         }
 
         launch(args); // Llamar a launch después de la inicialización de la BD
@@ -38,6 +35,19 @@ public class App extends Application {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error al cargar la vista de login: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+
+        System.out.println("La aplicación se está cerrando. Cerrando la conexión a la BD...");
+        try {
+            ConexionBD.cerrarConexion();
+            System.out.println("Conexión a la BD cerrada con éxito");
+        } catch (Exception e) {
+            System.err.println("Error al cerrar la conexión a la BD: " + e.getMessage());
         }
     }
 }

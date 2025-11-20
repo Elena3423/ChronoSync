@@ -3,7 +3,7 @@ package org.chronosync.proyecto.bd;
 import java.sql.*;
 
 /**
- * Clase de utilidad para gestionar la conexión a la base de datos SQLite
+ * Clase de utilidad para gestionar la conexión a la base de datos
  * Asegura que solo haya una conexión activa
  */
 public class ConexionBD {
@@ -12,7 +12,9 @@ public class ConexionBD {
     private static Connection conn = null;
 
     // URL de conexión a la base de datos SQLite
-    private static String url = "jdbc:sqlite:src/main/java/org/chronosync/proyecto/bd/chronosync.db";
+    private static final String url = "jdbc:mysql://mysql-chronosync.alwaysdata.net/chronosync_bd";
+    private static final String usuario = "441742_admin";
+    private static String password = "SalvaElena0604";
 
     /**
      * Método para obtener la conexión a la base de datos
@@ -26,14 +28,8 @@ public class ConexionBD {
             if (conn == null || conn.isClosed()) {
 
                 // Establece la conexión utilizando la URL
-                conn = DriverManager.getConnection(url);
-                System.out.println("Conexión establecida con la base de datos");
-
-                // Intenta activar el soporte para crear claves fóraneas
-                try (Statement stmt = conn.createStatement()) {
-                    stmt.execute("PRAGMA foreign_keys=ON;");
-                    System.out.println("Soporte para claves foráneas activado");
-                }
+                conn = DriverManager.getConnection(url, usuario, password);
+                System.out.println("Conexión establecida con MySQL (AlwaysData)");
             }
         } catch (SQLException e) {
             // Muestra cualquier error que ocurra durante la conexión
