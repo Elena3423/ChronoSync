@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="fondo" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.RegistroControlador">
+<AnchorPane fx:id="fondo" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.RegistroControlador">
     <children>
-        <Rectangle fx:id="boxBlanca" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="637.0" layoutX="674.0" layoutY="263.0" stroke="#444444" strokeType="INSIDE" width="583.0" />
+        <Rectangle fx:id="boxBlanca" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="682.0" layoutX="674.0" layoutY="263.0" stroke="#444444" strokeType="INSIDE" width="583.0" />
         <Label fx:id="txtTitulo" alignment="CENTER" layoutX="672.0" layoutY="477.0" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
             <font>
                 <Font name="System Bold" size="30.0" />
@@ -41,7 +39,7 @@
                 <Image url="@../img/iconoPNG.png" />
             </image>
         </ImageView>
-        <Label fx:id="txtCuentaExiste" alignment="CENTER" layoutX="861.0" layoutY="820.0" text="Ya tienes cuenta? Inicia sesión" textAlignment="CENTER" textFill="#3a7bd5" underline="true">
+        <Label fx:id="txtCuentaExiste" alignment="CENTER" layoutX="858.0" layoutY="891.0" text="Ya tienes cuenta? Inicia sesión" textAlignment="CENTER" textFill="#3a7bd5" underline="true">
             <font>
                 <Font size="16.0" />
             </font>
@@ -64,5 +62,10 @@
         </Label>
         <PasswordField fx:id="fieldPassword" layoutX="733.0" layoutY="734.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
         <PasswordField fx:id="fieldPassword2" layoutX="733.0" layoutY="784.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+      <Button fx:id="btnRegistrar" layoutX="841.0" layoutY="844.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="253.0" style="-fx-background-color: #3a7bd5; -fx-background-radius: 10;" text="Registrar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
