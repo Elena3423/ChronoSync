@@ -1,8 +1,6 @@
 package org.chronosync.proyecto.controlador;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +18,7 @@ public class RegistroControlador {
     @FXML private PasswordField fieldPassword;
     @FXML private PasswordField fieldPassword2;
     @FXML private Label txtCuentaExiste;
+    @FXML private Button btnRegistrar;
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
@@ -33,7 +32,8 @@ public class RegistroControlador {
         });
 
         // El texto "Inicia sesión" vuelve al login
-        txtCuentaExiste.setOnMouseClicked(this::volverLogin);
+        txtCuentaExiste.setOnMouseClicked(this::volverLoginEnter);
+        btnRegistrar.setOnMouseClicked(this::volverLoginBton);
     }
 
     private void registrar() {
@@ -68,11 +68,15 @@ public class RegistroControlador {
 
         showAlert("Registrado", "Usuario creado correctamente.");
 
-        volverLogin(null);
+        volverLoginEnter(null);
     }
 
-    private void volverLogin(MouseEvent e) {
+    private void volverLoginEnter(MouseEvent e) {
         Stage stage = (Stage) txtCuentaExiste.getScene().getWindow();
+        CargadorUtil.cambiarEscena(stage, "/fxml/login.fxml");
+    }
+    private void volverLoginBton(MouseEvent e) {
+        Stage stage = (Stage) btnRegistrar.getScene().getWindow();
         CargadorUtil.cambiarEscena(stage, "/fxml/login.fxml");
     }
 
