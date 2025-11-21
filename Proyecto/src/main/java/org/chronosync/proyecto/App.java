@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.chronosync.proyecto.bd.ConexionBD;
 
@@ -26,9 +27,13 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-            Scene scene = new Scene(root, 1600, 1000); // Tamaño inicial
+            Scene scene = new Scene(root, 1920, 1080); // Tamaño inicial
+
+            Image icono = new Image(getClass().getResourceAsStream("/img/iconoPNG.png"));
+            primaryStage.getIcons().add(icono);
 
             primaryStage.setTitle("Chrono Sync - Login");
+            primaryStage.setResizable(true);
             primaryStage.setScene(scene);
             primaryStage.show();
 
