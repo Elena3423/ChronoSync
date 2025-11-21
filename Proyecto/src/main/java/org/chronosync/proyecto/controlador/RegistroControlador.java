@@ -33,7 +33,8 @@ public class RegistroControlador {
 
         // El texto "Inicia sesión" vuelve al login
         txtCuentaExiste.setOnMouseClicked(this::volverLoginEnter);
-        btnRegistrar.setOnMouseClicked(this::volverLoginBton);
+
+        btnRegistrar.setOnMouseClicked(e -> registrar());
     }
 
     private void registrar() {

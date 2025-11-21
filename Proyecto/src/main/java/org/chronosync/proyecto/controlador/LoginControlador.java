@@ -16,6 +16,7 @@ public class LoginControlador {
     @FXML private TextField fieldEmail;
     @FXML private PasswordField fieldPassword;
     @FXML private Label txtCuentaNoExiste;
+    @FXML private Button btnIniciarSesion;
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
@@ -30,6 +31,9 @@ public class LoginControlador {
 
         // Al hacer clic en el texto "No estás registrado", te lleva al registro
         txtCuentaNoExiste.setOnMouseClicked(this::irRegistro);
+
+        // Al hacer clic en el boton de iniciar sesion, te lleva el menu principal
+        btnIniciarSesion.setOnMouseClicked(e -> intentarLogin());
     }
 
     private void intentarLogin() {
@@ -61,6 +65,9 @@ public class LoginControlador {
 
         // Redirigimos (provisional)
         verAlerta("Éxito", "Inicio de sesión correcto");
+        Stage stage = (Stage) fieldEmail.getScene().getWindow();
+        CargadorUtil.cambiarEscena(stage, "/fxml/menuAdmin.fxml");
+
     }
 
     private void irRegistro(MouseEvent event) {
