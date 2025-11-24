@@ -1,71 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="fondo" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.RegistroControlador">
     <children>
-        <Rectangle fx:id="boxBlanca" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="682.0" layoutX="674.0" layoutY="263.0" stroke="#444444" strokeType="INSIDE" width="583.0" />
-        <Label fx:id="txtTitulo" alignment="CENTER" layoutX="672.0" layoutY="477.0" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
-            <font>
-                <Font name="System Bold" size="30.0" />
-            </font></Label>
-        <Label fx:id="txtSubtitulo" alignment="CENTER" layoutX="799.0" layoutY="518.0" text="Ingresa tus credenciales para acceder al sistema">
-            <font>
-                <Font size="16.0" />
-            </font></Label>
-        <ImageView fitHeight="189.0" fitWidth="205.0" layoutX="862.0" layoutY="274.0">
-            <image>
-                <Image url="@../../../../../../../../Downloads/iconoPNG.png" />
-            </image>
-        </ImageView>
-        <Label fx:id="lblNombre" layoutX="733.0" layoutY="559.0" text="Nombre">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-        <Label fx:id="lblApellido" layoutX="733.0" layoutY="609.0" text="Apellidos">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-        <TextField fx:id="fieldNombre" layoutX="733.0" layoutY="584.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
-        <TextField fx:id="fieldApellido" layoutX="733.0" layoutY="634.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
-        <ImageView fx:id="imgLogo" fitHeight="166.0" fitWidth="170.0" layoutX="884.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../img/iconoPNG.png" />
-            </image>
-        </ImageView>
-        <Label fx:id="txtCuentaExiste" alignment="CENTER" layoutX="858.0" layoutY="891.0" text="Ya tienes cuenta? Inicia sesión" textAlignment="CENTER" textFill="#3a7bd5" underline="true">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Label>
-        <Label fx:id="lblEmail" layoutX="733.0" layoutY="659.0" text="Correo Electrónico">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-        <Label fx:id="lblPassword" layoutX="733.0" layoutY="709.0" text="Contraseña">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-        <TextField fx:id="fieldEmail" layoutX="733.0" layoutY="684.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
-        <Label fx:id="lblPassword2" layoutX="733.0" layoutY="759.0" text="Repetir Contraseña">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-        <PasswordField fx:id="fieldPassword" layoutX="733.0" layoutY="734.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
-        <PasswordField fx:id="fieldPassword2" layoutX="733.0" layoutY="784.0" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
-      <Button fx:id="btnRegistrar" layoutX="841.0" layoutY="844.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="253.0" style="-fx-background-color: #3a7bd5; -fx-background-radius: 10;" text="Registrar" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Button>
+      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Group>
+               <children>
+                  <VBox alignment="CENTER" prefHeight="775.0" prefWidth="580.0" style="-fx-background-color: #ffffff; -fx-background-radius: 30; -fx-border-color: #444444; -fx-border-radius: 30;">
+                     <children>
+                          <ImageView fitHeight="200.0" fitWidth="200.0">
+                              <image>
+                                  <Image url="@../img/iconoPNG.png" />
+                              </image>
+                          </ImageView>
+                          <Label fx:id="txtTitulo" alignment="CENTER" prefHeight="45.0" prefWidth="584.0" text="CHRONO SYNC" textAlignment="CENTER">
+                              <font>
+                                  <Font name="System Bold" size="30.0" />
+                              </font>
+                        </Label>
+                          <Label fx:id="txtSubtitulo" alignment="CENTER" text="Registra tus credenciales para acceder al sistema">
+                              <font>
+                                  <Font size="16.0" />
+                              </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
+                          <Label fx:id="lblNombre" text="Nombre">
+                              <font>
+                                  <Font name="System Bold" size="16.0" />
+                              </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                          </Label>
+                          <TextField fx:id="fieldNombre" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+                          <Label fx:id="lblApellido" text="Apellidos">
+                              <font>
+                                  <Font name="System Bold" size="16.0" />
+                              </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                          </Label>
+                          <TextField fx:id="fieldApellido" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+                          <Label fx:id="lblEmail" text="Correo Electrónico">
+                              <font>
+                                  <Font name="System Bold" size="16.0" />
+                              </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                          </Label>
+                          <TextField fx:id="fieldEmail" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+                          <Label fx:id="lblPassword" text="Contraseña">
+                              <font>
+                                  <Font name="System Bold" size="16.0" />
+                              </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                          </Label>
+                          <PasswordField fx:id="fieldPassword" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;" />
+                          <Label fx:id="lblPassword2" text="Repetir Contraseña">
+                              <font>
+                                  <Font name="System Bold" size="16.0" />
+                              </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                          </Label>
+                          <PasswordField fx:id="fieldPassword2" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="468.0" style="-fx-background-radius: 10;">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                        <Button fx:id="btnRegistrar" mnemonicParsing="false" prefHeight="38.0" prefWidth="253.0" style="-fx-background-color: #3a7bd5; -fx-background-radius: 10;" text="Registrar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                          <Label fx:id="txtCuentaExiste" alignment="CENTER" text="Ya tienes cuenta? Inicia sesión" textAlignment="CENTER" textFill="#3a7bd5" underline="true">
+                              <font>
+                                  <Font size="16.0" />
+                              </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                          </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </Group>
+         </children>
+      </StackPane>
     </children>
 </AnchorPane>
