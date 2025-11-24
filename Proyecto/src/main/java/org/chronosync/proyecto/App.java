@@ -35,6 +35,7 @@ public class App extends Application {
             primaryStage.setTitle("Chrono Sync - Login");
             primaryStage.setResizable(true);
             primaryStage.setScene(scene);
+            primaryStage.setMaximized(true);
             primaryStage.show();
 
         } catch (IOException e) {

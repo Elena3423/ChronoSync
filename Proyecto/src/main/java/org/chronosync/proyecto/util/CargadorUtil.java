@@ -1,7 +1,9 @@
 package org.chronosync.proyecto.util;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 
@@ -20,8 +22,11 @@ public class CargadorUtil {
             // Se usa getClass().getResource para asegurar que la ruta se resuelve correctamente en el classpath.
             Parent root = FXMLLoader.load(CargadorUtil.class.getResource(rutaFXML));
 
-            Scene scene = new Scene(root);
+            Rectangle2D pantalla =  Screen.getPrimary().getVisualBounds();
+
+            Scene scene = new Scene(root, pantalla.getWidth(), pantalla.getHeight());
             stage.setScene(scene);
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
