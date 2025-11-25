@@ -65,8 +65,16 @@ public class LoginControlador {
 
         // Redirigimos (provisional)
         verAlerta("Éxito", "Inicio de sesión correcto");
+
         Stage stage = (Stage) fieldEmail.getScene().getWindow();
-        CargadorUtil.cambiarEscena(stage, "/fxml/menuAdmin.fxml");
+
+        // Si nuestra cuenta no tiene asignado ningún negocio mostramos crear/unirse
+        // Si tiene un negocio mostramos el panel principal
+        if (u.getNegocioId() == null) {
+            CargadorUtil.cambiarEscena(stage, "/fxml/crearUnirseNegocio.fxml");
+        } else {
+            CargadorUtil.cambiarEscena(stage, "/fxml/menuAdmin.fxml");
+        }
 
     }
 
