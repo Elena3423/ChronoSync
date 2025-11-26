@@ -4,6 +4,7 @@ module org.chronosync.proyecto {
 
     requires org.controlsfx.controls;
     requires java.sql;
+    requires javafx.graphics;
 
     opens org.chronosync.proyecto to javafx.fxml;
     exports org.chronosync.proyecto;

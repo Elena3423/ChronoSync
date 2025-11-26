@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane style="-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3A7BD5, #58B368);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.CrearUnirseNegocioControlador">
    <children>
       <GridPane alignment="CENTER" layoutY="87.0" prefHeight="633.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0">
         <columnConstraints>
