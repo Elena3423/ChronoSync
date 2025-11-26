@@ -2,6 +2,7 @@ package org.chronosync.proyecto.dao;
 
 import org.chronosync.proyecto.bd.ConexionBD;
 import org.chronosync.proyecto.modelo.Negocio;
+import org.chronosync.proyecto.modelo.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -60,6 +61,31 @@ public class NegocioDAO {
 
         } catch (SQLException e) {
             System.out.println("Error obteniendo negocio por ID: " + e.getMessage());
+        }
+
+        return negocio;
+    }
+
+    public Negocio obtenerPorEmail(String email) {
+        String sql = "SELECT * FROM negocio WHERE LOWER(email) = LOWER(?)";
+        Negocio negocio = null;
+
+        // Obtenemos la conexión
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Asignamos el email al parámetro
+            stmt.setString(1, email);
+            // Ejecutamos la consulta
+            ResultSet rs = stmt.executeQuery();
+
+            // Si existe un resultado
+            if (rs.next()) {
+                negocio = construirNegocio(rs);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error obteniendo usuario por email: " + e.getMessage());
         }
 
         return negocio;
