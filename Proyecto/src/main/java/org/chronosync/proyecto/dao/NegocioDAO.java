@@ -16,12 +16,12 @@ public class NegocioDAO {
      * @param negocio objeto Negocio a insertar
      * @return true si la operación fue exitosa; false si ocurrió un error
      */
-    public boolean insertar(Negocio negocio) {
+    public Integer insertar(Negocio negocio) {
         String sql = "INSERT INTO negocio (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)";
 
         // Obtenemos la conexión
         try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             // Asignamos los parámetros
             stmt.setString(1, negocio.getNombre());
@@ -29,12 +29,19 @@ public class NegocioDAO {
             stmt.setString(3, negocio.getTelefono());
             stmt.setString(4, negocio.getEmail());
 
-            // Devolvemos true si se ha insertado al menos 1 línea
-            return stmt.executeUpdate() > 0;
+            int filas = stmt.executeUpdate();
+            if (filas == 0) return null;
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return  rs.getInt(1);
+            }
+
+            return null;
 
         } catch (SQLException e) {
             System.out.println("Error insertando negocio: " + e.getMessage());
-            return false;
+            return null;
         }
     }
 

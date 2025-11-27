@@ -174,4 +174,21 @@ public class UsuarioDAO {
                 rs.getObject("negocio_id", Integer.class)
         );
     }
+
+    public boolean asignarAdminNegocio(int idUsuario, int idNegocio) {
+        String sql = "UPDATE usuarios SET activo = 1, rol_id = 1, negocio_id = ? WHERE id = ?";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idNegocio);
+            stmt.setInt(2, idUsuario);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error asignando admin al negocio: " + e.getMessage());
+            return false;
+        }
+    }
 }

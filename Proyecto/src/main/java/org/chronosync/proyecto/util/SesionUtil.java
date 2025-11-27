@@ -9,7 +9,7 @@ import org.chronosync.proyecto.modelo.Usuario;
 public class SesionUtil {
 
     private static SesionUtil instancia;
-    private Usuario usuario;
+    private static Usuario usuarioActual;
 
     /**
      * Constructor privado que impide que se creen nuevas instancias desde fuera de esta clase
@@ -33,8 +33,8 @@ public class SesionUtil {
      *
      * @return el usuario que representa la sesión activa, o null si no hay sesión iniciada
      */
-    public Usuario getUsuario() {
-        return usuario;
+    public static Usuario getUsuario() {
+        return usuarioActual;
     }
 
     /**
@@ -42,14 +42,14 @@ public class SesionUtil {
      *
      * @param usuario el usuario que representa el usuario recién logueado
      */
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public static void setUsuario(Usuario usuario) {
+        usuarioActual = usuario;
     }
 
     /**
      * Cierra la sesión actual
      */
-    public void cerrarSesion() {
-        usuario = null;
+    public static void cerrarSesion() {
+        usuarioActual = null;
     }
 }
