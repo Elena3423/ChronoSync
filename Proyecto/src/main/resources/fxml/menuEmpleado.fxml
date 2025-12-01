@@ -14,10 +14,10 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
 
-        <VBox prefWidth="250.0" style="-fx-border-color: #AAAAAA;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <GridPane alignment="CENTER" style="-fx-border-color: #444444; -fx-background-color: #ffffff;" VBox.vgrow="ALWAYS">
                     <columnConstraints>
@@ -29,7 +29,7 @@
                         <RowConstraints maxHeight="224.0" minHeight="10.0" prefHeight="193.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="385.0" prefWidth="248.0" GridPane.rowIndex="1">
+                        <VBox alignment="TOP_CENTER" prefWidth="248.0" GridPane.rowIndex="1">
                             <children>
                                 <Button fx:id="btnPanelPrincipal" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: #3A7BD5; -fx-background-radius: 8;" text="Panel Principal" textFill="WHITE">
                                     <font>
@@ -91,39 +91,9 @@
                                         <Insets bottom="10.0" />
                                     </VBox.margin>
                                 </Button>
-                                <Button fx:id="btnConfiguracion" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: transparent; -fx-border-radius: 8; -fx-border-color: #3A7BD5;" text="Empleados">
-                                    <font>
-                                        <Font name="System Bold" size="14.0" />
-                                    </font>
-                                    <graphic>
-                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@../img/configuracionNegro.png" />
-                                            </image>
-                                        </ImageView>
-                                    </graphic>
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                                </Button>
-                        <Button fx:id="btnConfiguracion1" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: transparent; -fx-border-radius: 8; -fx-border-color: #3A7BD5;" text="Configuración">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/configuracionNegro.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </Button>
                             </children>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="210.0" prefWidth="248.0">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                             <children>
                                 <ImageView fx:id="imgLogo" fitHeight="218.0" fitWidth="204.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -195,46 +165,8 @@
             </children>
         </VBox>
 
-        <AnchorPane fx:id="anchorContenidoPrincipal" layoutX="249.0" layoutY="1.0" prefHeight="720.0" prefWidth="1032.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
-         <GridPane layoutX="-1.0" layoutY="1.0" prefHeight="720.0" prefWidth="1033.0">
-           <columnConstraints>
-             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-           </columnConstraints>
-           <rowConstraints>
-             <RowConstraints maxHeight="205.0" minHeight="10.0" prefHeight="86.0" vgrow="SOMETIMES" />
-             <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="166.0" vgrow="SOMETIMES" />
-             <RowConstraints maxHeight="294.0" minHeight="10.0" prefHeight="294.0" vgrow="SOMETIMES" />
-               <RowConstraints maxHeight="175.0" minHeight="10.0" prefHeight="165.0" vgrow="SOMETIMES" />
-           </rowConstraints>
-            <children>
-               <GridPane GridPane.rowIndex="1">
-                 <columnConstraints>
-                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                 </columnConstraints>
-                 <rowConstraints>
-                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                 </rowConstraints>
-               </GridPane>
-                  <Label text="Panel de administración" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-                      <font>
-                          <Font name="System Bold" size="14.0" />
-                      </font>
-                  <GridPane.margin>
-                     <Insets left="20.0" top="30.0" />
-                  </GridPane.margin>
-                  <font>
-                     <Font name="System Bold" size="20.0" />
-                  </font>
-               </Label>
-               <Label text="Bienvenido, (nombre) . Aquí puedes gestionar todos los aspectos del sistema. " GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-                  <GridPane.margin>
-                     <Insets left="20.0" top="45.0" />
-                  </GridPane.margin>
-               </Label>
-            </children>
-         </GridPane>
+        <AnchorPane fx:id="anchorContenidoPrincipal" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label text="ÁREA DE CONTENIDO PRINCIPAL (SE ESTIRA)" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
         </AnchorPane>
 
     </children>
