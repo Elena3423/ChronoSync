@@ -7,6 +7,7 @@ import org.chronosync.proyecto.modelo.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class NegocioDAO {
 
@@ -17,7 +18,7 @@ public class NegocioDAO {
      * @return true si la operación fue exitosa; false si ocurrió un error
      */
     public Integer insertar(Negocio negocio) {
-        String sql = "INSERT INTO negocio (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO negocio (nombre, direccion, telefono, email, codigo_union) VALUES (?, ?, ?, ?, ?)";
 
         // Obtenemos la conexión
         try (Connection conn = ConexionBD.obtenerConexion();
@@ -28,6 +29,9 @@ public class NegocioDAO {
             stmt.setString(2, negocio.getDireccion());
             stmt.setString(3, negocio.getTelefono());
             stmt.setString(4, negocio.getEmail());
+
+            String codigoUnion = generarCodigoUnion();
+            stmt.setString(5, codigoUnion);
 
             int filas = stmt.executeUpdate();
             if (filas == 0) return null;
@@ -93,6 +97,27 @@ public class NegocioDAO {
 
         } catch (SQLException e) {
             System.out.println("Error obteniendo usuario por email: " + e.getMessage());
+        }
+
+        return negocio;
+    }
+
+    public Negocio obtenerPorCodigo(String codigo) {
+        String sql = "SELECT * FROM negocio WHERE codigo_union = ?";
+        Negocio negocio = null;
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, codigo);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                negocio = construirNegocio(rs);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error obteniendo negocio por código: " + e.getMessage());
         }
 
         return negocio;
@@ -185,5 +210,17 @@ public class NegocioDAO {
                 rs.getString("telefono"),
                 rs.getString("email")
         );
+    }
+
+    private String generarCodigoUnion() {
+        String letras = "ABDCEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder codigo = new StringBuilder();
+        Random rnd = new Random();
+
+        for (int i = 0; i < 6; i++) {
+            codigo.append(letras.charAt(rnd.nextInt(letras.length())));
+        }
+
+        return codigo.toString();
     }
 }
