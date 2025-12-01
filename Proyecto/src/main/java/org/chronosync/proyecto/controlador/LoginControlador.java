@@ -72,8 +72,10 @@ public class LoginControlador {
         // Si tiene un negocio mostramos el panel principal
         if (u.getNegocioId() == null) {
             CargadorUtil.cambiarEscena(stage, "/fxml/crearUnirseNegocio.fxml");
-        } else {
+        } else if (u.getRolId() == 1){
             CargadorUtil.cambiarEscena(stage, "/fxml/menuAdmin.fxml");
+        } else {
+            CargadorUtil.cambiarEscena(stage, "/fxml/menuEmpleado.fxml");
         }
 
     }
