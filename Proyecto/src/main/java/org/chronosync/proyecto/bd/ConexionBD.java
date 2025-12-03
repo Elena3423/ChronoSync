@@ -1,6 +1,9 @@
 package org.chronosync.proyecto.bd;
 
+import org.chronosync.proyecto.secure.ConfigManager;
+
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * Clase de utilidad para gestionar la conexión a la base de datos
@@ -11,32 +14,37 @@ public class ConexionBD {
     // Variable que almacena la única instancia de la conexión
     private static Connection conn = null;
 
-    // URL de conexión a la base de datos SQLite
+    /* URL de conexión a la base de datos SQLite
     private static final String url = "jdbc:mysql://mysql-chronosync.alwaysdata.net/chronosync_bd";
-    private static final String usuario = "441742_admin";
-    private static String password = "SalvaElena0604";
+    private static final String usuario = "441742_user";
+    private static String password = "SalvaElena0604";*/
 
     /**
      * Método para obtener la conexión a la base de datos
      * Si la conexión no existe o está cerrada, intenta establecer una nueva
      * @return Devuelve el objeto Connection a la base de datos
      */
-    public static Connection obtenerConexion(){
+    public static Connection obtenerConexion() {
         try {
-
-            // Verifica si la conexión es nula o si ya está cerrada
+            // Si no hay conexión o está cerrada, la creamos
             if (conn == null || conn.isClosed()) {
 
-                // Establece la conexión utilizando la URL
+                // Cargamos los datos desde ConfigManager (dev o secure)
+                Properties p = ConfigManager.getConfig();
+                String url = p.getProperty("db.url");
+                String usuario = p.getProperty("db.user");
+                String password = p.getProperty("db.password");
+
+                // Conectamos a MySQL
                 conn = DriverManager.getConnection(url, usuario, password);
-                System.out.println("Conexión establecida con MySQL (AlwaysData)");
+                System.out.println("Conexión establecida con MySQL (ConfigManager).");
             }
-        } catch (SQLException e) {
-            // Muestra cualquier error que ocurra durante la conexión
-            System.out.println("Error al obtener el conexion: " + e.getMessage());
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener la conexión: " + e.getMessage());
+            e.printStackTrace();
         }
 
-        // Devuelve la conexión establecida (o null si da error)
         return conn;
     }
 
