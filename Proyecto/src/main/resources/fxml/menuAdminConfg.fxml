@@ -203,45 +203,12 @@
            </columnConstraints>
            <rowConstraints>
              <RowConstraints maxHeight="205.0" minHeight="10.0" prefHeight="86.0" vgrow="SOMETIMES" />
-             <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="166.0" vgrow="SOMETIMES" />
-             <RowConstraints maxHeight="294.0" minHeight="10.0" prefHeight="275.0" vgrow="SOMETIMES" />
-               <RowConstraints maxHeight="187.0" minHeight="10.0" prefHeight="187.0" vgrow="SOMETIMES" />
+             <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="210.0" vgrow="SOMETIMES" />
+             <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="222.0" vgrow="SOMETIMES" />
+               <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="213.0" vgrow="SOMETIMES" />
            </rowConstraints>
             <children>
-               <GridPane GridPane.rowIndex="1">
-                 <columnConstraints>
-                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                 </columnConstraints>
-                 <rowConstraints>
-                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                 </rowConstraints>
-                  <children>
-                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="112.0" stroke="#aaaaaa" strokeLineCap="ROUND" strokeType="INSIDE" width="210.0">
-                        <GridPane.margin>
-                           <Insets left="25.0" />
-                        </GridPane.margin>
-                     </Rectangle>
-                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="112.0" stroke="#aaaaaa" strokeType="INSIDE" width="210.0" GridPane.columnIndex="1">
-                        <GridPane.margin>
-                           <Insets left="25.0" />
-                        </GridPane.margin>
-                     </Rectangle>
-                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="112.0" stroke="#aaaaaa" strokeType="INSIDE" width="210.0" GridPane.columnIndex="2">
-                        <GridPane.margin>
-                           <Insets left="25.0" />
-                        </GridPane.margin>
-                     </Rectangle>
-                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="112.0" stroke="#aaaaaa" strokeType="INSIDE" width="210.0" GridPane.columnIndex="3">
-                        <GridPane.margin>
-                           <Insets left="25.0" />
-                        </GridPane.margin>
-                     </Rectangle>
-                  </children>
-               </GridPane>
-                  <Label text="Panel de administración" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                  <Label text="Configuración del sistema" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                       <font>
                           <Font name="System Bold" size="14.0" />
                       </font>
@@ -252,19 +219,24 @@
                      <Font name="System Bold" size="20.0" />
                   </font>
                </Label>
-               <Label text="Bienvenido, (nombre) . Aquí puedes gestionar todos los aspectos del sistema. " GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+               <Label text="Administra los ajustes generales de la aplicación  " GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                   <GridPane.margin>
                      <Insets left="20.0" top="45.0" />
                   </GridPane.margin>
                </Label>
-               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="260.0" stroke="#a8a8a8" strokeType="INSIDE" width="985.0" GridPane.rowIndex="2">
+               <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="175.0" stroke="#aaaaaa" strokeType="INSIDE" width="985.0" GridPane.rowIndex="1">
                   <GridPane.margin>
-                     <Insets left="23.0" />
+                     <Insets left="25.0" top="20.0" />
                   </GridPane.margin>
                </Rectangle>
-               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="150.0" stroke="#aaaaaa" strokeType="INSIDE" width="985.0" GridPane.rowIndex="3">
+               <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="175.0" stroke="#aaaaaa" strokeType="INSIDE" width="985.0" GridPane.rowIndex="2">
                   <GridPane.margin>
-                     <Insets left="23.0" />
+                     <Insets left="25.0" />
+                  </GridPane.margin>
+               </Rectangle>
+               <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="175.0" stroke="#aaaaaa" strokeType="INSIDE" width="985.0" GridPane.rowIndex="3">
+                  <GridPane.margin>
+                     <Insets bottom="20.0" left="25.0" />
                   </GridPane.margin>
                </Rectangle>
             </children>
