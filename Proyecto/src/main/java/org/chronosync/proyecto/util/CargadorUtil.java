@@ -22,9 +22,7 @@ public class CargadorUtil {
             // Se usa getClass().getResource para asegurar que la ruta se resuelve correctamente en el classpath.
             Parent root = FXMLLoader.load(CargadorUtil.class.getResource(rutaFXML));
 
-            Rectangle2D pantalla =  Screen.getPrimary().getVisualBounds();
-
-            Scene scene = new Scene(root, pantalla.getWidth(), pantalla.getHeight());
+            Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setMaximized(true);
             stage.show();

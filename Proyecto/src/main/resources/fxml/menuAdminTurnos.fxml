@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,84 +17,7 @@
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
 
-        <AnchorPane fx:id="anchorContenidoPrincipal" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <GridPane alignment="TOP_CENTER" style="-fx-background-color: #F4F4F4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="80.0" vgrow="NEVER" />
-                    <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="150.0" vgrow="NEVER" />
-                    <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
-                    <RowConstraints maxHeight="180.0" minHeight="10.0" prefHeight="180.0" vgrow="NEVER" />
-                </rowConstraints>
-                <children>
-                    <VBox alignment="TOP_LEFT" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-                        <padding>
-                            <Insets left="20.0" top="20.0" />
-                        </padding>
-                        <children>
-                            <Label text="Panel de administración">
-                                <font>
-                                    <Font name="System Bold" size="20.0" />
-                                </font>
-                                <VBox.margin>
-                                    <Insets bottom="5.0" />
-                                </VBox.margin>
-                            </Label>
-                            <Label text="Bienvenido. Aquí puedes gestionar todos los aspectos del sistema." />
-                        </children>
-                    </VBox>
-
-                    <GridPane hgap="15.0" vgap="15.0" GridPane.rowIndex="1">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                        </rowConstraints>
-                        <children>
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" />
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="1" />
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="2" />
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="3" />
-                        </children>
-                        <padding>
-                            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                        </padding>
-                    </GridPane>
-
-                    <VBox style="-fx-background-color: white;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.rowIndex="2">
-                        <GridPane.margin>
-                            <Insets left="20.0" right="20.0" top="15.0" />
-                        </GridPane.margin>
-                  <children>
-                     <Label text="Gestión de Empleados">
-                        <font>
-                           <Font name="System Bold" size="18.0" />
-                        </font>
-                        <VBox.margin>
-                           <Insets bottom="5.0" />
-                        </VBox.margin>
-                     </Label>
-                     <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                       <content>
-                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="198.0" prefWidth="200.0" />
-                       </content>
-                     </ScrollPane>
-                  </children>
-                    </VBox>
-                    <VBox style="-fx-background-color: white;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.rowIndex="3">
-                        <GridPane.margin>
-                            <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
-                        </GridPane.margin>
-                    </VBox>
-                </children>
-            </GridPane>
-        </AnchorPane>
+        <AnchorPane fx:id="anchorContenidoPrincipal" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
         <VBox prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -114,7 +36,7 @@
                                 <Insets left="15.0" right="15.0" />
                             </padding>
                             <children>
-                                <Button fx:id="btnPanelPrincipal" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: #3A7BD5; -fx-background-radius: 8;" text="Panel Principal" textFill="WHITE">
+                                <Button fx:id="btnPanelPrincipal" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: transparent; -fx-border-radius: 8; -fx-border-color: #3A7BD5;" text="Panel Principal">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
@@ -124,7 +46,7 @@
                                     <graphic>
                                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../img/menuBlanco.png" />
+                                                <Image url="@../img/menuNegro.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -144,14 +66,14 @@
                                         <Insets bottom="10.0" />
                                     </VBox.margin>
                                 </Button>
-                                <Button fx:id="btnTurnos" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: transparent; -fx-border-radius: 8; -fx-border-color: #3A7BD5;" text="Turnos">
+                                <Button fx:id="btnTurnos" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: #3A7BD5; -fx-background-radius: 8;" text="Turnos" textFill="WHITE">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                     <graphic>
                                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../img/turnoNegro.png" />
+                                                <Image url="@../img/turnoBlanco.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>

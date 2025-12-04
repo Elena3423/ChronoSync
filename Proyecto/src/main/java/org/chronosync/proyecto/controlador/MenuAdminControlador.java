@@ -49,7 +49,7 @@ public class MenuAdminControlador {
     @FXML
     private void irConfiguracion(MouseEvent e) {
         Stage stage = (Stage) btnConfiguracion.getScene().getWindow();
-        CargadorUtil.cambiarEscena(stage, "/fxml/menuAdminConfg.fxml");
+        CargadorUtil.cambiarEscena(stage, "fxml/menuAdminConfiguracion.fxml");
     }
 
 
