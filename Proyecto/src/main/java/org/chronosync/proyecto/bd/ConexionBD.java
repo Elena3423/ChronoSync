@@ -33,7 +33,7 @@ public class ConexionBD {
                 Properties p = ConfigManager.getConfig();
                 String url = p.getProperty("db.url");
                 String usuario = p.getProperty("db.user");
-                String password = p.getProperty("db.password");
+                String password = p.getProperty("db.pass");
 
                 // Conectamos a MySQL
                 conn = DriverManager.getConnection(url, usuario, password);
