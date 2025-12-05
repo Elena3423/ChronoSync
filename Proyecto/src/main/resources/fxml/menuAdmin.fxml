@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -24,30 +23,62 @@
                     <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="80.0" vgrow="NEVER" />
-                    <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="150.0" vgrow="NEVER" />
-                    <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+               <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="80.0" vgrow="NEVER" />
+                    <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="117.0" vgrow="NEVER" />
+                    <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="132.0" vgrow="NEVER" />
+                    <RowConstraints maxHeight="268.0" minHeight="10.0" prefHeight="228.0" vgrow="ALWAYS" />
                     <RowConstraints maxHeight="180.0" minHeight="10.0" prefHeight="180.0" vgrow="NEVER" />
                 </rowConstraints>
                 <children>
-                    <VBox alignment="TOP_LEFT" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-                        <padding>
-                            <Insets left="20.0" top="20.0" />
-                        </padding>
+                    <VBox alignment="TOP_LEFT" prefHeight="114.0" prefWidth="1030.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                  <children>
+                     <VBox prefHeight="100.0" prefWidth="990.0" style="-fx-background-color: white;" styleClass="tarjeta" stylesheets="@../css/menu.css">
+                        <VBox.margin>
+                           <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+                        </VBox.margin>
                         <children>
-                            <Label text="Panel de administración">
-                                <font>
-                                    <Font name="System Bold" size="20.0" />
-                                </font>
-                                <VBox.margin>
-                                    <Insets bottom="5.0" />
-                                </VBox.margin>
-                            </Label>
-                            <Label text="Bienvenido. Aquí puedes gestionar todos los aspectos del sistema." />
+                           <GridPane fx:id="gridTurnos">
+                             <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+
+                             </columnConstraints>
+                             <rowConstraints>
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+
+                             </rowConstraints>
+                              <children>
+                                 <GridPane fx:id="gridImgTurno">
+                                   <columnConstraints>
+                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="38.0" />
+                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="920.0" minWidth="10.0" prefWidth="920.0" />
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+
+                                   </rowConstraints>
+                                    <children>
+                                       <ImageView fitHeight="28.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true" />
+                                       <Label text="Titulo 1" GridPane.columnIndex="1">
+                                          <font>
+                                             <Font size="16.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </GridPane>
+                                 <Label text="Subtitulo1" GridPane.rowIndex="1">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </GridPane>
                         </children>
+                     </VBox>
+                  </children>
                     </VBox>
 
-                    <GridPane hgap="15.0" vgap="15.0" GridPane.rowIndex="1">
+                    <GridPane hgap="15.0" vgap="15.0" GridPane.rowIndex="2">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -58,41 +89,316 @@
                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" />
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="1" />
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="2" />
-                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="3" />
+                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css">
+                        <children>
+                           <GridPane fx:id="proxTurnos" prefHeight="269.0" prefWidth="255.0">
+                             <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+
+                             </columnConstraints>
+                             <rowConstraints>
+                               <RowConstraints maxHeight="34.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                               <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                             </rowConstraints>
+                              <children>
+                                 <GridPane fx:id="txtProxTurnos" alignment="CENTER_LEFT" prefHeight="23.0" prefWidth="205.0">
+                                   <columnConstraints>
+                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="164.0" />
+                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="41.0" />
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   </rowConstraints>
+                                    <children>
+                                       <Label fx:id="txt1" text="Texto 1">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                          <GridPane.margin>
+                                             <Insets />
+                                          </GridPane.margin>
+                                       </Label>
+                                       <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                                    </children>
+                                 </GridPane>
+                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                    <children>
+                                       <Label text="0">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                       <Label fx:id="txtSub" text="SubTexto" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </GridPane>
+                        </children></VBox>
+                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="1">
+                        <children>
+                           <GridPane fx:id="proxTurnos1" prefHeight="269.0" prefWidth="255.0">
+                              <columnConstraints>
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              </columnConstraints>
+                              <rowConstraints>
+                                 <RowConstraints maxHeight="34.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                              </rowConstraints>
+                              <children>
+                                 <GridPane fx:id="txtProxTurnos1" alignment="CENTER_LEFT" prefHeight="23.0" prefWidth="205.0">
+                                    <columnConstraints>
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="164.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="41.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                       <Label fx:id="txt11" text="Texto 1">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                          <GridPane.margin>
+                                             <Insets />
+                                          </GridPane.margin>
+                                       </Label>
+                                       <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                                    </children>
+                                 </GridPane>
+                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                    <children>
+                                       <Label text="0">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                       <Label fx:id="txtSub1" text="SubTexto" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </GridPane>
+                        </children></VBox>
+                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="2">
+                        <children>
+                           <GridPane fx:id="proxTurnos11" prefHeight="269.0" prefWidth="255.0">
+                              <columnConstraints>
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              </columnConstraints>
+                              <rowConstraints>
+                                 <RowConstraints maxHeight="34.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                              </rowConstraints>
+                              <children>
+                                 <GridPane fx:id="txtProxTurnos11" alignment="CENTER_LEFT" prefHeight="23.0" prefWidth="205.0">
+                                    <columnConstraints>
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="164.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="41.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                       <Label fx:id="txt111" text="Texto 1">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                          <GridPane.margin>
+                                             <Insets />
+                                          </GridPane.margin>
+                                       </Label>
+                                       <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                                    </children>
+                                 </GridPane>
+                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                    <children>
+                                       <Label text="0">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                       <Label fx:id="txtSub11" text="SubTexto" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </GridPane>
+                        </children></VBox>
+                            <VBox style="-fx-background-color: #ffffff; -fx-border-color: #AAAAAA; -fx-border-radius: 10; -fx-background-radius: 10;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.columnIndex="3">
+                        <children>
+                           <GridPane fx:id="proxTurnos111" prefHeight="269.0" prefWidth="255.0">
+                              <columnConstraints>
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              </columnConstraints>
+                              <rowConstraints>
+                                 <RowConstraints maxHeight="34.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                              </rowConstraints>
+                              <children>
+                                 <GridPane fx:id="txtProxTurnos111" alignment="CENTER_LEFT" prefHeight="23.0" prefWidth="205.0">
+                                    <columnConstraints>
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="164.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="41.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                       <Label fx:id="txt1111" text="Texto 1">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                          <GridPane.margin>
+                                             <Insets />
+                                          </GridPane.margin>
+                                       </Label>
+                                       <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                                    </children>
+                                 </GridPane>
+                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                    <children>
+                                       <Label text="0">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                       <Label fx:id="txtSub111" text="SubTexto" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </GridPane>
+                        </children></VBox>
                         </children>
                         <padding>
                             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                         </padding>
                     </GridPane>
 
-                    <VBox style="-fx-background-color: white;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.rowIndex="2">
+                    <VBox style="-fx-background-color: white;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.rowIndex="3">
                         <GridPane.margin>
                             <Insets left="20.0" right="20.0" top="15.0" />
                         </GridPane.margin>
                   <children>
-                     <Label text="Gestión de Empleados">
-                        <font>
-                           <Font name="System Bold" size="18.0" />
-                        </font>
-                        <VBox.margin>
-                           <Insets bottom="5.0" />
-                        </VBox.margin>
-                     </Label>
-                     <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                       <content>
-                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="198.0" prefWidth="200.0" />
-                       </content>
-                     </ScrollPane>
+                     <GridPane fx:id="gridGestion" prefHeight="210.0" prefWidth="958.0">
+                       <columnConstraints>
+                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+
+                       </columnConstraints>
+                       <rowConstraints>
+                         <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                         <RowConstraints maxHeight="135.0" minHeight="10.0" prefHeight="134.0" vgrow="SOMETIMES" />
+
+                       </rowConstraints>
+                        <children>
+                           <GridPane>
+                             <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="699.0" minWidth="10.0" prefWidth="699.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="259.0" />
+                             </columnConstraints>
+                             <rowConstraints>
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+
+                             </rowConstraints>
+                              <children>
+                                 <Button fx:id="btnPanelPrincipal1" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: #3A7BD5; -fx-background-radius: 8;" text="Boton1" textFill="WHITE" GridPane.columnIndex="1">
+                                    <font>
+                                       <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <graphic>
+                                       <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                             <Image url="@../img/menuBlanco.png" />
+                                          </image>
+                                       </ImageView>
+                                    </graphic>
+                                 </Button>
+                                 <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                       <Label text="Titulo 1">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="Subtitulo 1" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </GridPane>
+                        </children>
+                     </GridPane>
                   </children>
                     </VBox>
-                    <VBox style="-fx-background-color: white;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.rowIndex="3">
+                    <VBox style="-fx-background-color: white;" styleClass="tarjeta" stylesheets="@../css/menu.css" GridPane.rowIndex="4">
                         <GridPane.margin>
                             <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
                         </GridPane.margin>
+                  <children>
+                     <GridPane fx:id="gridGestion1" prefHeight="210.0" prefWidth="958.0">
+                        <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                           <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="135.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                           <GridPane>
+                              <columnConstraints>
+                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="699.0" minWidth="10.0" prefWidth="699.0" />
+                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="259.0" />
+                              </columnConstraints>
+                              <rowConstraints>
+                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              </rowConstraints>
+                              <children>
+                                 <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                       <Label text="Titulo 1">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="Subtitulo 1" />
+                                    </children>
+                                 </VBox>
+                                 <Button fx:id="btm" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: transparent; -fx-border-radius: 8; -fx-border-color: #3A7BD5;" text="Boton1" GridPane.columnIndex="1">
+                                    <font>
+                                       <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <graphic>
+                                       <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                             <Image url="@../img/turnoNegro.png" />
+                                          </image>
+                                       </ImageView>
+                                    </graphic>
+                                 </Button>
+                              </children>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </GridPane>
+                        </children>
+                     </GridPane>
+                  </children>
                     </VBox>
+               <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                            <Label text="Panel de administración">
+                                <font>
+                                    <Font name="System Bold" size="20.0" />
+                                </font>
+                        <padding>
+                           <Insets top="10.0" />
+                        </padding>
+                            </Label>
+                            <Label text="Bienvenido. Aquí puedes gestionar todos los aspectos del sistema." />
+                  </children>
+                  <GridPane.margin>
+                     <Insets left="20.0" />
+                  </GridPane.margin>
+               </VBox>
                 </children>
             </GridPane>
         </AnchorPane>
