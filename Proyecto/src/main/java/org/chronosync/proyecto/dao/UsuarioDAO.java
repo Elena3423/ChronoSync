@@ -209,4 +209,44 @@ public class UsuarioDAO {
         }
     }
 
+    public int contarUsuariosActivosPorNegocio(int idNegocio) {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE negocio_id = ? AND activo = 1";
+        int conteo = 0;
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idNegocio);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    conteo = rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al contar los usuarios activos por negocio: " + e.getMessage());
+        }
+        return conteo;
+    }
+
+    public int contarUsuariosInactivosPorNegocio(int idNegocio) {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE negocio_id = ? AND activo = 0";
+        int conteo = 0;
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idNegocio);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    conteo = rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al contar los usuarios inactivos por negocio: " + e.getMessage());
+        }
+        return conteo;
+    }
+
 }
