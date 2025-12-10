@@ -223,4 +223,31 @@ public class NegocioDAO {
 
         return codigo.toString();
     }
+
+    public int contarTurnosMesActual(int idNegocio) {
+        String sql = "SELECT COUNT(*)\n" +
+                "        FROM turno\n" +
+                "        WHERE id_negocio = ?\n" +
+                "          AND fecha_inicio <= LAST_DAY(CURRENT_DATE())\n" +
+                "          AND fecha_fin >= DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')";
+
+        int conteo = 0;
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idNegocio);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    conteo = rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al contar turnos del mes actual: " + e.getMessage());
+        }
+
+        return conteo;
+    }
 }

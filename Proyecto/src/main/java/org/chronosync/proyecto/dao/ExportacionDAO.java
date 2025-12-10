@@ -124,4 +124,32 @@ public class ExportacionDAO {
                 rs.getInt("negocio_id")
         );
     }
+
+    public int contarExportacionesMesActual(int idNegocio) {
+        String sql = "SELECT COUNT(*)\n" +
+                "        FROM exportacion\n" +
+                "        WHERE id_negocio = ?\n" +
+                "          AND fecha_generacion <= LAST_DAY(CURRENT_DATE())\n" +
+                "          AND fecha_generacion >= DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')";
+
+        int conteo = 0;
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idNegocio);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    conteo = rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al contar exportaciones del mes actual: " + e.getMessage());
+        }
+
+        return conteo;
+    }
+
 }

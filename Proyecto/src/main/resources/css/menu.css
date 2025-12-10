@@ -1,3 +1,53 @@
+.fondo-principal {
+    -fx-background-color: #F4F4F4;
+    -fx-padding: 20;
+}
+
+.fondo-izq {
+    -fx-background-color: #FFFFFF;
+}
+
+.boton-blanco {
+    -fx-background-color: transparent;
+    -fx-border-radius: 8;
+    -fx-border-color: #3A7BD5;
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+}
+
+.boton-azul {
+    -fx-background-color: #3A7BD5;
+    -fx-background-radius: 8;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+}
+
+.titulo {
+    -fx-font-family: Roboto;
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+    -fx-text-fill: #333333;
+}
+
+.subtitulo {
+    -fx-font-family: Roboto;
+    -fx-font-weight: regular;
+    -fx-font-size: 16;
+}
+
+.hbox {
+    -fx-spacing: 15px;
+    -fx-padding: 10px;
+}
+
+.vbox {
+    -fx-padding: 10px;
+}
+
 .tarjeta {
     -fx-background-color: #ffffff;
     -fx-background-radius: 10;
@@ -5,5 +55,38 @@
     -fx-border-radius: 10;
     -fx-border-width: 1px;
     -fx-border-style: solid;
-    -fx-padding: 15px;
+    -fx-padding: 10px;
+}
+
+.titulo-tarjeta {
+    -fx-font-family: Roboto;
+    -fx-font-weight: regular;
+    -fx-font-size: 12;
+}
+
+.dato-tarjeta {
+    -fx-font-family: Roboto;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-text-fill: #333333;
+}
+
+.subdato-tarjeta {
+    -fx-font-family: Roboto;
+    -fx-font-weight: regular;
+    -fx-font-size: 10;
+    -fx-text-fill: #23282B;
+}
+
+.titulo-caja {
+    -fx-font-family: Roboto;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+    -fx-text-fill: #333333;
+}
+
+.subtitulo-caja {
+    -fx-font-family: Roboto;
+    -fx-font-weight: regular;
+    -fx-font-size: 16;
 }

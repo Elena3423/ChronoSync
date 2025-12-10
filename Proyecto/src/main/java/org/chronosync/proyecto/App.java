@@ -32,7 +32,7 @@ public class App extends Application {
             Image icono = new Image(getClass().getResourceAsStream("/img/iconoPNG.png"));
             primaryStage.getIcons().add(icono);
 
-            primaryStage.setTitle("Chrono Sync - Login");
+            primaryStage.setTitle("Chrono Sync");
             primaryStage.setResizable(true);
             primaryStage.setScene(scene);
             primaryStage.setMaximized(true);
