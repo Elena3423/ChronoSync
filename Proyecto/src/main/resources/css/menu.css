@@ -89,4 +89,11 @@
     -fx-font-family: Roboto;
     -fx-font-weight: regular;
     -fx-font-size: 16;
+    -fx-text-fill: #333333;
+}
+
+.info-caja {
+    -fx-font-family: Roboto;
+    -fx-font-weight: regular;
+    -fx-font-size: 16;
 }

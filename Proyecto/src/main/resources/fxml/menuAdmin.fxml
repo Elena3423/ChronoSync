@@ -215,6 +215,21 @@
                   <Label fx:id="subtitulo" styleClass="subtitulo" stylesheets="@../css/menu.css" text="Label" />
                </children>
             </VBox>
+            <HBox fx:id="hboxTurnos" prefHeight="100.0" prefWidth="200.0" styleClass="hbox" stylesheets="@../css/menu.css">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="tarjeta" stylesheets="@../css/menu.css" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox VBox.vgrow="ALWAYS">
+                           <children>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                              <Label styleClass="subtitulo-caja" stylesheets="@../css/menu.css" text="Tu turno de hoy" />
+                           </children>
+                        </HBox>
+                        <Label fx:id="infoCaja1" styleClass="info-caja" stylesheets="@../css/menu.css" text="Info" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox" stylesheets="@../css/menu.css">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" styleClass="tarjeta" stylesheets="@../css/menu.css" HBox.hgrow="ALWAYS">
@@ -288,7 +303,7 @@
                         <GridPane stylesheets="@../css/menu.css">
                            <columnConstraints>
                               <ColumnConstraints hgrow="ALWAYS" maxWidth="136.0" minWidth="10.0" prefWidth="136.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="73.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="73.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -318,7 +333,7 @@
                         <GridPane stylesheets="@../css/menu.css">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="145.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="64.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="64.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -346,21 +361,21 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" styleClass="tarjeta" stylesheets="@../css/menu.css" HBox.hgrow="ALWAYS">
                      <children>
-                        <GridPane>
+                        <GridPane VBox.vgrow="ALWAYS">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="640.0" minWidth="10.0" prefWidth="640.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="469.0" minWidth="10.0" prefWidth="308.0" />
+                            <ColumnConstraints hgrow="ALWAYS" maxWidth="640.0" minWidth="10.0" prefWidth="640.0" />
+                            <ColumnConstraints hgrow="ALWAYS" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                                  <children>
                                     <Label fx:id="titCaja1" styleClass="titulo-caja" stylesheets="@../css/menu.css" text="Caja 1" />
                                  </children>
                               </HBox>
-                              <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                              <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
                                  <children>
                                     <Button fx:id="btnCaja1" mnemonicParsing="false" styleClass="boton-azul" stylesheets="@../css/menu.css" text="Texto">
                                        <HBox.margin>
@@ -381,8 +396,8 @@
                      <children>
                         <GridPane>
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="640.0" minWidth="10.0" prefWidth="640.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="469.0" minWidth="10.0" prefWidth="308.0" />
+                              <ColumnConstraints hgrow="ALWAYS" maxWidth="640.0" minWidth="10.0" prefWidth="640.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
