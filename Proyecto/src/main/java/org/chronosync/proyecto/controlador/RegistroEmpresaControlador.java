@@ -98,7 +98,7 @@ public class RegistroEmpresaControlador {
         showAlert("Registrado", "Negocio creado correctamente.");
 
         Stage stage = (Stage) fieldRepetirEmail.getScene().getWindow();
-        CargadorUtil.cambiarEscena(stage, "/fxml/menuAdmin.fxml");
+        CargadorUtil.cambiarEscena(stage, "/fxml/menuPrincipal.fxml");
     }
 
     private void volver(MouseEvent e) {

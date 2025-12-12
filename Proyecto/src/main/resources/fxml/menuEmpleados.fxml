@@ -8,15 +8,13 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.menu.MenuTurnosControlador">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.menu.MenuEmpleadosControlador">
    <left>
 
               <VBox prefWidth="250.0" BorderPane.alignment="CENTER">
@@ -61,14 +59,14 @@
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="btnEmpleados" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" styleClass="boton-blanco" stylesheets="@../css/menu.css" text="Empleados">
+                                <Button fx:id="btnEmpleados" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" styleClass="boton-azul" stylesheets="@../css/menu.css" text="Empleados">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                     <graphic>
                                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../img/empleadosNegro.png" />
+                                                <Image url="@../img/empleadosBlanco.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -76,14 +74,14 @@
                                         <Insets bottom="10.0" />
                                     </VBox.margin>
                                 </Button>
-                                <Button fx:id="btnTurnos" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" styleClass="boton-azul" stylesheets="@../css/menu.css" text="Turnos">
+                                <Button fx:id="btnTurnos" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="217.0" styleClass="boton-blanco" stylesheets="@../css/menu.css" text="Turnos">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                     <graphic>
                                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../img/turnoBlanco.png" />
+                                                <Image url="@../img/turnoNegro.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -212,95 +210,10 @@
          <children>
             <VBox styleClass="vbox" stylesheets="@../css/menu.css">
                <children>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label fx:id="titulo" styleClass="titulo" stylesheets="@../css/menu.css" text="Titulo" />
-                        <Button mnemonicParsing="false" styleClass="boton-azul" stylesheets="@../css/menu.css" text="Añadir Turno" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
-                     </children>
-                  </GridPane>
+                  <Label fx:id="titulo" styleClass="titulo" stylesheets="@../css/menu.css" text="Titulo" />
                   <Label fx:id="subtitulo" styleClass="subtitulo" stylesheets="@../css/menu.css" text="Label" />
                </children>
             </VBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox" stylesheets="@../css/menu.css" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox styleClass="tarjeta" stylesheets="@../css/menu.css" HBox.hgrow="ALWAYS">
-                     <children>
-                        <GridPane>
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Label fx:id="titCaja21" styleClass="titulo-caja" stylesheets="@../css/menu.css" text="Fecha" />
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
-                                 <children>
-                                    <Button mnemonicParsing="false" styleClass="boton-blancoNego" stylesheets="@../css/menu.css" text="&lt;">
-                                       <HBox.margin>
-                                          <Insets right="10.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button mnemonicParsing="false" styleClass="boton-blancoNego" stylesheets="@../css/menu.css" text="&gt;" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </GridPane>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox" stylesheets="@../css/menu.css">
-               <children>
-                  <VBox styleClass="tarjeta" stylesheets="@../css/menu.css" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label fx:id="titCaja2" styleClass="titulo-caja" stylesheets="@../css/menu.css" text="Leyenda" />
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" stylesheets="@../css/menu.css">
-                           <children>
-                              <Rectangle arcHeight="8.0" arcWidth="8.0" fill="#3a7bd5" height="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="15.0">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Rectangle>
-                              <Label text="Turno de Mañana">
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <Rectangle arcHeight="8.0" arcWidth="8.0" fill="#58b368" height="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="15.0">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Rectangle>
-                              <Label text="Turno de Tarde">
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <Rectangle arcHeight="8.0" arcWidth="8.0" fill="#9b59b6" height="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="15.0">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Rectangle>
-                              <Label text="Turno de Noche">
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
          </children>
       </VBox>
    </center>

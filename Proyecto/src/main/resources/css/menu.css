@@ -17,6 +17,16 @@
     -fx-font-size: 14px;
 }
 
+.boton-blancoNego {
+    -fx-background-color: transparent;
+    -fx-border-radius: 8;
+    -fx-border-color: #AAAAAA;
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+}
+
 .boton-azul {
     -fx-background-color: #3A7BD5;
     -fx-background-radius: 8;

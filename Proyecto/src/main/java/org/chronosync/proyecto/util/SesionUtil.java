@@ -1,5 +1,6 @@
 package org.chronosync.proyecto.util;
 
+import javafx.stage.Stage;
 import org.chronosync.proyecto.modelo.Usuario;
 
 /**
@@ -49,7 +50,8 @@ public class SesionUtil {
     /**
      * Cierra la sesión actual
      */
-    public static void cerrarSesion() {
+    public static void cerrarSesion(Stage stage) {
         usuarioActual = null;
+        CargadorUtil.cambiarEscena(stage, "/fxml/login.fxml");
     }
 }

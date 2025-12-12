@@ -73,7 +73,7 @@ public class LoginEmpresaControlador {
         mostrar("Perfecto", "Te has unido al negocio correctamente.");
 
         Stage stage = (Stage) fieldCodigo.getScene().getWindow();
-        CargadorUtil.cambiarEscena(stage, "/fxml/menuEmpleado.fxml");
+        CargadorUtil.cambiarEscena(stage, "/fxml/menuPrincipal.fxml");
     }
 
     private void volver(MouseEvent e) {
