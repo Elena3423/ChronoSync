@@ -3,6 +3,7 @@ package org.chronosync.proyecto.dao;
 import org.chronosync.proyecto.bd.ConexionBD;
 import org.chronosync.proyecto.modelo.Usuario;
 
+import javax.swing.text.html.parser.Entity;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

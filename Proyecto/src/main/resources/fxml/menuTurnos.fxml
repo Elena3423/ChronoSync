@@ -241,19 +241,31 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Label fx:id="titCaja21" styleClass="titulo-caja" stylesheets="@../css/menu.css" text="Fecha" />
+                              <Label fx:id="lblMes" styleClass="titulo-caja" stylesheets="@../css/menu.css" text="Fecha" />
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                                  <children>
-                                    <Button mnemonicParsing="false" styleClass="boton-blancoNego" stylesheets="@../css/menu.css" text="&lt;">
+                                    <Button fx:id="btnMesAnterior" mnemonicParsing="false" styleClass="boton-blancoNego" stylesheets="@../css/menu.css" text="&lt;">
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" styleClass="boton-blancoNego" stylesheets="@../css/menu.css" text="&gt;" />
+                                    <Button fx:id="btnMesSiguiente" mnemonicParsing="false" styleClass="boton-blancoNego" stylesheets="@../css/menu.css" text="&gt;" />
                                  </children>
                               </HBox>
                            </children>
                         </GridPane>
+                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                           <children>
+                              <GridPane fx:id="gridCalendario" alignment="CENTER" VBox.vgrow="ALWAYS">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
                </children>

@@ -11,6 +11,8 @@ module org.chronosync.proyecto {
     opens org.chronosync.proyecto to javafx.fxml;
     exports org.chronosync.proyecto;
 
+    opens org.chronosync.proyecto.modelo to javafx.base;
+
     opens org.chronosync.proyecto.controlador to javafx.fxml;
     opens org.chronosync.proyecto.controlador.menu to javafx.fxml;
 }

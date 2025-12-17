@@ -2,6 +2,9 @@ package org.chronosync.proyecto.controlador.menu;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.chronosync.proyecto.util.CargadorUtil;
@@ -23,6 +26,7 @@ public class MenuEmpleadosControlador {
         btnExportaciones.setOnMouseClicked(this::navegar);
         btnConfiguracion.setOnMouseClicked(this::navegar);
         btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
+
     }
 
     private void navegar(MouseEvent e) {

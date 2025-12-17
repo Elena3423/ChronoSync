@@ -18,8 +18,6 @@ import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.CargarImagenUtil;
 import org.chronosync.proyecto.util.SesionUtil;
 
-import java.io.InputStream;
-
 public class MenuPrincipalControlador {
     @FXML private Button btnEmpleados;
     @FXML private Button btnTurnos;
@@ -119,7 +117,7 @@ public class MenuPrincipalControlador {
                 tarjetaSubdato3.setText("Requieren atención");
 
                 tarjetaTit4.setText("Informes Generados");
-                tarjetaDato4.setText("4");
+                tarjetaDato4.setText("0");
                 CargarImagenUtil.establecerImagen(imgTarjeta4, "/img/archivoIcono.png");
                 tarjetaSubdato4.setText("Este mes");
 
