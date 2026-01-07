@@ -155,4 +155,26 @@ public class TurnoDAO {
         );
     }
 
+    public int contarTurnosMesUsuario(int usuarioId) {
+        // Consulta que filtra por ID de usuario y el mes/año actual
+        String sql = "SELECT COUNT(*) FROM turno " +
+                "WHERE usuario_id = ? " +
+                "AND MONTH(fecha_inicio) = MONTH(CURRENT_DATE()) " +
+                "AND YEAR(fecha_inicio) = YEAR(CURRENT_DATE())";
+        int total = 0;
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, usuarioId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    total = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar turnos del usuario: " + e.getMessage());
+        }
+        return total;
+    }
+
 }
