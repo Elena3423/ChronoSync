@@ -4,9 +4,13 @@ import org.chronosync.proyecto.bd.ConexionBD;
 import org.chronosync.proyecto.modelo.Turno;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TurnoDAO {
 
@@ -175,6 +179,82 @@ public class TurnoDAO {
             System.out.println("Error al contar turnos del usuario: " + e.getMessage());
         }
         return total;
+    }
+
+    public boolean insertarTurnoRapido(int usuarioId, String tipo) {
+        String sql = "INSERT INTO turno (fecha_inicio, fecha_fin, tipo, estado, usuario_id) " +
+                "VALUES (NOW(), DATE_ADD(NOW(), INTERVAL 8 HOUR), ?, 'Activo', ?)";
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, tipo);
+            stmt.setInt(2, usuarioId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Map<LocalDate, List<String>> obtenerTurnosDelMes(YearMonth ym, Integer usuarioId) {
+        Map<LocalDate, List<String>> mapa = new HashMap<>();
+
+        // Consulta dinámica: si hay usuarioId, añadimos el filtro AND t.usuario_id = ?
+        String sql = "SELECT t.fecha_inicio, t.tipo, u.nombre " +
+                "FROM turno t " +
+                "JOIN usuarios u ON t.usuario_id = u.id " +
+                "WHERE MONTH(t.fecha_inicio) = ? AND YEAR(t.fecha_inicio) = ? " +
+                (usuarioId != null ? "AND t.usuario_id = ? " : "");
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, ym.getMonthValue());
+            ps.setInt(2, ym.getYear());
+            if (usuarioId != null) {
+                ps.setInt(3, usuarioId);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                LocalDate fecha = rs.getDate("fecha_inicio").toLocalDate();
+                // Guardamos "Nombre - Tipo" para que el controlador sepa separar el texto del color
+                String info = rs.getString("nombre") + " - " + rs.getString("tipo");
+                mapa.computeIfAbsent(fecha, k -> new ArrayList<>()).add(info);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mapa;
+    }
+
+    public boolean insertarTurno(int usuarioId, String tipo, LocalDate fecha) {
+        // Definimos la hora de inicio según el turno
+        int horaInicio = switch (tipo.toLowerCase()) {
+            case "mañana" -> 6;
+            case "tarde" -> 14;
+            case "noche" -> 22;
+            default -> 8;
+        };
+
+        // Calculamos inicio y fin (8 horas después)
+        java.time.LocalDateTime inicio = fecha.atTime(horaInicio, 0);
+        java.time.LocalDateTime fin = inicio.plusHours(8);
+
+        String sql = "INSERT INTO turno (usuario_id, tipo, fecha_inicio, fecha_fin) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, usuarioId);
+            ps.setString(2, tipo);
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(inicio));
+            ps.setTimestamp(4, java.sql.Timestamp.valueOf(fin));
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

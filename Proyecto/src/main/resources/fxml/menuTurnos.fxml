@@ -222,7 +222,7 @@
                     </rowConstraints>
                      <children>
                         <Label fx:id="titulo" styleClass="titulo" stylesheets="@../css/menu.css" text="Titulo" />
-                        <Button mnemonicParsing="false" styleClass="boton-azul" stylesheets="@../css/menu.css" text="Añadir Turno" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                        <Button fx:id="btnAñadirTurno" mnemonicParsing="false" styleClass="boton-azul" stylesheets="@../css/menu.css" text="Añadir Turno" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
                      </children>
                   </GridPane>
                   <Label fx:id="subtitulo" styleClass="subtitulo" stylesheets="@../css/menu.css" text="Label" />

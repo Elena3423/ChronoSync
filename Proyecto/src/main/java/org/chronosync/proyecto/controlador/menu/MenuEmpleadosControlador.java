@@ -2,13 +2,9 @@ package org.chronosync.proyecto.controlador.menu;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.chronosync.proyecto.dao.TurnoDAO;
 import org.chronosync.proyecto.dao.UsuarioDAO;
@@ -26,12 +22,14 @@ public class MenuEmpleadosControlador {
     @FXML private Button btnConfiguracion;
     @FXML private Button btnCerrarSesion;
 
+    @FXML private Label txtNombre;
+    @FXML private Label txtRol;
+
     @FXML private TableView<Usuario> tabla;
     @FXML private TableColumn<Usuario, String> colNombre;
     @FXML private TableColumn<Usuario, Integer> colPuesto;
     @FXML private TableColumn<Usuario, Boolean> colEstado;
     @FXML private TableColumn<Usuario, Integer> colTurnos;
-    @FXML private TableColumn<Usuario, Void> colAcciones;
 
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private TurnoDAO turnoDAO = new TurnoDAO();
@@ -39,6 +37,9 @@ public class MenuEmpleadosControlador {
     @FXML
     public void initialize() {
         configurarNavegacion();
+        mostrarDatosUsuario();
+
+        tabla.getStyleClass().add("");
 
         // Configuración de las columnas básicas
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -51,19 +52,18 @@ public class MenuEmpleadosControlador {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
+                getStyleClass().remove("table-cell"); // Limpiar para evitar duplicados
+                getStyleClass().add("table-cell");
+
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
                 } else {
-                    // Traducción de ID a Texto
                     if (item == 1) {
                         setText("Administrador");
-                        setStyle("-fx-text-fill: #2980b9; -fx-font-weight: bold;"); // Azul para admin
-                    } else if (item == 2) {
-                        setText("Empleado");
-                        setStyle("-fx-text-fill: #7f8c8d;"); // Gris para empleado
+                        setStyle("-fx-text-fill: #3A7BD5; -fx-font-weight: bold;");
                     } else {
-                        setText("Rol " + item);
+                        setText("Empleado");
+                        setStyle("-fx-text-fill: #7f8c8d;");
                     }
                 }
             }
@@ -74,16 +74,17 @@ public class MenuEmpleadosControlador {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
                 super.updateItem(item, empty);
+                getStyleClass().add("table-cell");
+
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
                 } else {
                     if (item) {
                         setText("Activo");
-                        setStyle("-fx-text-fill: #2ecc71; -fx-font-weight: bold;"); // Verde
+                        setStyle("-fx-text-fill: #2ecc71; -fx-font-weight: bold;");
                     } else {
                         setText("Inactivo");
-                        setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;"); // Rojo
+                        setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
                     }
                 }
             }
@@ -94,73 +95,33 @@ public class MenuEmpleadosControlador {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
+                getStyleClass().add("table-cell");
 
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
                 } else {
-                    // 'item' es el ID del usuario
                     int totalTurnos = turnoDAO.contarTurnosMesUsuario(item);
-
                     setText(totalTurnos + " turnos");
-                    setStyle("-fx-alignment: CENTER;");
+                    setStyle("-fx-text-fill: #333333;");
                 }
             }
         });
 
-        configurarColumnaAcciones();
-
         actualizarTabla();
-    }
-
-    private void configurarColumnaAcciones() {
-        colAcciones.setCellFactory(param -> new TableCell<>() {
-            private final Button btnEditar = new Button("Editar");
-            private final Button btnVerTurnos = new Button("Ver Turnos");
-            private final HBox pane = new HBox(btnEditar, btnVerTurnos);
-
-            {
-                pane.setSpacing(10);
-                btnEditar.getStyleClass().add("boton-editar"); // Puedes definir este estilo en tu CSS
-                btnVerTurnos.getStyleClass().add("boton-blancoNego"); // Reutilizando tu clase CSS
-
-                // Acción Editar
-                btnEditar.setOnAction(event -> {
-                    Usuario usuario = getTableView().getItems().get(getIndex());
-                    manejarEditar(usuario);
-                });
-
-                // Acción Ver Turnos
-                btnVerTurnos.setOnAction(event -> {
-                    Usuario usuario = getTableView().getItems().get(getIndex());
-                    manejarVerTurnos(usuario);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : pane);
-            }
-        });
-    }
-
-    private void manejarEditar(Usuario usuario) {
-        System.out.println("Editando a: " + usuario.getNombre());
-        // Aquí abrirías el JDialog o ventana de edición
-        // Ejemplo: FormularioEmpleado.abrir(usuario);
-    }
-
-    private void manejarVerTurnos(Usuario usuario) {
-        // Redirigir a la vista de turnos
-        Stage stage = (Stage) tabla.getScene().getWindow();
-        CargadorUtil.cambiarEscena(stage, "/fxml/menuTurnos.fxml");
-        // Nota: Si quieres filtrar, deberías pasar el ID del usuario a través de una clase de utilidad o Singleton
     }
 
     private void actualizarTabla() {
         List<Usuario> lista = usuarioDAO.obtenerTodos();
         tabla.setItems(FXCollections.observableArrayList(lista));
+    }
+
+    private void mostrarDatosUsuario() {
+        txtNombre.setText(SesionUtil.getUsuario().getNombre());
+        if (SesionUtil.getUsuario().getRolId().equals(1)) {
+            txtRol.setText("Administrador");
+        } else if (SesionUtil.getUsuario().getRolId().equals(2)) {
+            txtRol.setText("Empleado");
+        }
     }
 
     private void configurarNavegacion() {
