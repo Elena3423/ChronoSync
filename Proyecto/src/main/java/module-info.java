@@ -6,7 +6,16 @@ module org.chronosync.proyecto {
     requires java.sql;
     requires javafx.graphics;
     requires java.desktop;
-    //requires org.chronosync.proyecto;
+
+    // Librerías de exportación
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
+    requires org.apache.logging.log4j;
+    requires org.apache.logging.log4j.core;
+    requires kernel;
+    requires layout;
+    requires io;
+    requires commons;
 
     opens org.chronosync.proyecto to javafx.fxml;
     exports org.chronosync.proyecto;

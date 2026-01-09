@@ -109,14 +109,6 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", apellidos='" + apellidos + '\'' +
-                ", email='" + email + '\'' +
-                ", activo=" + activo +
-                ", rolId=" + rolId +
-                ", negocioId=" + negocioId +
-                '}';
+        return this.nombre;
     }
 }

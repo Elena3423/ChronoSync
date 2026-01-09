@@ -250,4 +250,28 @@ public class UsuarioDAO {
         return conteo;
     }
 
+    public List<Usuario> obtenerTodosLosEmpleados() {
+        List<Usuario> lista = new ArrayList<>();
+        // Filtramos por rol_id = 2 (Empleados)
+        String sql = "SELECT * FROM usuarios WHERE rol_id = 2";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                // Usamos el constructor de tu clase Usuario
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("id"));
+                u.setNombre(rs.getString("nombre"));
+                u.setRolId(rs.getInt("rol_id"));
+                // ... añade el resto de campos que tenga tu modelo
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar empleados: " + e.getMessage());
+        }
+        return lista;
+    }
+
 }

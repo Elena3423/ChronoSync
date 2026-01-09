@@ -119,18 +119,16 @@ public class ExportacionDAO {
         return new Exportacion(
                 rs.getInt("id"),
                 rs.getString("tipo_formato"),
-                LocalDateTime.parse(rs.getString("fecha_generacion")),
+                rs.getTimestamp("fecha_generacion").toLocalDateTime(), // Conversión directa
                 rs.getInt("usuario_id"),
                 rs.getInt("negocio_id")
         );
     }
 
     public int contarExportacionesMesActual(int idNegocio) {
-        String sql = "SELECT COUNT(*)\n" +
-                "        FROM exportacion\n" +
-                "        WHERE id_negocio = ?\n" +
-                "          AND fecha_generacion <= LAST_DAY(CURRENT_DATE())\n" +
-                "          AND fecha_generacion >= DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')";
+        String sql = "SELECT COUNT(*) FROM exportacion WHERE negocio_id = ? " +
+                "AND MONTH(fecha_generacion) = MONTH(CURRENT_DATE()) " +
+                "AND YEAR(fecha_generacion) = YEAR(CURRENT_DATE())";
 
         int conteo = 0;
 

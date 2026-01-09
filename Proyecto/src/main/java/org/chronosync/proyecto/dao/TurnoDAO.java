@@ -257,4 +257,50 @@ public class TurnoDAO {
         }
     }
 
+    public List<Turno> obtenerTurnosPorFiltro(int idEmpleado, String periodo) {
+        List<Turno> lista = new ArrayList<>();
+        String condicionFecha = "";
+
+        // Lógica de fechas corregida para MySQL
+        switch (periodo) {
+            case "Semana actual":
+                condicionFecha = "YEARWEEK(fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)";
+                break;
+            case "Mes actual":
+                condicionFecha = "MONTH(fecha_inicio) = MONTH(CURDATE()) AND YEAR(fecha_inicio) = YEAR(CURDATE())";
+                break;
+            case "Mes anterior":
+                condicionFecha = "MONTH(fecha_inicio) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) " +
+                        "AND YEAR(fecha_inicio) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))";
+                break;
+            default:
+                condicionFecha = "1=1"; // Traer todo si no coincide
+        }
+
+        String sql = "SELECT * FROM turno WHERE usuario_id = ? AND " + condicionFecha;
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idEmpleado);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Turno t = new Turno();
+                t.setId(rs.getInt("id"));
+                // Usamos getTimestamp para convertir a LocalDateTime
+                t.setFechaInicio(rs.getTimestamp("fecha_inicio").toLocalDateTime());
+                t.setFechaFin(rs.getTimestamp("fecha_fin") != null ?
+                        rs.getTimestamp("fecha_fin").toLocalDateTime() : null);
+                t.setTipo(rs.getString("tipo"));
+                t.setEstado(rs.getString("estado"));
+                t.setUsuarioId(rs.getInt("usuario_id"));
+                lista.add(t);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en TurnoDAO: " + e.getMessage());
+        }
+        return lista;
+    }
+
 }

@@ -36,6 +36,24 @@
     -fx-font-size: 14px;
 }
 
+.boton-rojo {
+    -fx-background-color: #E74C3C;
+    -fx-background-radius: 8;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+}
+
+.boton-verde {
+    -fx-background-color: #58B368;
+    -fx-background-radius: 8;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+}
+
 .titulo {
     -fx-font-family: Roboto;
     -fx-font-weight: bold;
@@ -192,4 +210,105 @@
 .table-view .scroll-bar .thumb {
     -fx-background-color: #CCCCCC;
     -fx-background-radius: 10;
+}
+
+/* --- ESTILO PARA CHECKBOX --- */
+
+.check-box {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-cursor: hand;
+    -fx-spacing: 10px; /* Espacio entre el cuadro y el texto */
+}
+
+/* El cuadro exterior */
+.check-box .box {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #AAAAAA;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-border-width: 1.5px;
+    -fx-padding: 3px;
+}
+
+.check-box:hover .box {
+    -fx-border-color: #3A7BD5;
+}
+
+/* Cuando está marcado (Selected) */
+.check-box:selected .box {
+    -fx-background-color: #3A7BD5;
+    -fx-border-color: #3A7BD5;
+}
+
+/* El símbolo del "Check" (el tic) */
+.check-box .mark {
+    -fx-background-color: transparent; /* Invisible cuando no está seleccionado */
+    -fx-shape: "M1.73,12.91L8.1,19.28L22.79,4.59L20.67,2.47L8.1,15.04L3.85,10.79L1.73,12.91Z";
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #FFFFFF; /* Tic blanco sobre fondo azul */
+}
+
+/* Quitar el anillo de enfoque azul de JavaFX */
+.check-box:focused .box {
+    -fx-border-color: #3A7BD5;
+    -fx-border-width: 2px;
+}
+
+/* --- ESTILO PARA CHOICEBOX --- */
+
+.choice-box {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-border-color: #AAAAAA;
+    -fx-border-radius: 8;
+    -fx-border-width: 1px;
+    -fx-padding: 5 10 5 10;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.choice-box:hover {
+    -fx-border-color: #3A7BD5; /* Azul de tu paleta */
+    -fx-background-color: #F9F9F9;
+}
+
+.choice-box:showing {
+    -fx-border-color: #3A7BD5;
+    -fx-border-width: 2px; /* Resalte al estar abierto */
+}
+
+/* Texto dentro del ChoiceBox */
+.choice-box .label {
+    -fx-text-fill: #333333;
+}
+
+/* Estilo del menú desplegable (Context Menu) */
+.choice-box .context-menu {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-border-color: #AAAAAA;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+/* Cada ítem dentro del menú desplegable */
+.choice-box .menu-item:focused {
+    -fx-background-color: #E8F1FA; /* Color de selección de tu tabla */
+}
+
+.choice-box .menu-item > .label {
+    -fx-text-fill: #333333;
+    -fx-font-family: "Roboto";
+}
+
+.choice-box .menu-item:focused > .label {
+    -fx-text-fill: #3A7BD5;
+    -fx-font-weight: bold;
 }
