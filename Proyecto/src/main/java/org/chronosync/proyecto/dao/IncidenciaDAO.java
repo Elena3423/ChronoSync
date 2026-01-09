@@ -5,16 +5,12 @@ import org.chronosync.proyecto.modelo.Incidencia;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class IncidenciaDAO {
 
-    /**
-     * Método que inserta una nueva incidencia en la base de datos.
-     *
-     * @param incidencia objeto Incidencia a insertar
-     * @return true si la operación fue exitosa; false si ocurrió un error
-     */
     public boolean insertar(Incidencia incidencia) {
         String sql = "INSERT INTO incidencias (tipo, estado, comentarios, usuario_id, turno_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -22,18 +18,29 @@ public class IncidenciaDAO {
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, incidencia.getTipo());
-            stmt.setString(2, incidencia.getEstado());
+            stmt.setString(1, incidencia.getTipo()); // 'Ausencia', 'Cambio', 'Retraso', 'Otra'
+            stmt.setString(2, incidencia.getEstado()); // 'Pendiente', 'Aceptada', 'Rechazada'
             stmt.setString(3, incidencia.getComentarios());
             stmt.setInt(4, incidencia.getUsuarioId());
+
             stmt.setInt(5, incidencia.getTurnoId());
 
             return stmt.executeUpdate() > 0;
-
         } catch (SQLException e) {
-            System.out.println("Error insertando incidencia: " + e.getMessage());
+            System.err.println("Error SQL: " + e.getMessage());
             return false;
         }
+    }
+
+    public boolean actualizarEstado(int id, String nuevoEstado) {
+        // Ajustado a tus valores ENUM: 'Aceptada' (en lugar de Aprobada)
+        String sql = "UPDATE incidencias SET estado = ? WHERE id = ?";
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) { return false; }
     }
 
     /**
@@ -177,6 +184,35 @@ public class IncidenciaDAO {
         }
 
         return conteo;
+    }
+
+    public List<Map<String, Object>> obtenerIncidenciasConNombre(Integer usuarioIdFiltro) {
+        List<Map<String, Object>> lista = new ArrayList<>();
+        String sql = "SELECT i.*, u.nombre, u.apellidos FROM incidencias i " +
+                "JOIN usuarios u ON i.usuario_id = u.id " +
+                (usuarioIdFiltro != null ? "WHERE i.usuario_id = ?" : "") +
+                " ORDER BY i.id DESC";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            if (usuarioIdFiltro != null) ps.setInt(1, usuarioIdFiltro);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> fila = new HashMap<>();
+                Incidencia inc = new Incidencia(
+                        rs.getInt("id"),
+                        rs.getString("tipo"),
+                        rs.getString("estado"),
+                        rs.getString("comentarios"),
+                        rs.getInt("usuario_id"),
+                        rs.getInt("turno_id")
+                );
+                fila.put("incidencia", inc);
+                fila.put("nombreEmpleado", rs.getString("nombre") + " " + rs.getString("apellidos"));
+                lista.add(fila);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return lista;
     }
 
 }
