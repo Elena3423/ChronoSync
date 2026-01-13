@@ -9,6 +9,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import org.chronosync.proyecto.modelo.Incidencia;
 import org.chronosync.proyecto.modelo.Turno;
 
 import java.io.File;
@@ -67,6 +68,144 @@ public class ExportadorPDF {
         }
 
         documento.add(tabla);
+        documento.close();
+    }
+
+    public static void generarInformeIncidencias(File destino, String periodo, String nombreEmpleado, List<Incidencia> lista) throws Exception {
+        PdfWriter writer = new PdfWriter(destino);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document documento = new Document(pdf);
+
+        documento.add(new Paragraph("INFORME DE INCIDENCIAS")
+                .setFontSize(20)
+                .setFontColor(AZUL_CHRONO)
+                .setTextAlignment(TextAlignment.CENTER));
+
+        documento.add(new Paragraph("Empleado: " + nombreEmpleado));
+        documento.add(new Paragraph("Periodo: " + periodo));
+        documento.add(new Paragraph("\n"));
+
+        // Columnas: ID Turno, Tipo, Estado, Comentarios
+        Table tabla = new Table(UnitValue.createPercentArray(new float[]{15, 20, 15, 50})).useAllAvailableWidth();
+
+        String[] cabeceras = {"ID Turno", "Tipo", "Estado", "Comentarios"};
+        for (String h : cabeceras) {
+            tabla.addHeaderCell(new Cell().add(new Paragraph(h).setFontColor(DeviceRgb.WHITE))
+                    .setBackgroundColor(AZUL_CHRONO));
+        }
+
+        if (lista.isEmpty()) {
+            tabla.addCell(new Cell(1, 4).add(new Paragraph("No se encontraron incidencias.")));
+        } else {
+            for (Incidencia i : lista) {
+                tabla.addCell(new Cell().add(new Paragraph(String.valueOf(i.getTurnoId()))));
+                tabla.addCell(new Cell().add(new Paragraph(i.getTipo())));
+                tabla.addCell(new Cell().add(new Paragraph(i.getEstado())));
+                tabla.addCell(new Cell().add(new Paragraph(i.getComentarios() != null ? i.getComentarios() : "")));
+            }
+        }
+
+        documento.add(tabla);
+        documento.close();
+    }
+
+    public static void generarInformeHoras(File destino, String periodo, String nombreEmpleado, List<Turno> turnos) throws Exception {
+        PdfWriter writer = new PdfWriter(destino);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document documento = new Document(pdf);
+
+        documento.add(new Paragraph("INFORME DE HORAS TRABAJADAS")
+                .setFontSize(20).setFontColor(AZUL_CHRONO).setTextAlignment(TextAlignment.CENTER));
+        documento.add(new Paragraph("Empleado: " + nombreEmpleado));
+        documento.add(new Paragraph("Periodo: " + periodo + "\n\n"));
+
+        Table tabla = new Table(UnitValue.createPercentArray(new float[]{25, 25, 25, 25})).useAllAvailableWidth();
+        String[] cabeceras = {"Fecha", "Entrada", "Salida", "Total Tiempo"};
+
+        for (String h : cabeceras) {
+            tabla.addHeaderCell(new Cell().add(new Paragraph(h).setFontColor(DeviceRgb.WHITE)).setBackgroundColor(AZUL_CHRONO));
+        }
+
+        for (Turno t : turnos) {
+            if (t.getFechaFin() != null) {
+                tabla.addCell(t.getFechaInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                tabla.addCell(t.getFechaInicio().format(DateTimeFormatter.ofPattern("HH:mm")));
+                tabla.addCell(t.getFechaFin().format(DateTimeFormatter.ofPattern("HH:mm")));
+
+                java.time.Duration d = java.time.Duration.between(t.getFechaInicio(), t.getFechaFin());
+                tabla.addCell(String.format("%02d:%02d h", d.toHours(), d.toMinutesPart()));
+            }
+        }
+        documento.add(tabla);
+        documento.close();
+    }
+
+    public static void generarInformeCompleto(File destino, String periodo, String nombre, List<Turno> turnos, List<Incidencia> incidencias) throws Exception {
+        PdfWriter writer = new PdfWriter(destino);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document documento = new Document(pdf);
+
+        // Título Principal (Sin setBold)
+        documento.add(new Paragraph("INFORME CONSOLIDADO DE ACTIVIDAD")
+                .setFontSize(22)
+                .setFontColor(AZUL_CHRONO)
+                .setTextAlignment(TextAlignment.CENTER));
+
+        documento.add(new Paragraph("Empleado: " + nombre + " | Periodo: " + periodo)
+                .setFontSize(12)
+                .setMarginBottom(20));
+
+        // SECCIÓN 1: TURNOS
+        documento.add(new Paragraph("1. REGISTRO DE TURNOS")
+                .setFontSize(16)
+                .setFontColor(AZUL_CHRONO));
+
+        Table tTurnos = new Table(UnitValue.createPercentArray(new float[]{20, 20, 20, 20, 20})).useAllAvailableWidth();
+        String[] hT = {"Fecha", "Entrada", "Salida", "Tipo", "Estado"};
+
+        for(String h : hT) {
+            tTurnos.addHeaderCell(new Cell().add(new Paragraph(h).setFontColor(DeviceRgb.WHITE))
+                    .setBackgroundColor(AZUL_CHRONO));
+        }
+
+        if (turnos.isEmpty()) {
+            tTurnos.addCell(new Cell(1, 5).add(new Paragraph("No hay turnos registrados.")));
+        } else {
+            for(Turno t : turnos) {
+                tTurnos.addCell(new Cell().add(new Paragraph(t.getFechaInicio().toLocalDate().toString())));
+                tTurnos.addCell(new Cell().add(new Paragraph(t.getFechaInicio().toLocalTime().toString())));
+                tTurnos.addCell(new Cell().add(new Paragraph(t.getFechaFin() != null ? t.getFechaFin().toLocalTime().toString() : "--:--")));
+                tTurnos.addCell(new Cell().add(new Paragraph(t.getTipo() != null ? t.getTipo() : "")));
+                tTurnos.addCell(new Cell().add(new Paragraph(t.getEstado() != null ? t.getEstado() : "")));
+            }
+        }
+        documento.add(tTurnos.setMarginBottom(30));
+
+        // SECCIÓN 2: INCIDENCIAS
+        documento.add(new Paragraph("2. REGISTRO DE INCIDENCIAS")
+                .setFontSize(16)
+                .setFontColor(AZUL_CHRONO));
+
+        Table tInc = new Table(UnitValue.createPercentArray(new float[]{15, 20, 15, 50})).useAllAvailableWidth();
+        String[] hI = {"ID Turno", "Tipo", "Estado", "Comentarios"};
+
+        for(String h : hI) {
+            tInc.addHeaderCell(new Cell().add(new Paragraph(h).setFontColor(DeviceRgb.WHITE))
+                    .setBackgroundColor(AZUL_CHRONO));
+        }
+
+        if (incidencias.isEmpty()) {
+            tInc.addCell(new Cell(1, 4).add(new Paragraph("No hay incidencias registradas.")));
+        } else {
+            for(Incidencia in : incidencias) {
+                tInc.addCell(new Cell().add(new Paragraph(String.valueOf(in.getTurnoId()))));
+                tInc.addCell(new Cell().add(new Paragraph(in.getTipo() != null ? in.getTipo() : "")));
+                tInc.addCell(new Cell().add(new Paragraph(in.getEstado() != null ? in.getEstado() : "")));
+                tInc.addCell(new Cell().add(new Paragraph(in.getComentarios() != null ? in.getComentarios() : "")));
+            }
+        }
+        documento.add(tInc);
+
         documento.close();
     }
 }

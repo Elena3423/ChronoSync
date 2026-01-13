@@ -215,4 +215,49 @@ public class IncidenciaDAO {
         return lista;
     }
 
+    public List<Incidencia> obtenerIncidenciasPorFiltro(int usuarioId, String periodo, String estado) {
+        List<Incidencia> lista = new ArrayList<>();
+
+        // CAMBIO: 'incidencias' en plural si así se llama en tu BD
+        StringBuilder sql = new StringBuilder(
+                "SELECT i.* FROM incidencias i " +
+                        "JOIN turno t ON i.turno_id = t.id " +
+                        "WHERE i.usuario_id = ?"
+        );
+
+        if (estado != null && !estado.equals("Todos")) {
+            sql.append(" AND i.estado = ?");
+        }
+
+        switch (periodo) {
+            case "Semana actual": sql.append(" AND YEARWEEK(t.fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)"); break;
+            case "Mes actual": sql.append(" AND MONTH(t.fecha_inicio) = MONTH(CURDATE()) AND YEAR(t.fecha_inicio) = YEAR(CURDATE())"); break;
+            case "Mes anterior": sql.append(" AND MONTH(t.fecha_inicio) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))"); break;
+        }
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            stmt.setInt(1, usuarioId);
+            if (estado != null && !estado.equals("Todos")) {
+                stmt.setString(2, estado);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Incidencia inc = new Incidencia();
+                inc.setId(rs.getInt("id"));
+                inc.setTipo(rs.getString("tipo"));
+                inc.setEstado(rs.getString("estado"));
+                inc.setComentarios(rs.getString("comentarios"));
+                inc.setUsuarioId(rs.getInt("usuario_id"));
+                inc.setTurnoId(rs.getInt("turno_id"));
+                lista.add(inc);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
 }

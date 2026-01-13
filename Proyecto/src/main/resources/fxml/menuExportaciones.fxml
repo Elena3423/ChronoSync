@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.menu.MenuExportacionesControlador">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.menu.MenuExportacionesControlador">
    <left>
 
               <VBox prefWidth="250.0" BorderPane.alignment="CENTER">
@@ -328,13 +319,13 @@
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
-                                    <ChoiceBox prefWidth="150.0" />
+                                    <ChoiceBox fx:id="choicePeriodo2" prefWidth="150.0" />
                                     <Label text="Estado">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
-                                    <ChoiceBox prefWidth="150.0" />
+                                    <ChoiceBox fx:id="choiceEstado2" prefWidth="150.0" />
                                     <GridPane>
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -344,12 +335,12 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" styleClass="boton-rojo" stylesheets="@../css/menu.css" text="PDF" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                          <Button fx:id="btnPDF2" mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" styleClass="boton-rojo" stylesheets="@../css/menu.css" text="PDF" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </GridPane.margin>
                                           </Button>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="279.0" styleClass="boton-verde" stylesheets="@../css/menu.css" text="Excel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                          <Button fx:id="btnExcel2" mnemonicParsing="false" prefHeight="25.0" prefWidth="279.0" styleClass="boton-verde" stylesheets="@../css/menu.css" text="Excel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </GridPane.margin>
@@ -401,13 +392,13 @@
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
-                                    <ChoiceBox prefWidth="150.0" />
-                                    <Label text="Empleado">
+                                    <ChoiceBox fx:id="choicePeriodo3" prefWidth="150.0" />
+                                    <Label fx:id="lblEmpleado3" text="Empleado">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
-                                    <ChoiceBox prefWidth="150.0" />
+                                    <ChoiceBox fx:id="choiceEmpleado3" prefWidth="150.0" />
                                     <GridPane>
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -417,12 +408,12 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" styleClass="boton-rojo" stylesheets="@../css/menu.css" text="PDF" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                          <Button fx:id="btnPDF3" mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" styleClass="boton-rojo" stylesheets="@../css/menu.css" text="PDF" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </GridPane.margin>
                                           </Button>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="279.0" styleClass="boton-verde" stylesheets="@../css/menu.css" text="Excel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                          <Button fx:id="btnExcel3" mnemonicParsing="false" prefHeight="25.0" prefWidth="279.0" styleClass="boton-verde" stylesheets="@../css/menu.css" text="Excel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </GridPane.margin>
@@ -474,7 +465,7 @@
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
-                                    <ChoiceBox prefWidth="150.0" />
+                                    <ChoiceBox fx:id="choicePeriodo4" prefWidth="150.0" />
                                     <GridPane>
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -487,12 +478,12 @@
                                           <Insets top="5.0" />
                                        </VBox.margin>
                                        <children>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" styleClass="boton-rojo" stylesheets="@../css/menu.css" text="PDF" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                          <Button fx:id="btnPDF4" mnemonicParsing="false" prefHeight="25.0" prefWidth="314.0" styleClass="boton-rojo" stylesheets="@../css/menu.css" text="PDF" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </GridPane.margin>
                                           </Button>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="279.0" styleClass="boton-verde" stylesheets="@../css/menu.css" text="Excel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                          <Button fx:id="btnExcel4" mnemonicParsing="false" prefHeight="25.0" prefWidth="279.0" styleClass="boton-verde" stylesheets="@../css/menu.css" text="Excel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </GridPane.margin>

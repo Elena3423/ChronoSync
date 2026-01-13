@@ -303,4 +303,33 @@ public class TurnoDAO {
         return lista;
     }
 
+    public List<Turno> obtenerResumenHoras(int usuarioId, String periodo) {
+        List<Turno> lista = new ArrayList<>();
+        String condicionFecha = "";
+
+        switch (periodo) {
+            case "Semana actual": condicionFecha = "AND YEARWEEK(fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)"; break;
+            case "Mes actual": condicionFecha = "AND MONTH(fecha_inicio) = MONTH(CURDATE()) AND YEAR(fecha_inicio) = YEAR(CURDATE())"; break;
+            case "Mes anterior": condicionFecha = "AND MONTH(fecha_inicio) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))"; break;
+            default: condicionFecha = "";
+        }
+
+        // Solo turnos finalizados (que tengan fecha_fin)
+        String sql = "SELECT * FROM turno WHERE usuario_id = ? AND fecha_fin IS NOT NULL " + condicionFecha + " ORDER BY fecha_inicio DESC";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Turno t = new Turno();
+                t.setFechaInicio(rs.getTimestamp("fecha_inicio").toLocalDateTime());
+                t.setFechaFin(rs.getTimestamp("fecha_fin").toLocalDateTime());
+                t.setTipo(rs.getString("tipo"));
+                lista.add(t);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return lista;
+    }
+
 }
