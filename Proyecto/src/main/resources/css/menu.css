@@ -312,3 +312,46 @@
     -fx-text-fill: #3A7BD5;
     -fx-font-weight: bold;
 }
+
+/* --- ESTILO PARA TEXTFIELD --- */
+
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-border-color: #AAAAAA;
+    -fx-border-radius: 8;
+    -fx-border-width: 1px;
+    -fx-padding: 8 12 8 12; /* Un poco más de padding para que el texto respire */
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-prompt-text-fill: #999999; /* Color gris suave para el placeholder */
+}
+
+/* Efecto al pasar el ratón */
+.text-field:hover {
+    -fx-border-color: #888888;
+}
+
+/* Estado de enfoque (cuando el usuario hace clic para escribir) */
+.text-field:focused {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #3A7BD5; /* Tu azul principal */
+    -fx-border-width: 2px;     /* Borde más grueso al estar activo */
+    -fx-background-insets: 0;  /* Elimina el halo azul por defecto de JavaFX */
+}
+
+/* Estilo para campos deshabilitados (opcional) */
+.text-field:disabled {
+    -fx-background-color: #EEEEEE;
+    -fx-opacity: 0.7;
+    -fx-border-color: #CCCCCC;
+    -fx-cursor: default;
+}
+
+/* Si usas PasswordField, suele heredar de text-field,
+   pero puedes forzarlo así para asegurar consistencia */
+.password-field {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}

@@ -33,6 +33,8 @@ public class MenuExportacionesControlador {
     @FXML private Button btnConfiguracion;
     @FXML private Button btnCerrarSesion;
 
+    @FXML private Label txtNombre, txtRol;
+
     @FXML private Label lblEmpleado1;
     @FXML private Label lblEmpleado3;
 
@@ -66,6 +68,8 @@ public class MenuExportacionesControlador {
         btnConfiguracion.setOnMouseClicked(this::navegar);
         btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
 
+        mostrarDatosUsuario();
+
         configurarInformeTurnos();
         configurarInformeIncidencias();
         configurarInformeHoras();
@@ -92,6 +96,15 @@ public class MenuExportacionesControlador {
 
         Stage stage = (Stage) btn.getScene().getWindow();
         CargadorUtil.cambiarEscena(stage, fxmlRuta);
+    }
+
+    private void mostrarDatosUsuario() {
+        txtNombre.setText(SesionUtil.getUsuario().getNombre());
+        if (SesionUtil.getUsuario().getRolId().equals(1)) {
+            txtRol.setText("Administrador");
+        } else if (SesionUtil.getUsuario().getRolId().equals(2)) {
+            txtRol.setText("Empleado");
+        }
     }
 
     private void cerrarSesion(MouseEvent e) {

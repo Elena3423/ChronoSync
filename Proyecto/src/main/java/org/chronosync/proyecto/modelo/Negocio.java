@@ -8,6 +8,7 @@ public class Negocio {
     private String direccion;
     private String telefono;
     private String email;
+    private String codigoUnion;
 
     /**
      * Constructor vacio (requerido)
@@ -17,12 +18,13 @@ public class Negocio {
     /**
      * Constructor completo
      */
-    public Negocio(Integer id, String nombre, String direccion, String telefono, String email) {
+    public Negocio(Integer id, String nombre, String direccion, String telefono, String email, String codigoUnion) {
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
         this.email = email;
+        this.codigoUnion = codigoUnion;
     }
 
     /**
@@ -76,6 +78,10 @@ public class Negocio {
         this.email = email;
     }
 
+    public String getCodigoUnion() { return codigoUnion; }
+
+    public void setCodigoUnion(String codigoUnion) { this.codigoUnion = codigoUnion; }
+
     @Override
     public String toString() {
         return "Negocio{" +
@@ -84,6 +90,7 @@ public class Negocio {
                 ", direccion='" + direccion + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", email='" + email + '\'' +
+                ", codigoUnion='" + codigoUnion + '\'' +
                 '}';
     }
 }

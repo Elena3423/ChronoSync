@@ -57,24 +57,22 @@ public class NegocioDAO {
      */
     public Negocio obtenerPorId(int id) {
         String sql = "SELECT * FROM negocio WHERE id = ?";
-        Negocio negocio = null;
-
-        // Obtenemos la conexión
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
-                negocio = construirNegocio(rs);
+                return new Negocio(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("direccion"),
+                        rs.getString("telefono"),
+                        rs.getString("email"),
+                        rs.getString("codigo_union")
+                );
             }
-
-        } catch (SQLException e) {
-            System.out.println("Error obteniendo negocio por ID: " + e.getMessage());
-        }
-
-        return negocio;
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
     }
 
     public Negocio obtenerPorEmail(String email) {
@@ -155,7 +153,7 @@ public class NegocioDAO {
      * @return true si la actualización fue correcta
      */
     public boolean actualizar(Negocio negocio) {
-        String sql = "UPDATE negocio SET nombre=?, direccion=?, telefono=?, email=? WHERE id=?";
+        String sql = "UPDATE negocio SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id = ?";
 
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -208,7 +206,8 @@ public class NegocioDAO {
                 rs.getString("nombre"),
                 rs.getString("direccion"),
                 rs.getString("telefono"),
-                rs.getString("email")
+                rs.getString("email"),
+                rs.getString("codigo_union")
         );
     }
 
