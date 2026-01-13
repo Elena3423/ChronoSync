@@ -223,30 +223,62 @@ public class NegocioDAO {
         return codigo.toString();
     }
 
-    public int contarTurnosMesActual(int idNegocio) {
-        String sql = "SELECT COUNT(*)\n" +
-                "        FROM turno\n" +
-                "        WHERE id_negocio = ?\n" +
-                "          AND fecha_inicio <= LAST_DAY(CURRENT_DATE())\n" +
-                "          AND fecha_fin >= DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')";
-
-        int conteo = 0;
+    public int contarTurnosMesActual(int negocioId) {
+        String sql = "SELECT COUNT(t.id) FROM turno t " +
+                "JOIN usuarios u ON t.usuario_id = u.id " +
+                "WHERE u.negocio_id = ? " +
+                "AND MONTH(t.fecha_inicio) = MONTH(CURDATE()) " + // Usamos fecha_inicio
+                "AND YEAR(t.fecha_inicio) = YEAR(CURDATE())";
 
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, idNegocio);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    conteo = rs.getInt(1);
-                }
-            }
-
+            stmt.setInt(1, negocioId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) {
-            System.out.println("Error al contar turnos del mes actual: " + e.getMessage());
+            System.err.println("Error al contar turnos del mes actual: " + e.getMessage());
         }
+        return 0;
+    }
 
-        return conteo;
+    public int contarTurnosSemanaUsuario(int usuarioId) {
+        String sql = "SELECT COUNT(*) FROM turno WHERE usuario_id = ? " +
+                "AND YEARWEEK(fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)";
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public String obtenerTurnoHoyUsuario(int usuarioId) {
+        String sql = "SELECT fecha_inicio, fecha_fin FROM turno " +
+                "WHERE usuario_id = ? AND DATE(fecha_inicio) = CURDATE() " +
+                "LIMIT 1";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // Extraemos solo la parte de la hora (HH:mm)
+                java.sql.Timestamp inicio = rs.getTimestamp("fecha_inicio");
+                java.sql.Timestamp fin = rs.getTimestamp("fecha_fin");
+
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+                String horaInicio = sdf.format(inicio);
+                String horaFin = (fin != null) ? sdf.format(fin) : "Sin definir";
+
+                return "Hoy: " + horaInicio + " - " + horaFin;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "No tienes turnos para hoy";
     }
 }

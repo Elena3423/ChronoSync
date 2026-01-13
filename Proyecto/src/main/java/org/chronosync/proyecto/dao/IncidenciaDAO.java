@@ -160,30 +160,20 @@ public class IncidenciaDAO {
         );
     }
 
-    public int contarInformesPendientes(int idNegocio) {
-        String sql = "SELECT COUNT(*)\n" +
-                "        FROM incidencia\n" +
-                "        WHERE id_negocio = ?\n" +
-                "          AND estado = 'pendiente'";
-
-        int conteo = 0;
-
+    public int contarInformesPendientes(int negocioId) {
+        // He cambiado 'incidencia' por 'incidencias' y 'id_negocio' por 'negocio_id'
+        String sql = "SELECT COUNT(i.id) FROM incidencias i " +
+                "JOIN usuarios u ON i.usuario_id = u.id " +
+                "WHERE u.negocio_id = ? AND i.estado != 'Resuelta'";
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, idNegocio);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    conteo = rs.getInt(1);
-                }
-            }
-
+            stmt.setInt(1, negocioId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) {
-            System.out.println("Error al contar informes pendientes: " + e.getMessage());
+            System.err.println("Error al contar informes: " + e.getMessage());
         }
-
-        return conteo;
+        return 0;
     }
 
     public List<Map<String, Object>> obtenerIncidenciasConNombre(Integer usuarioIdFiltro) {
@@ -260,4 +250,16 @@ public class IncidenciaDAO {
         return lista;
     }
 
+    public int contarIncidenciasUsuario(int usuarioId) {
+        String sql = "SELECT COUNT(*) FROM incidencias WHERE usuario_id = ?";
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("Error en contarIncidenciasUsuario: " + e.getMessage());
+        }
+        return 0;
+    }
 }

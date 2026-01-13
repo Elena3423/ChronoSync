@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.chronosync.proyecto.dao.NegocioDAO;
 import org.chronosync.proyecto.dao.UsuarioDAO;
@@ -14,8 +13,6 @@ import org.chronosync.proyecto.modelo.Negocio;
 import org.chronosync.proyecto.modelo.Usuario;
 import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.SesionUtil;
-
-import java.io.File;
 
 public class MenuConfiguracionControlador {
     @FXML private Button btnPanelPrincipal;

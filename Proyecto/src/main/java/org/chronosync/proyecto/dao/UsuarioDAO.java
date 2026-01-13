@@ -274,4 +274,26 @@ public class UsuarioDAO {
         return lista;
     }
 
+    public double calcularHorasTrabajadasMes(int usuarioId) {
+        String sql = "SELECT SUM(TIMESTAMPDIFF(MINUTE, fecha_inicio, fecha_fin)) " +
+                "FROM turno " +
+                "WHERE usuario_id = ? " +
+                "AND MONTH(fecha_inicio) = MONTH(CURDATE()) " +
+                "AND YEAR(fecha_inicio) = YEAR(CURDATE()) " +
+                "AND fecha_fin IS NOT NULL";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int minutosTotales = rs.getInt(1);
+                return minutosTotales / 60.0; // Convierte a horas decimales (ej: 40.5 horas)
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en calcularHorasTrabajadasMes: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
 }

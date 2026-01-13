@@ -14,6 +14,7 @@ import org.chronosync.proyecto.dao.ExportacionDAO;
 import org.chronosync.proyecto.dao.IncidenciaDAO;
 import org.chronosync.proyecto.dao.NegocioDAO;
 import org.chronosync.proyecto.dao.UsuarioDAO;
+import org.chronosync.proyecto.modelo.Usuario;
 import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.CargarImagenUtil;
 import org.chronosync.proyecto.util.SesionUtil;
@@ -55,14 +56,6 @@ public class MenuPrincipalControlador {
     @FXML private ImageView imgTarjeta4;
     @FXML private Label tarjetaDato4;
     @FXML private Label tarjetaSubdato4;
-
-    @FXML private Label titCaja1;
-    @FXML private Label subtitCaja1;
-    @FXML private Button btnCaja1;
-
-    @FXML private Label titCaja2;
-    @FXML private Label subtitCaja2;
-    @FXML private Button btnCaja2;
 
     UsuarioDAO usuarioDAO = new UsuarioDAO();
     NegocioDAO negocioDAO = new NegocioDAO();
@@ -121,14 +114,6 @@ public class MenuPrincipalControlador {
                 CargarImagenUtil.establecerImagen(imgTarjeta4, "/img/archivoIcono.png");
                 tarjetaSubdato4.setText("Este mes");
 
-                titCaja1.setText("Gestión de Empleados");
-                subtitCaja1.setText("Listado completo del personal");
-                btnCaja1.setText("Nuevo Empleado");
-
-                titCaja2.setText("Incidencias Recientes");
-                subtitCaja2.setText("Últimas solicitudes y reportes");
-                btnCaja2.setText("Ver Todas");
-
                 break;
 
             case 2:
@@ -153,14 +138,6 @@ public class MenuPrincipalControlador {
                 tarjeta4.setVisible(false);
                 tarjeta4.setManaged(false);
 
-                titCaja1.setText("Próximos Turnos");
-                subtitCaja1.setText("Tu calendario de la semana");
-                btnCaja1.setText("Ver calendario completo");
-
-                titCaja2.setText("Mis Incidencias");
-                subtitCaja2.setText("Historial de solicitudes");
-                btnCaja2.setText("Nueva Incidencia");
-
                 break;
 
             default:
@@ -169,28 +146,48 @@ public class MenuPrincipalControlador {
     }
 
     private void cargarDatos() {
-        if (SesionUtil.getUsuario().getRolId().equals(1)) {
-            Task<Void> tarea =  new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    final int empleadosActivos = usuarioDAO.contarUsuariosActivosPorNegocio(SesionUtil.getUsuario().getNegocioId());
-                    final int empleadosInactivos = usuarioDAO.contarUsuariosInactivosPorNegocio(SesionUtil.getUsuario().getNegocioId());
-                    final int turnosMes = negocioDAO.contarTurnosMesActual(SesionUtil.getUsuario().getNegocioId());
-                    final int informesPendientes = incidenciaDAO.contarInformesPendientes(SesionUtil.getUsuario().getNegocioId());
-                    final int exportacionesMes = exportacionDAO.contarExportacionesMesActual(SesionUtil.getUsuario().getNegocioId());
+        Usuario user = SesionUtil.getUsuario();
+        int negocioId = user.getNegocioId();
+        int usuarioId = user.getId();
+
+        Task<Void> tarea = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                if (user.getRolId() == 1) {
+                    // --- LÓGICA DE ADMINISTRADOR ---
+                    int activos = usuarioDAO.contarUsuariosActivosPorNegocio(negocioId);
+                    int inactivos = usuarioDAO.contarUsuariosInactivosPorNegocio(negocioId);
+                    int turnos = negocioDAO.contarTurnosMesActual(negocioId);
+                    int incidencias = incidenciaDAO.contarInformesPendientes(negocioId);
+                    int exportaciones = exportacionDAO.contarExportacionesMesActual(negocioId);
 
                     javafx.application.Platform.runLater(() -> {
-                        tarjetaDato1.setText(String.valueOf(empleadosActivos));
-                        tarjetaSubdato1.setText(empleadosInactivos + " empleados inactivos");
-                        tarjetaDato2.setText(String.valueOf(turnosMes));
-                        tarjetaDato3.setText(String.valueOf(informesPendientes));
-                        tarjetaDato4.setText(String.valueOf(exportacionesMes));
+                        tarjetaDato1.setText(String.valueOf(activos));
+                        tarjetaSubdato1.setText(inactivos + " empleados inactivos");
+                        tarjetaDato2.setText(String.valueOf(turnos));
+                        tarjetaDato3.setText(String.valueOf(incidencias));
+                        tarjetaDato4.setText(String.valueOf(exportaciones));
                     });
-                    return null;
+                } else {
+                    final int usuarioId = SesionUtil.getUsuario().getId();
+                    int turnos = negocioDAO.contarTurnosSemanaUsuario(usuarioId);
+                    int incidencias = incidenciaDAO.contarIncidenciasUsuario(usuarioId);
+                    double horas = usuarioDAO.calcularHorasTrabajadasMes(usuarioId);
+                    final String turnoHoy = negocioDAO.obtenerTurnoHoyUsuario(usuarioId);
+
+                    javafx.application.Platform.runLater(() -> {
+                        tarjetaDato1.setText(String.valueOf(turnos));
+                        tarjetaDato2.setText(String.valueOf(incidencias));
+                        tarjetaDato3.setText(String.format("%.1f", horas));
+                        infoCaja1.setText(turnoHoy);
+                    });
                 }
-            };
-            new Thread(tarea).start();
-        }
+                return null;
+            }
+        };
+        Thread th = new Thread(tarea);
+        th.setDaemon(true); // Para que el hilo no bloquee el cierre de la app
+        th.start();
     }
 
     private void navegar(MouseEvent e) {
