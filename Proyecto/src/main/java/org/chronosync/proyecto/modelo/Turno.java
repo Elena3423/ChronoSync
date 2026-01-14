@@ -13,15 +13,14 @@ public class Turno {
     private Integer usuarioId;
 
     /**
-     * Constructor vacio (requerido)
+     * Constructor vacio
      */
     public Turno() {}
 
     /**
-     * Constructor completo
+     * Constructor sin ID, para inserciones
      */
-    public Turno(Integer id, LocalDateTime fechaInicio, LocalDateTime fechaFin, String tipo, String estado, Integer usuarioId) {
-        this.id = id;
+    public Turno(LocalDateTime fechaInicio, LocalDateTime fechaFin, String tipo, String estado, Integer usuarioId) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.tipo = tipo;
@@ -30,9 +29,10 @@ public class Turno {
     }
 
     /**
-     * Constructor sin ID, para inserciones
+     * Constructor completo
      */
-    public Turno(LocalDateTime fechaInicio, LocalDateTime fechaFin, String tipo, String estado, Integer usuarioId) {
+    public Turno(Integer id, LocalDateTime fechaInicio, LocalDateTime fechaFin, String tipo, String estado, Integer usuarioId) {
+        this.id = id;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.tipo = tipo;

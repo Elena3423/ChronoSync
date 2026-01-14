@@ -8,23 +8,23 @@ public class Rol {
     private String descripcion;
 
     /**
-     * Constructor vacio (requerido)
+     * Constructor vacio
      */
     public Rol() {}
+
+    /**
+     * Constructor sin ID, para inserciones
+     */
+    public Rol(String tipoRol, String descripcion) {
+        this.tipoRol = tipoRol;
+        this.descripcion = descripcion;
+    }
 
     /**
      * Constructor completo
      */
     public Rol(Integer id, String tipoRol, String descripcion) {
         this.id = id;
-        this.tipoRol = tipoRol;
-        this.descripcion = descripcion;
-    }
-
-    /**
-     * Constructor sin ID, para inserciones
-     */
-    public Rol(String tipoRol, String descripcion) {
         this.tipoRol = tipoRol;
         this.descripcion = descripcion;
     }

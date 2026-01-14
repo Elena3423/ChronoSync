@@ -3,7 +3,6 @@ package org.chronosync.proyecto.dao;
 import org.chronosync.proyecto.bd.ConexionBD;
 import org.chronosync.proyecto.modelo.Usuario;
 
-import javax.swing.text.html.parser.Entity;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +19,9 @@ public class UsuarioDAO {
         String sql = "INSERT INTO usuarios (nombre, apellidos, email, password, activo, rol_id, negocio_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        // Obtenemos la conexión
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Asignamos parámetros al PreparedStatement
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getApellidos());
             stmt.setString(3, usuario.getEmail());
@@ -33,7 +30,6 @@ public class UsuarioDAO {
             stmt.setObject(6, usuario.getRolId());
             stmt.setObject(7, usuario.getNegocioId());
 
-            // Devolvemos true si se ha insertado al menos 1 línea
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -43,77 +39,17 @@ public class UsuarioDAO {
     }
 
     /**
-     * Método que obtiene un usuario de la BD a partir de su email.
-     * Funciona como método auxiliar para login.
-     *
-     * @param email email del usuario a buscar
-     * @return Usuario encontrado o null si no existe
-     */
-    public Usuario obtenerPorEmail(String email) {
-        String sql = "SELECT * FROM usuarios WHERE LOWER(email) = LOWER(?)";
-        Usuario usuario = null;
-
-        // Obtenemos la conexión
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            // Asignamos el email al parámetro
-            stmt.setString(1, email);
-            // Ejecutamos la consulta
-            ResultSet rs = stmt.executeQuery();
-
-            // Si existe un resultado
-            if (rs.next()) {
-                usuario = construirUsuario(rs);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error obteniendo usuario por email: " + e.getMessage());
-        }
-
-        return usuario;
-    }
-
-    /**
-     * Método que obtiene una lista con todos los usuarios registrados en la BD.
-     *
-     * @return lista de usuarios
-     */
-    public List<Usuario> obtenerTodos() {
-        List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT * FROM usuarios";
-
-        // Obtenemos la conexión
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            // Mientras haya resultados, añadimos a la lista
-            while (rs.next()) {
-                lista.add(construirUsuario(rs));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error obteniendo todos los usuarios: " + e.getMessage());
-        }
-
-        return lista;
-    }
-
-    /**
      * Método que actualiza los datos de un usuario existente en la BD.
      *
      * @param usuario usuario con los nuevos datos
-     * @return true si la actualización fue correcta
+     * @return devuelve true si la actualización fue correcta
      */
     public boolean actualizar(Usuario usuario) {
         String sql = "UPDATE usuarios SET nombre=?, apellidos=?, email=?, password=?, activo=?, rol_id=?, negocio_id=? WHERE id=?";
 
-        // Obtenemos la conexión
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Asignamos parámetros al PreparedStatement
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getApellidos());
             stmt.setString(3, usuario.getEmail());
@@ -123,7 +59,6 @@ public class UsuarioDAO {
             stmt.setObject(7, usuario.getNegocioId());
             stmt.setInt(8, usuario.getId());
 
-            // Devolvemos true si se ha insertado al menos 1 línea
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -136,18 +71,15 @@ public class UsuarioDAO {
      * Método que elimina un usuario de la BD según su ID.
      *
      * @param id identificador del usuario
-     * @return true si la operación se realizó correctamente
+     * @return devuelve true si la operación se realizó correctamente
      */
     public boolean eliminar(int id) {
         String sql = "DELETE FROM usuarios WHERE id=?";
 
-        // Obtenemos la conexión
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Asignamos el id al parámetro
             stmt.setInt(1, id);
-            // Devolvemos true si se ha eliminado al menos 1 línea
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -176,6 +108,92 @@ public class UsuarioDAO {
         );
     }
 
+    /**
+     * Método que obtiene un usuario de la BD a partir de su email.
+     * Funciona como método auxiliar para login.
+     *
+     * @param email email del usuario a buscar
+     * @return devuelve Usuario encontrado o null si no existe
+     */
+    public Usuario obtenerPorEmail(String email) {
+        String sql = "SELECT * FROM usuarios WHERE LOWER(email) = LOWER(?)";
+        Usuario usuario = null;
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                usuario = construirUsuario(rs);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error obteniendo usuario por email: " + e.getMessage());
+        }
+
+        return usuario;
+    }
+
+    /**
+     * Método que obtiene una lista con todos los usuarios registrados en la BD.
+     *
+     * @return devuelve una lista con todos los usuarios registrados
+     */
+    public List<Usuario> obtenerTodos() {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuarios";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(construirUsuario(rs));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error obteniendo todos los usuarios: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    /**
+     * Método que obtiene una lista con todos los empleados de un negocio registrados en la BD.
+     *
+     * @return devuelve una lista con todos los empleados de un negocio
+     */
+    public List<Usuario> obtenerTodosLosEmpleados() {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuarios WHERE rol_id = 2";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("id"));
+                u.setNombre(rs.getString("nombre"));
+                u.setRolId(rs.getInt("rol_id"));
+                lista.add(u);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al listar los empleados: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    /**
+     * Método que establece a un usuario como administrador de un negocio
+     *
+     * @param idUsuario id del usuario al que queremos hacer admin
+     * @param idNegocio id del negocio al que pertenece el usuario
+     * @return devuelve true si se ha actualizado al menos un registro del BD
+     */
     public boolean asignarAdminNegocio(int idUsuario, int idNegocio) {
         String sql = "UPDATE usuarios SET activo = 1, rol_id = 1, negocio_id = ? WHERE id = ?";
 
@@ -193,6 +211,13 @@ public class UsuarioDAO {
         }
     }
 
+    /**
+     * Método que establece a un usuario como empleado de un negocio
+     *
+     * @param idUsuario id del usuario al que queremos hacer empleado
+     * @param idNegocio id del negocio al que pertenece el usuario
+     * @return devuelve true si se ha actualizado al menos un registro del BD
+     */
     public boolean asignarEmpleadoNegocio(int idUsuario, int idNegocio) {
         String sql = "UPDATE usuarios SET activo = 1, rol_id = 2, negocio_id = ? WHERE id = ?";
 
@@ -210,6 +235,12 @@ public class UsuarioDAO {
         }
     }
 
+    /**
+     * Método que cuenta los usuarios que hay activos en un negocio
+     *
+     * @param idNegocio id del negocio al que pertenece el usuario
+     * @return devuelve la cantidad de empleados activos del negocio al que pertenece
+     */
     public int contarUsuariosActivosPorNegocio(int idNegocio) {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE negocio_id = ? AND activo = 1";
         int conteo = 0;
@@ -218,6 +249,7 @@ public class UsuarioDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, idNegocio);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     conteo = rs.getInt(1);
@@ -230,6 +262,12 @@ public class UsuarioDAO {
         return conteo;
     }
 
+    /**
+     * Método que cuenta lo usuario que hay inactivos en un negocio
+     *
+     * @param idNegocio id del negocio al que pertenece el usuario
+     * @return devuelve la cantidad de empleados inactivos del negocio al que pertenece
+     */
     public int contarUsuariosInactivosPorNegocio(int idNegocio) {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE negocio_id = ? AND activo = 0";
         int conteo = 0;
@@ -250,30 +288,12 @@ public class UsuarioDAO {
         return conteo;
     }
 
-    public List<Usuario> obtenerTodosLosEmpleados() {
-        List<Usuario> lista = new ArrayList<>();
-        // Filtramos por rol_id = 2 (Empleados)
-        String sql = "SELECT * FROM usuarios WHERE rol_id = 2";
-
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                // Usamos el constructor de tu clase Usuario
-                Usuario u = new Usuario();
-                u.setId(rs.getInt("id"));
-                u.setNombre(rs.getString("nombre"));
-                u.setRolId(rs.getInt("rol_id"));
-                // ... añade el resto de campos que tenga tu modelo
-                lista.add(u);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al listar empleados: " + e.getMessage());
-        }
-        return lista;
-    }
-
+    /**
+     * Método que calcula el total de horas trabajadas en un mes de un usuario
+     *
+     * @param usuarioId id del usuario del que calculará el total de horas trabajadas
+     * @return devuelve el total de horas en formato decimal
+     */
     public double calcularHorasTrabajadasMes(int usuarioId) {
         String sql = "SELECT SUM(TIMESTAMPDIFF(MINUTE, fecha_inicio, fecha_fin)) " +
                 "FROM turno " +
@@ -284,14 +304,17 @@ public class UsuarioDAO {
 
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, usuarioId);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 int minutosTotales = rs.getInt(1);
-                return minutosTotales / 60.0; // Convierte a horas decimales (ej: 40.5 horas)
+                return minutosTotales / 60.0;
             }
+
         } catch (SQLException e) {
-            System.err.println("Error en calcularHorasTrabajadasMes: " + e.getMessage());
+            System.err.println("Error al calcular las horás trabajadas en un mes: " + e.getMessage());
         }
         return 0.0;
     }

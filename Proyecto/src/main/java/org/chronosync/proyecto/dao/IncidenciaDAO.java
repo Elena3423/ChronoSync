@@ -32,68 +32,6 @@ public class IncidenciaDAO {
         }
     }
 
-    public boolean actualizarEstado(int id, String nuevoEstado) {
-        // Ajustado a tus valores ENUM: 'Aceptada' (en lugar de Aprobada)
-        String sql = "UPDATE incidencias SET estado = ? WHERE id = ?";
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, nuevoEstado);
-            ps.setInt(2, id);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) { return false; }
-    }
-
-    /**
-     * Método que obtiene una incidencia según su ID.
-     *
-     * @param id identificador de la incidencia
-     * @return Incidencia encontrada o null si no existe
-     */
-    public Incidencia obtenerPorId(int id) {
-        String sql = "SELECT * FROM incidencias WHERE id = ?";
-        Incidencia incidencia = null;
-
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                incidencia = construirIncidencia(rs);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error obteniendo incidencia por ID: " + e.getMessage());
-        }
-
-        return incidencia;
-    }
-
-    /**
-     * Método que obtiene una lista con todas las incidencias de la BD.
-     *
-     * @return lista de incidencias
-     */
-    public List<Incidencia> obtenerTodas() {
-        List<Incidencia> lista = new ArrayList<>();
-        String sql = "SELECT * FROM incidencias";
-
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(construirIncidencia(rs));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error obteniendo todas las incidencias: " + e.getMessage());
-        }
-
-        return lista;
-    }
-
     /**
      * Método que actualiza una incidencia existente.
      *
@@ -143,41 +81,91 @@ public class IncidenciaDAO {
     }
 
     /**
-     * Método que construye un objeto Incidencia desde un ResultSet.
+     * Método que actualiza el estado de una incidencia
      *
-     * @param rs datos de la consulta
-     * @return objeto Incidencia construido
-     * @throws SQLException si ocurre un error al leer los datos
+     * @param id id de la incidencia a la que hace referencia
+     * @param nuevoEstado estado que asignaremos
+     * @return devuelve true si se ha realizado la modificación
      */
-    private Incidencia construirIncidencia(ResultSet rs) throws SQLException {
-        return new Incidencia(
-                rs.getInt("id"),
-                rs.getString("tipo"),
-                rs.getString("estado"),
-                rs.getString("comentarios"),
-                rs.getInt("usuario_id"),
-                rs.getInt("turno_id")
-        );
+    public boolean actualizarEstado(int id, String nuevoEstado) {
+        String sql = "UPDATE incidencias SET estado = ? WHERE id = ?";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, id);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
+    /**
+     * Método que cuenta la cantidad de informes pendientes de un negocio
+     *
+     * @param negocioId id del negocio al que hace referencia
+     * @return devuelve el total de informes pendientes
+     */
     public int contarInformesPendientes(int negocioId) {
-        // He cambiado 'incidencia' por 'incidencias' y 'id_negocio' por 'negocio_id'
         String sql = "SELECT COUNT(i.id) FROM incidencias i " +
                 "JOIN usuarios u ON i.usuario_id = u.id " +
                 "WHERE u.negocio_id = ? AND i.estado != 'Resuelta'";
+
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, negocioId);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             System.err.println("Error al contar informes: " + e.getMessage());
         }
+
         return 0;
     }
 
+    /**
+     * Método que cuenta la cantidad de incidencias de un usuario
+     *
+     * @param usuarioId id del usuario al que hace referencia
+     * @return devuelve el total de incidencias del usuario
+     */
+    public int contarIncidenciasUsuario(int usuarioId) {
+        String sql = "SELECT COUNT(*) FROM incidencias WHERE usuario_id = ?";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error en al contar las incidencias: " + e.getMessage());
+        }
+
+        return 0;
+    }
+
+    /**
+     * Método que obtiene una lista de incidencias junto con el nombre del usuario asociado
+     *
+     * @param usuarioIdFiltro id del usuario al que hace referencia
+     * @return devuelve una lista de mapas que contiene un objeto incidencia
+     */
     public List<Map<String, Object>> obtenerIncidenciasConNombre(Integer usuarioIdFiltro) {
         List<Map<String, Object>> lista = new ArrayList<>();
+
         String sql = "SELECT i.*, u.nombre, u.apellidos FROM incidencias i " +
                 "JOIN usuarios u ON i.usuario_id = u.id " +
                 (usuarioIdFiltro != null ? "WHERE i.usuario_id = ?" : "") +
@@ -185,10 +173,16 @@ public class IncidenciaDAO {
 
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            if (usuarioIdFiltro != null) ps.setInt(1, usuarioIdFiltro);
+
+            if (usuarioIdFiltro != null) {
+                ps.setInt(1, usuarioIdFiltro);
+            }
+
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 Map<String, Object> fila = new HashMap<>();
+
                 Incidencia inc = new Incidencia(
                         rs.getInt("id"),
                         rs.getString("tipo"),
@@ -197,18 +191,30 @@ public class IncidenciaDAO {
                         rs.getInt("usuario_id"),
                         rs.getInt("turno_id")
                 );
+
                 fila.put("incidencia", inc);
                 fila.put("nombreEmpleado", rs.getString("nombre") + " " + rs.getString("apellidos"));
                 lista.add(fila);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return lista;
     }
 
+    /**
+     * Método que obtiene una lista de incidencias en función de unos filtros seleccionados en el apartado de exportaciones
+     *
+     * @param usuarioId id del usuario al que hace referencia
+     * @param periodo periodo seleccionado desde el menú
+     * @param estado estado de la incidencia del usuario
+     * @return
+     */
     public List<Incidencia> obtenerIncidenciasPorFiltro(int usuarioId, String periodo, String estado) {
         List<Incidencia> lista = new ArrayList<>();
 
-        // CAMBIO: 'incidencias' en plural si así se llama en tu BD
         StringBuilder sql = new StringBuilder(
                 "SELECT i.* FROM incidencias i " +
                         "JOIN turno t ON i.turno_id = t.id " +
@@ -220,20 +226,28 @@ public class IncidenciaDAO {
         }
 
         switch (periodo) {
-            case "Semana actual": sql.append(" AND YEARWEEK(t.fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)"); break;
-            case "Mes actual": sql.append(" AND MONTH(t.fecha_inicio) = MONTH(CURDATE()) AND YEAR(t.fecha_inicio) = YEAR(CURDATE())"); break;
-            case "Mes anterior": sql.append(" AND MONTH(t.fecha_inicio) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))"); break;
+            case "Semana actual":
+                sql.append(" AND YEARWEEK(t.fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)");
+                break;
+            case "Mes actual":
+                sql.append(" AND MONTH(t.fecha_inicio) = MONTH(CURDATE()) AND YEAR(t.fecha_inicio) = YEAR(CURDATE())");
+                break;
+            case "Mes anterior":
+                sql.append(" AND MONTH(t.fecha_inicio) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))");
+                break;
         }
 
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
 
             stmt.setInt(1, usuarioId);
+
             if (estado != null && !estado.equals("Todos")) {
                 stmt.setString(2, estado);
             }
 
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
                 Incidencia inc = new Incidencia();
                 inc.setId(rs.getInt("id"));
@@ -244,22 +258,11 @@ public class IncidenciaDAO {
                 inc.setTurnoId(rs.getInt("turno_id"));
                 lista.add(inc);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return lista;
-    }
 
-    public int contarIncidenciasUsuario(int usuarioId) {
-        String sql = "SELECT COUNT(*) FROM incidencias WHERE usuario_id = ?";
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, usuarioId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) return rs.getInt(1);
-        } catch (SQLException e) {
-            System.err.println("Error en contarIncidenciasUsuario: " + e.getMessage());
-        }
-        return 0;
+        return lista;
     }
 }

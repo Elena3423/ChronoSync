@@ -31,7 +31,8 @@ public class Usuario {
     /**
      * Constructor completo
      */
-    public Usuario(Integer id, String nombre, String apellidos, String email, String password, boolean activo, Integer rolId, Integer negocioId) {
+    public Usuario(Integer id, String nombre, String apellidos, String email, String password, boolean activo, Integer rolId, Integer negocioId
+    ) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;

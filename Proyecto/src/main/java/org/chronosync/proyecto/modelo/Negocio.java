@@ -11,9 +11,19 @@ public class Negocio {
     private String codigoUnion;
 
     /**
-     * Constructor vacio (requerido)
+     * Constructor vacio
      */
     public Negocio() {}
+
+    /**
+     * Constructor sin ID, para inserciones
+     */
+    public Negocio(String nombre, String direccion, String telefono, String email) {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.email = email;
+    }
 
     /**
      * Constructor completo
@@ -25,16 +35,6 @@ public class Negocio {
         this.telefono = telefono;
         this.email = email;
         this.codigoUnion = codigoUnion;
-    }
-
-    /**
-     * Constructor sin ID, para inserciones
-     */
-    public Negocio(String nombre, String direccion, String telefono, String email) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.email = email;
     }
 
     // Getters y Setters

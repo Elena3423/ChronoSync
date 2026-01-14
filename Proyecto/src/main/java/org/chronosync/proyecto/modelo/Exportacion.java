@@ -17,10 +17,9 @@ public class Exportacion {
     public Exportacion() {}
 
     /**
-     * Constructor completo
+     * Constructor sin ID, para inserciones
      */
-    public Exportacion(Integer id, String tipoFormato, LocalDateTime fechaGeneracion, Integer usuarioId, Integer negocioId) {
-        this.id = id;
+    public Exportacion(String tipoFormato, LocalDateTime fechaGeneracion, Integer usuarioId, Integer negocioId) {
         this.tipoFormato = tipoFormato;
         this.fechaGeneracion = fechaGeneracion;
         this.usuarioId = usuarioId;
@@ -28,9 +27,10 @@ public class Exportacion {
     }
 
     /**
-     * Constructor sin ID, para inserciones
+     * Constructor completo
      */
-    public Exportacion(String tipoFormato, LocalDateTime fechaGeneracion, Integer usuarioId, Integer negocioId) {
+    public Exportacion(Integer id, String tipoFormato, LocalDateTime fechaGeneracion, Integer usuarioId, Integer negocioId) {
+        this.id = id;
         this.tipoFormato = tipoFormato;
         this.fechaGeneracion = fechaGeneracion;
         this.usuarioId = usuarioId;

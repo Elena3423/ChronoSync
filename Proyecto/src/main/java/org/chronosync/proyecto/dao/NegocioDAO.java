@@ -2,11 +2,8 @@ package org.chronosync.proyecto.dao;
 
 import org.chronosync.proyecto.bd.ConexionBD;
 import org.chronosync.proyecto.modelo.Negocio;
-import org.chronosync.proyecto.modelo.Usuario;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class NegocioDAO {
@@ -47,6 +44,72 @@ public class NegocioDAO {
             System.out.println("Error insertando negocio: " + e.getMessage());
             return null;
         }
+    }
+
+
+    /**
+     * Método que actualiza un negocio existente en la BD.
+     *
+     * @param negocio objeto Negocio con los nuevos datos
+     * @return true si la actualización fue correcta
+     */
+    public boolean actualizar(Negocio negocio) {
+        String sql = "UPDATE negocio SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id = ?";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, negocio.getNombre());
+            stmt.setString(2, negocio.getDireccion());
+            stmt.setString(3, negocio.getTelefono());
+            stmt.setString(4, negocio.getEmail());
+            stmt.setInt(5, negocio.getId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error actualizando negocio: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Método que elimina un negocio de la BD.
+     *
+     * @param id identificador del negocio
+     * @return true si la operación fue correcta
+     */
+    public boolean eliminar(int id) {
+        String sql = "DELETE FROM negocio WHERE id=?";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error eliminando negocio: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Método que construye un objeto Negocio a partir del ResultSet.
+     *
+     * @param rs fila de la consulta
+     * @return objeto Negocio construido
+     * @throws SQLException se lanza si ocurre un error al leer los datos
+     */
+    private Negocio construirNegocio(ResultSet rs) throws SQLException {
+        return new Negocio(
+                rs.getInt("id"),
+                rs.getString("nombre"),
+                rs.getString("direccion"),
+                rs.getString("telefono"),
+                rs.getString("email"),
+                rs.getString("codigo_union")
+        );
     }
 
     /**
@@ -122,95 +185,10 @@ public class NegocioDAO {
     }
 
     /**
-     * Método que obtiene una lista con todos los negocios registrados en la BD.
+     * Método que genera un código de unión de 6 carácteres aleatorio
      *
-     * @return lista de negocios
+     * @return devuelve el código de unión ya creado
      */
-    public List<Negocio> obtenerTodos() {
-        List<Negocio> lista = new ArrayList<>();
-        String sql = "SELECT * FROM negocio";
-
-        // Obtenemos la conexión
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(construirNegocio(rs));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error obteniendo todos los negocios: " + e.getMessage());
-        }
-
-        return lista;
-    }
-
-    /**
-     * Método que actualiza un negocio existente en la BD.
-     *
-     * @param negocio objeto Negocio con los nuevos datos
-     * @return true si la actualización fue correcta
-     */
-    public boolean actualizar(Negocio negocio) {
-        String sql = "UPDATE negocio SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id = ?";
-
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, negocio.getNombre());
-            stmt.setString(2, negocio.getDireccion());
-            stmt.setString(3, negocio.getTelefono());
-            stmt.setString(4, negocio.getEmail());
-            stmt.setInt(5, negocio.getId());
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Error actualizando negocio: " + e.getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Método que elimina un negocio de la BD.
-     *
-     * @param id identificador del negocio
-     * @return true si la operación fue correcta
-     */
-    public boolean eliminar(int id) {
-        String sql = "DELETE FROM negocio WHERE id=?";
-
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Error eliminando negocio: " + e.getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Método que construye un objeto Negocio a partir del ResultSet.
-     *
-     * @param rs fila de la consulta
-     * @return objeto Negocio construido
-     * @throws SQLException si ocurre un error al leer los datos
-     */
-    private Negocio construirNegocio(ResultSet rs) throws SQLException {
-        return new Negocio(
-                rs.getInt("id"),
-                rs.getString("nombre"),
-                rs.getString("direccion"),
-                rs.getString("telefono"),
-                rs.getString("email"),
-                rs.getString("codigo_union")
-        );
-    }
-
     private String generarCodigoUnion() {
         String letras = "ABDCEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder codigo = new StringBuilder();
@@ -223,38 +201,69 @@ public class NegocioDAO {
         return codigo.toString();
     }
 
+    /**
+     * Método que cuenta los turnos del mes totales de un negocio
+     *
+     * @param negocioId id del negocio al que hace referencia
+     * @return devuelve el total de turnos
+     */
     public int contarTurnosMesActual(int negocioId) {
         String sql = "SELECT COUNT(t.id) FROM turno t " +
                 "JOIN usuarios u ON t.usuario_id = u.id " +
                 "WHERE u.negocio_id = ? " +
-                "AND MONTH(t.fecha_inicio) = MONTH(CURDATE()) " + // Usamos fecha_inicio
+                "AND MONTH(t.fecha_inicio) = MONTH(CURDATE()) " +
                 "AND YEAR(t.fecha_inicio) = YEAR(CURDATE())";
 
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, negocioId);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             System.err.println("Error al contar turnos del mes actual: " + e.getMessage());
         }
+
         return 0;
     }
 
+    /**
+     * Método que cuenta el total de turnos semanales de un negocio
+     *
+     * @param usuarioId id del usuario al que hace referencia
+     * @return devuelve el total de turnos
+     */
     public int contarTurnosSemanaUsuario(int usuarioId) {
         String sql = "SELECT COUNT(*) FROM turno WHERE usuario_id = ? " +
                 "AND YEARWEEK(fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)";
+
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, usuarioId);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return 0;
     }
 
+    /**
+     * Método que devuelve el horario del turno de hoy de un usuario
+     *
+     * @param usuarioId id del usuario al que hace referencia
+     * @return devuelve un String con el horario del turno
+     */
     public String obtenerTurnoHoyUsuario(int usuarioId) {
         String sql = "SELECT fecha_inicio, fecha_fin FROM turno " +
                 "WHERE usuario_id = ? AND DATE(fecha_inicio) = CURDATE() " +

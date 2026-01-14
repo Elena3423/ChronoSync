@@ -16,10 +16,9 @@ public class Incidencia {
     public Incidencia() {}
 
     /**
-     * Constructor completo
+     * Constructor sin ID, para inserciones
      */
-    public Incidencia(Integer id, String tipo, String estado, String comentarios, Integer usuarioId, Integer turnoId) {
-        this.id = id;
+    public Incidencia(String tipo, String estado, String comentarios, Integer usuarioId, Integer turnoId) {
         this.tipo = tipo;
         this.estado = estado;
         this.comentarios = comentarios;
@@ -28,9 +27,10 @@ public class Incidencia {
     }
 
     /**
-     * Constructor sin ID, para inserciones
+     * Constructor completo
      */
-    public Incidencia(String tipo, String estado, String comentarios, Integer usuarioId, Integer turnoId) {
+    public Incidencia(Integer id, String tipo, String estado, String comentarios, Integer usuarioId, Integer turnoId) {
+        this.id = id;
         this.tipo = tipo;
         this.estado = estado;
         this.comentarios = comentarios;
