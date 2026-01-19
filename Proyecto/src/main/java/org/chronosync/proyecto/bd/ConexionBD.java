@@ -5,10 +5,6 @@ import org.chronosync.proyecto.secure.ConfigManager;
 import java.sql.*;
 import java.util.Properties;
 
-/**
- * Clase de utilidad para gestionar la conexión a la base de datos
- * Asegura que solo haya una conexión activa
- */
 public class ConexionBD {
 
     // Variable que almacena la única instancia de la conexión
@@ -22,6 +18,7 @@ public class ConexionBD {
     /**
      * Método para obtener la conexión a la base de datos
      * Si la conexión no existe o está cerrada, intenta establecer una nueva
+     *
      * @return Devuelve el objeto Connection a la base de datos
      */
     public static Connection obtenerConexion() {
@@ -60,6 +57,7 @@ public class ConexionBD {
                 conn = null; // Establece la variable a null para permitir una nueva conexión
                 System.out.println("Conexión cerrada");
             }
+
         } catch (SQLException e) {
             // Muestra cualquier error al intentar cerrar la conexión
             System.out.println("Error al desconectarse de la base de datos: " +  e.getMessage());

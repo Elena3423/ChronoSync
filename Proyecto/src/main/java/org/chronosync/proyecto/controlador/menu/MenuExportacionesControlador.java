@@ -26,49 +26,28 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class MenuExportacionesControlador {
-    @FXML private Button btnPanelPrincipal;
-    @FXML private Button btnEmpleados;
-    @FXML private Button btnTurnos;
-    @FXML private Button btnIncidencias;
-    @FXML private Button btnConfiguracion;
-    @FXML private Button btnCerrarSesion;
-
+    // Botones de navegación lateral
+    @FXML private Button btnPanelPrincipal, btnEmpleados, btnTurnos, btnIncidencias, btnConfiguracion, btnCerrarSesion;
     @FXML private Label txtNombre, txtRol;
 
-    @FXML private Label lblEmpleado1;
-    @FXML private Label lblEmpleado3;
+    // Elementos visuales de los 4 tipos de informes (Turnos, Incidencias, Horas, Completo)
+    @FXML private Label lblEmpleado1, lblEmpleado3;
+    @FXML private ChoiceBox<String> choicePeriodo1, choicePeriodo2, choicePeriodo3, choicePeriodo4, choiceEstado2;
+    @FXML private ChoiceBox<Usuario> choiceEmpleado1, choiceEmpleado3;
+    @FXML private Button btnPDF1, btnExcel1, btnPDF2, btnExcel2, btnPDF3, btnExcel3, btnPDF4, btnExcel4;
 
-    @FXML private ChoiceBox<String> choicePeriodo1;
-    @FXML private ChoiceBox<Usuario> choiceEmpleado1;
-    @FXML private Button btnPDF1, btnExcel1;
-
-    @FXML private ChoiceBox<String> choicePeriodo2;
-    @FXML private ChoiceBox<String> choiceEstado2;
-    @FXML private Button btnPDF2, btnExcel2;
-
-    @FXML private ChoiceBox<String> choicePeriodo3;
-    @FXML private ChoiceBox<Usuario> choiceEmpleado3;
-    @FXML private Button btnPDF3, btnExcel3;
-
-    @FXML private ChoiceBox<String> choicePeriodo4;
-    @FXML private Button btnPDF4, btnExcel4;
-
-    // Referencias a DAOs
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private ExportacionDAO exportacionDAO = new ExportacionDAO();
     private TurnoDAO turnoDAO = new TurnoDAO();
     private IncidenciaDAO incidenciaDAO = new IncidenciaDAO();
 
+    /**
+     * Método que se ejecuta al abrir la pantalla
+     */
     @FXML
     public void initialize() {
-        btnPanelPrincipal.setOnMouseClicked(this::navegar);
-        btnEmpleados.setOnMouseClicked(this::navegar);
-        btnTurnos.setOnMouseClicked(this::navegar);
-        btnIncidencias.setOnMouseClicked(this::navegar);
-        btnConfiguracion.setOnMouseClicked(this::navegar);
-        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
-
         mostrarDatosUsuario();
+        configurarNavegacion();
 
         configurarInformeTurnos();
         configurarInformeIncidencias();
@@ -76,6 +55,23 @@ public class MenuExportacionesControlador {
         configurarInformeCompleto();
     }
 
+    /**
+     * Método que muestra los datos del usuario por pantalla
+     */
+    private void mostrarDatosUsuario() {
+        txtNombre.setText(SesionUtil.getUsuario().getNombre());
+        if (SesionUtil.getUsuario().getRolId().equals(1)) {
+            txtRol.setText("Administrador");
+        } else if (SesionUtil.getUsuario().getRolId().equals(2)) {
+            txtRol.setText("Empleado");
+        }
+    }
+
+    /**
+     * Método que cambia la escena en función del botón pulsado
+     *
+     * @param e evento del ratón
+     */
     private void navegar(MouseEvent e) {
         Button btn = (Button) e.getSource();
 
@@ -98,26 +94,37 @@ public class MenuExportacionesControlador {
         CargadorUtil.cambiarEscena(stage, fxmlRuta);
     }
 
-    private void mostrarDatosUsuario() {
-        txtNombre.setText(SesionUtil.getUsuario().getNombre());
-        if (SesionUtil.getUsuario().getRolId().equals(1)) {
-            txtRol.setText("Administrador");
-        } else if (SesionUtil.getUsuario().getRolId().equals(2)) {
-            txtRol.setText("Empleado");
-        }
-    }
-
+    /**
+     * Método que cierra las sesión actual del usuario
+     *
+     * @param e evento del ratón
+     */
     private void cerrarSesion(MouseEvent e) {
         Stage stage = (Stage) btnCerrarSesion.getScene().getWindow();
         SesionUtil.cerrarSesion(stage);
     }
 
+    /**
+     * Método que configura los botones de navegación
+     */
+    private void configurarNavegacion() {
+        btnPanelPrincipal.setOnMouseClicked(this::navegar);
+        btnEmpleados.setOnMouseClicked(this::navegar);
+        btnTurnos.setOnMouseClicked(this::navegar);
+        btnIncidencias.setOnMouseClicked(this::navegar);
+        btnConfiguracion.setOnMouseClicked(this::navegar);
+        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
+    }
+
+    /**
+     * Método que configura el informe orientado a los turnos de un usuario
+     */
     private void configurarInformeTurnos() {
         // 1. Llenar Periodos
         choicePeriodo1.getItems().addAll("Semana actual", "Mes actual", "Mes anterior");
         choicePeriodo1.setValue("Mes actual");
 
-        // 2. Seguridad: ¿Quién está logueado?
+        // 2. Obtener usuario
         Usuario usuarioLogueado = SesionUtil.getUsuario();
 
         if (usuarioLogueado.getRolId() == 1) { // ADMIN
@@ -127,12 +134,11 @@ public class MenuExportacionesControlador {
                 choiceEmpleado1.setItems(FXCollections.observableArrayList(empleados));
             }
         } else { // EMPLEADO
-            // Ocultamos el selector de empleados y el label previo si fuera necesario
+            // Ocultamos el selector de empleados y el label previo
             choiceEmpleado1.setVisible(false);
             choiceEmpleado1.setManaged(false);
             lblEmpleado1.setVisible(false);
             lblEmpleado1.setManaged(false);
-            // Podrías ponerle un valor por defecto para que la lógica interna no falle
             choiceEmpleado1.setValue(usuarioLogueado);
         }
 
@@ -141,6 +147,9 @@ public class MenuExportacionesControlador {
         btnExcel1.setOnAction(e -> exportarInformeTurnos("EXCEL"));
     }
 
+    /**
+     * Método que configura el informe orientado a las incidencias registradas de un usuario
+     */
     private void configurarInformeIncidencias() {
         // 1. Llenar Periodos y Estados
         choicePeriodo2.getItems().addAll("Semana actual", "Mes actual", "Mes anterior");
@@ -149,7 +158,7 @@ public class MenuExportacionesControlador {
         choiceEstado2.getItems().addAll("Todos", "Pendiente", "Validada", "Denegada");
         choiceEstado2.setValue("Todos");
 
-        // 2. Seguridad: ¿Quién está logueado?
+        // 2. Obtener usuario
         Usuario usuarioLogueado = SesionUtil.getUsuario();
 
         // 3. Asignar Eventos a los botones
@@ -157,6 +166,9 @@ public class MenuExportacionesControlador {
         btnExcel2.setOnAction(e -> exportarIncidencias("EXCEL"));
     }
 
+    /**
+     * Método que configura el informe orientado al total de horas trabajadas de un usuario
+     */
     private void configurarInformeHoras() {
         // 1. Llenar Periodos
         choicePeriodo3.getItems().addAll("Semana actual", "Mes actual", "Mes anterior");
@@ -193,6 +205,9 @@ public class MenuExportacionesControlador {
         btnExcel3.setOnAction(e -> exportarInformeHoras("EXCEL"));
     }
 
+    /**
+     * Método que configura el informe completo con todos los datos de trabajo de un usuario
+     */
     private void configurarInformeCompleto() {
         choicePeriodo4.getItems().addAll("Semana actual", "Mes actual", "Mes anterior");
         choicePeriodo4.setValue("Mes actual");
@@ -201,8 +216,13 @@ public class MenuExportacionesControlador {
         btnExcel4.setOnAction(e -> exportarInformeCompleto("EXCEL"));
     }
 
+    /**
+     * Método que exporta el informe orientado a los turnos de un usuario en un formato determinado
+     *
+     * @param formato formato en el que queremos exportar
+     */
     private void exportarInformeTurnos(String formato) {
-        // 1. Configurar el guardado de archivo
+        // Configuramos el guardado
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar Informe de Turnos");
         String ext = formato.equals("PDF") ? ".pdf" : ".xlsx";
@@ -213,22 +233,22 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                // 2. Obtener datos según el usuario (Admin elige, Empleado es él mismo)
+                // Obtenemos el empleado
                 Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
                         ? choiceEmpleado1.getValue()
                         : SesionUtil.getUsuario();
 
-                // Aquí llamas a tu DAO (Asegúrate de tener este método)
+                // Obtenemos los datos del DAO
                 List<Turno> lista = turnoDAO.obtenerTurnosPorFiltro(emp.getId(), choicePeriodo1.getValue());
 
-                // 3. Llamar al exportador correspondiente
+                // Llamamos al exportador que corresponda
                 if (formato.equals("PDF")) {
                     ExportadorPDF.generarInformeTurnos(destino, choicePeriodo1.getValue(), emp.getNombre(), lista);
                 } else {
                     ExportadorExcel.generarExcelTurnos(destino, choicePeriodo1.getValue(), emp.getNombre(), lista);
                 }
 
-                // 4. Registrar en BD con tu DAO
+                // Inserción en la BD
                 Exportacion exp = new Exportacion();
                 exp.setTipoFormato(formato);
                 exp.setFechaGeneracion(LocalDateTime.now());
@@ -245,8 +265,13 @@ public class MenuExportacionesControlador {
         }
     }
 
+    /**
+     * Método que exporta el informe orientado a las incidencias de un usuario en un formato determinado
+     *
+     * @param formato formato en el que queremos exportar
+     */
     private void exportarIncidencias(String formato) {
-        // 1. Configurar el diálogo de guardado
+        // Configuramos el guardado
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar Informe de Incidencias");
         String ext = formato.equalsIgnoreCase("PDF") ? ".pdf" : ".xlsx";
@@ -259,21 +284,21 @@ public class MenuExportacionesControlador {
             try {
                 Usuario usuarioActual = SesionUtil.getUsuario();
 
-                // 2. Consultar datos (Usando tu IncidenciaDAO con el JOIN a turnos)
+                // Consultamos los datos del DAO
                 List<Incidencia> lista = incidenciaDAO.obtenerIncidenciasPorFiltro(
                         usuarioActual.getId(),
                         choicePeriodo2.getValue(),
                         choiceEstado2.getValue()
                 );
 
-                // 3. Generar el archivo según el formato
+                // Generamos según el formato
                 if (formato.equalsIgnoreCase("PDF")) {
                     ExportadorPDF.generarInformeIncidencias(destino, choicePeriodo2.getValue(), usuarioActual.getNombre(), lista);
                 } else {
                     ExportadorExcel.generarExcelIncidencias(destino, choicePeriodo2.getValue(), usuarioActual.getNombre(), lista);
                 }
 
-                // 4. Registrar la exportación en la base de datos para auditoría
+                // Inserción en la BD
                 Exportacion reg = new Exportacion();
                 reg.setTipoFormato(formato);
                 reg.setFechaGeneracion(LocalDateTime.now());
@@ -289,8 +314,13 @@ public class MenuExportacionesControlador {
         }
     }
 
+    /**
+     * Método que exporta el informe orientado al total de horas trabajadas de un usuario en un formato determinado
+     *
+     * @param formato formato en el que queremos exportar
+     */
     private void exportarInformeHoras(String formato) {
-        // 1. Configurar el guardado
+        // Configuramos el guardado
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar Informe de Horas");
         String ext = formato.equalsIgnoreCase("PDF") ? ".pdf" : ".xlsx";
@@ -301,23 +331,22 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                // 2. Obtener el empleado (Admin elige de la lista, Empleado es él mismo)
+                // Obtenemos el empleado (Admin elige de la lista, Empleado es él mismo)
                 Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
                         ? choiceEmpleado3.getValue()
                         : SesionUtil.getUsuario();
 
-                // 3. Obtener datos del DAO (Asegúrate de tener obtenerResumenHoras en turnoDAO)
+                // Obtenemos los datos del DAO
                 List<Turno> datos = turnoDAO.obtenerResumenHoras(emp.getId(), choicePeriodo3.getValue());
 
-                // 4. Exportar
+                // Exportación
                 if (formato.equalsIgnoreCase("PDF")) {
-                    // Si aún no tienes este método en ExportadorPDF, lo crearemos luego
                     ExportadorPDF.generarInformeHoras(destino, choicePeriodo3.getValue(), emp.getNombre(), datos);
                 } else {
                     ExportadorExcel.generarExcelHoras(destino, choicePeriodo3.getValue(), emp.getNombre(), datos);
                 }
 
-                // 5. REGISTRO MANUAL (Igual que en tus otros métodos)
+                // Inserción en la BD
                 Exportacion reg = new Exportacion();
                 reg.setTipoFormato(formato);
                 reg.setFechaGeneracion(LocalDateTime.now());
@@ -334,6 +363,11 @@ public class MenuExportacionesControlador {
         }
     }
 
+    /**
+     * Método que exporta el informe completo de un usuario en un formato determinado
+     *
+     * @param formato formato en el que queremos exportar
+     */
     private void exportarInformeCompleto(String formato) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar Informe Completo");
@@ -347,18 +381,18 @@ public class MenuExportacionesControlador {
                 Usuario usuario = SesionUtil.getUsuario();
                 String periodo = choicePeriodo4.getValue();
 
-                // 1. Recopilar todos los datos
+                // Recopilamos los datos
                 List<Turno> turnos = turnoDAO.obtenerTurnosPorFiltro(usuario.getId(), periodo);
                 List<Incidencia> incidencias = incidenciaDAO.obtenerIncidenciasPorFiltro(usuario.getId(), periodo, "Todos");
 
-                // 2. Exportar según formato
+                // Exportamos según el formato
                 if (formato.equalsIgnoreCase("PDF")) {
                     ExportadorPDF.generarInformeCompleto(destino, periodo, usuario.getNombre(), turnos, incidencias);
                 } else {
                     ExportadorExcel.generarExcelCompleto(destino, periodo, usuario.getNombre(), turnos, incidencias);
                 }
 
-                // 3. Registro de auditoría
+                // Inserción en la BD
                 Exportacion reg = new Exportacion();
                 reg.setTipoFormato(formato + "_COMPLETO");
                 reg.setFechaGeneracion(LocalDateTime.now());

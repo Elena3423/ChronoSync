@@ -1,6 +1,7 @@
 package org.chronosync.proyecto.controlador.menu;
 
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 import org.chronosync.proyecto.dao.TurnoDAO;
 import org.chronosync.proyecto.dao.UsuarioDAO;
 import org.chronosync.proyecto.modelo.Usuario;
+import org.chronosync.proyecto.util.AlertaUtil;
 import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.SesionUtil;
 
@@ -19,37 +21,31 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Stream;
 
 import javafx.geometry.Pos;
 
 public class MenuTurnosControlador {
-    @FXML private Button btnPanelPrincipal;
-    @FXML private Button btnEmpleados;
-    @FXML private Button btnIncidencias;
-    @FXML private Button btnExportaciones;
-    @FXML private Button btnConfiguracion;
-    @FXML private Button btnCerrarSesion;
+    // Elementos de navegación
+    @FXML private Button btnPanelPrincipal, btnEmpleados, btnIncidencias, btnExportaciones, btnConfiguracion, btnCerrarSesion;
+    @FXML private Label txtNombre, txtRol;
 
-    @FXML private Label txtNombre;
-    @FXML private Label txtRol;
-
-    @FXML private Label titulo;
-    @FXML private Label subtitulo;
-
+    // Elementos del calendario
+    @FXML private Label titulo, subtitulo, lblMes;
     @FXML private GridPane gridCalendario;
-    @FXML private Label lblMes;
-    @FXML private Button btnMesAnterior;
-    @FXML private Button btnMesSiguiente;
-    @FXML private Button btnAñadirTurno;
+    @FXML private Button btnMesAnterior, btnMesSiguiente, btnAñadirTurno;
 
     private YearMonth yearMonth;
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     private final TurnoDAO turnoDAO = new TurnoDAO();
 
+    /**
+     * Método que se ejecuta al abrir la pantalla
+     */
     @FXML
     public void initialize() {
-        yearMonth = YearMonth.now();
+        yearMonth = YearMonth.now(); // Empezamos en el mes actual
         mostrarDatosUsuario();
         aplicarRestriccionesSeguridad();
         configurarNavegacion();
@@ -57,34 +53,32 @@ public class MenuTurnosControlador {
         titulo.setText("Calendario de Turnos");
         subtitulo.setText("Visualiza y gestiona los turnos asignados");
 
+        // Configuramos los botones de control del calendario
         btnMesAnterior.setOnAction(e -> cambiarMes(-1));
         btnMesSiguiente.setOnAction(e -> cambiarMes(1));
-        if (btnAñadirTurno != null) btnAñadirTurno.setOnAction(e -> manejarAnadirTurno());
+        if (btnAñadirTurno != null) {
+            btnAñadirTurno.setOnAction(e -> manejarAnadirTurno());
+        }
 
         dibujarCalendario();
-
     }
 
+    /**
+     * Método que oculta las funciones de creación a los empleados
+     */
     private void aplicarRestriccionesSeguridad() {
         Usuario usuarioLogueado = SesionUtil.getUsuario();
 
-        // Si el rol no es Administrador (ID 1)
         if (!usuarioLogueado.getRolId().equals(1)) {
-
-            // Ocultar y quitar espacio del botón Añadir Turno
             btnAñadirTurno.setVisible(false);
             btnAñadirTurno.setManaged(false);
-
-            // Opcional: Ocultar otros botones de administración si existen
-            if (btnEmpleados != null) {
-                // Un empleado quizás no debería gestionar otros empleados
-                // btnEmpleados.setDisable(true);
-            }
-
             subtitulo.setText("Visualización de turnos asignados");
         }
     }
 
+    /**
+     * Método que muestra los datos del usuario por pantalla
+     */
     private void mostrarDatosUsuario() {
         txtNombre.setText(SesionUtil.getUsuario().getNombre());
         if (SesionUtil.getUsuario().getRolId().equals(1)) {
@@ -94,15 +88,11 @@ public class MenuTurnosControlador {
         }
     }
 
-    private void configurarNavegacion() {
-        btnPanelPrincipal.setOnMouseClicked(this::navegar);
-        btnEmpleados.setOnMouseClicked(this::navegar);
-        btnIncidencias.setOnMouseClicked(this::navegar);
-        btnExportaciones.setOnMouseClicked(this::navegar);
-        btnConfiguracion.setOnMouseClicked(this::navegar);
-        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
-    }
-
+    /**
+     * Método que cambia la escena en función del botón pulsado
+     *
+     * @param e evento del ratón
+     */
     private void navegar(MouseEvent e) {
         Button btn = (Button) e.getSource();
 
@@ -125,64 +115,117 @@ public class MenuTurnosControlador {
         CargadorUtil.cambiarEscena(stage, fxmlRuta);
     }
 
+    /**
+     * Método que cierra las sesión actual del usuario
+     *
+     * @param e evento del ratón
+     */
     private void cerrarSesion(MouseEvent e) {
         Stage stage = (Stage) btnCerrarSesion.getScene().getWindow();
         SesionUtil.cerrarSesion(stage);
     }
 
+    /**
+     * Método que configura los botones de navegación
+     */
+    private void configurarNavegacion() {
+        btnPanelPrincipal.setOnMouseClicked(this::navegar);
+        btnEmpleados.setOnMouseClicked(this::navegar);
+        btnIncidencias.setOnMouseClicked(this::navegar);
+        btnExportaciones.setOnMouseClicked(this::navegar);
+        btnConfiguracion.setOnMouseClicked(this::navegar);
+        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
+    }
+
+    /**
+     * Método que cambia el mes del calendario
+     *
+     * @param meses
+     */
     private void cambiarMes(int meses) {
         yearMonth = yearMonth.plusMonths(meses);
         dibujarCalendario();
     }
 
+    /**
+     * Método que crea el calendario consultando los datos del mes
+     */
     private void dibujarCalendario() {
         gridCalendario.getChildren().clear();
-        gridCalendario.getColumnConstraints().clear();
-        gridCalendario.getRowConstraints().clear();
+        configurarDimensionesGrid();
 
-        // 1. Cabecera del mes
         String mesTexto = yearMonth.getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
         lblMes.setText(mesTexto.substring(0, 1).toUpperCase() + mesTexto.substring(1) + " " + yearMonth.getYear());
 
-        configurarDimensionesGrid();
+        // Añadimos un icono de carga visual mientras consultamos la BD
+        ProgressIndicator loading = new ProgressIndicator();
+        gridCalendario.add(loading, 3, 2); // Lo colocamos en el centro aproximado del grid
 
-        // --- LÓGICA DE FILTRADO POR ROL ---
         Usuario user = SesionUtil.getUsuario();
-        Integer filtroId = null;
+        final Integer filtroId = user.getRolId().equals(2) ? user.getId() : null;
+        final YearMonth mesActual = yearMonth;
 
-        // Si es Empleado (Rol 2), solo pasamos su propio ID para filtrar
-        if (user.getRolId().equals(2)) {
-            filtroId = user.getId();
-        }
+        // Creamos una tarea para la consulta pesada a la BD
+        Task<Map<LocalDate, List<String>>> tareaCarga = new Task<>() {
+            @Override
+            protected Map<LocalDate, List<String>> call() throws Exception {
+                // Esto ocurre en un HILO SECUNDARIO (No bloquea la ventana)
+                return turnoDAO.obtenerTurnosDelMes(mesActual, filtroId);
+            }
+        };
 
-        // Pedimos los turnos al DAO (filtrados o no)
-        Map<LocalDate, List<String>> turnosDelMes = turnoDAO.obtenerTurnosDelMes(yearMonth, filtroId);
+        // Cuando la tarea se ejecute correctamente, entonces:
+        tareaCarga.setOnSucceeded(e -> {
+            gridCalendario.getChildren().remove(loading); // Quitamos el icono de carga
+            Map<LocalDate, List<String>> turnosDelMes = tareaCarga.getValue();
+            rellenarCeldasCalendario(turnosDelMes);
+        });
 
+        // Si hay un error, entonces:
+        tareaCarga.setOnFailed(e -> {
+            gridCalendario.getChildren().remove(loading);
+            AlertaUtil.mostrarError("Error de Carga", "No se pudieron recuperar los turnos.");
+            tareaCarga.getException().printStackTrace();
+        });
+
+        // Lanzamos el hilo
+        new Thread(tareaCarga).start();
+    }
+
+    /**
+     * Método que rellena cada una de las celdas del calendario
+     *
+     * @param turnosDelMes mapa con la lista de turnos que hay en un mes
+     */
+    private void rellenarCeldasCalendario(Map<LocalDate, List<String>> turnosDelMes) {
         LocalDate primerDia = yearMonth.atDay(1);
         int desplazamiento = primerDia.getDayOfWeek().getValue() - 1;
         int diasMes = yearMonth.lengthOfMonth();
 
-        int fila = 0;
-        int columna = desplazamiento;
-
         for (int dia = 1; dia <= diasMes; dia++) {
+            int columna = (dia + desplazamiento - 1) % 7;
+            int fila = (dia + desplazamiento - 1) / 7;
+
             LocalDate fechaActual = yearMonth.atDay(dia);
             VBox celda = crearCeldaDia(dia, turnosDelMes.getOrDefault(fechaActual, Collections.emptyList()));
             gridCalendario.add(celda, columna, fila);
-
-            columna++;
-            if (columna == 7) {
-                columna = 0;
-                fila++;
-            }
         }
     }
 
+    /**
+     * Método que crea un contenedor para un día con sus etiquetas de turnos
+     *
+     * @param dia
+     * @param turnos
+     * @return
+     */
     private VBox crearCeldaDia(int dia, List<String> turnos) {
         VBox celda = new VBox(5);
         celda.getStyleClass().add("tarjeta");
         celda.setPadding(new Insets(5));
         celda.setAlignment(Pos.TOP_LEFT);
+
+        // Hacemos que la celda crezca para llenar el espacio del Grid
         celda.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         GridPane.setHgrow(celda, Priority.ALWAYS);
         GridPane.setVgrow(celda, Priority.ALWAYS);
@@ -191,22 +234,30 @@ public class MenuTurnosControlador {
         lblDia.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
         celda.getChildren().add(lblDia);
 
+        // Añadimos una etiqueta de color por cada turno que haya ese día
         for (String tipo : turnos) {
             celda.getChildren().add(crearEtiquetaTurno(tipo));
         }
+
         return celda;
     }
 
+    /**
+     * Método que crea una etiqueta de distinto color para cada tipo de turno
+     *
+     * @param info información del turno
+     * @return
+     */
     private Label crearEtiquetaTurno(String info) {
-        // info viene como "Juan - Mañana"
         String[] partes = info.split(" - ");
         String nombre = partes[0];
         String tipo = partes[1];
 
-        Label etiqueta = new Label(nombre); // O puedes poner tipo si prefieres que el empleado vea "Mañana"
+        Label etiqueta = new Label(nombre);
         etiqueta.setMaxWidth(Double.MAX_VALUE);
         etiqueta.setPadding(new Insets(2, 5, 2, 5));
 
+        // Código de colores en función de la hora
         String color = switch (tipo.toLowerCase()) {
             case "mañana" -> "#3A7BD5";
             case "tarde" -> "#58B368";
@@ -218,106 +269,115 @@ public class MenuTurnosControlador {
         return etiqueta;
     }
 
+    /**
+     * Método que configura las dimensiones del grid
+     */
     private void configurarDimensionesGrid() {
+        gridCalendario.getColumnConstraints().clear();
+        gridCalendario.getRowConstraints().clear();
+
         for (int i = 0; i < 7; i++) {
             ColumnConstraints cc = new ColumnConstraints();
             cc.setPercentWidth(100.0 / 7);
             cc.setHalignment(HPos.CENTER);
+            cc.setFillWidth(true);
             gridCalendario.getColumnConstraints().add(cc);
         }
+
         for (int i = 0; i < 6; i++) {
             RowConstraints rc = new RowConstraints();
             rc.setPercentHeight(100.0 / 6);
-            rc.setValignment(VPos.CENTER);
+            rc.setValignment(VPos.TOP);
+            rc.setFillHeight(true);
             gridCalendario.getRowConstraints().add(rc);
         }
     }
 
+    /**
+     * Método que abre un cuadro de diálogo para asignar turnos
+     */
     @FXML
     private void manejarAnadirTurno() {
+        // Verificamos el rol del usuario
         if (!SesionUtil.getUsuario().getRolId().equals(1)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Acceso Denegado");
-            alert.setHeaderText(null);
-            alert.setContentText("No tienes permisos para realizar esta acción.");
-            alert.showAndWait();
+            AlertaUtil.mostrarAdvertencia("Acceso Denegado", "No tienes permisos.");
             return;
         }
 
-        // 1. Obtener lista de empleados
-        List<Usuario> empleados = usuarioDAO.obtenerTodos();
-
-        // 2. Crear el Diálogo
+        // Configuramos el diálogo
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Asignar Nuevo Turno");
-        dialog.setHeaderText("Completa los datos para registrar el turno.");
-
-        // Aplicar el estilo del diálogo (opcional, para que herede tu CSS)
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());
 
-        ButtonType btnGuardar = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
+        ButtonType btnGuardarType = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnGuardarType, ButtonType.CANCEL);
 
-        // 3. Crear componentes del formulario
-        ComboBox<Usuario> cbEmpleados = new ComboBox<>(FXCollections.observableArrayList(empleados));
-        cbEmpleados.setPromptText("Seleccionar empleado");
-        cbEmpleados.setMaxWidth(Double.MAX_VALUE);
+        // Cargamos los usuarios del negocio (Ahora con placeholder o gestión de carga)
+        ComboBox<Usuario> cbEmpleados = crearComboBoxEmpleados();
+        DatePicker dpFecha = new DatePicker(LocalDate.now());
+        ComboBox<String> cbTurnos = new ComboBox<>(FXCollections.observableArrayList("Mañana", "Tarde", "Noche"));
 
-        // Formatear visualización del ComboBox de empleados
-        cbEmpleados.setCellFactory(lv -> new ListCell<>() {
+        // Damos un estilo
+        Stream.of(cbEmpleados, dpFecha, cbTurnos).forEach(c -> c.setMaxWidth(Double.MAX_VALUE));
+
+        VBox content = new VBox(10, new Label("Trabajador:"), cbEmpleados,
+                new Label("Fecha:"), dpFecha,
+                new Label("Franja:"), cbTurnos);
+        content.setPadding(new Insets(20));
+        dialog.getDialogPane().setContent(content);
+
+        // Guardamos de forma asíncrona (hilos)
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == btnGuardarType) {
+                ejecutarGuardadoAsync(cbEmpleados.getValue(), cbTurnos.getValue(), dpFecha.getValue());
+            }
+        });
+    }
+
+    /**
+     * Método que mueve la carga pesada de la BD a un hilo secundario
+     *
+     * @param sel campo del formulario del usuario
+     * @param tipo campo del formulario del tipo de turno
+     * @param fecha campo del formulario de la fecha del turno
+     */
+    private void ejecutarGuardadoAsync(Usuario sel, String tipo, LocalDate fecha) {
+        if (sel == null || tipo == null || fecha == null) {
+            AlertaUtil.mostrarAdvertencia("Campos incompletos", "Rellene todos los campos.");
+            return;
+        }
+
+        Task<Boolean> saveTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                return turnoDAO.insertarTurno(sel.getId(), tipo, fecha);
+            }
+        };
+
+        saveTask.setOnSucceeded(e -> {
+            if (saveTask.getValue()) {
+                dibujarCalendario(); // Refresca la UI
+            } else {
+                AlertaUtil.mostrarError("Error", "No se pudo guardar en la base de datos.");
+            }
+        });
+
+        new Thread(saveTask).start();
+    }
+
+    /**
+     * Método que crea y configura el ComboBox de empleados de forma limpia
+     */
+    private ComboBox<Usuario> crearComboBoxEmpleados() {
+        // Obtenemos todos los empleados
+        ComboBox<Usuario> cb = new ComboBox<>(FXCollections.observableArrayList(usuarioDAO.obtenerTodos()));
+        cb.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Usuario u, boolean empty) {
                 super.updateItem(u, empty);
                 setText(empty ? null : u.getNombre() + " " + u.getApellidos());
             }
         });
-        cbEmpleados.setButtonCell(cbEmpleados.getCellFactory().call(null));
-
-        // Selector de Fecha (Dato clave para que aparezca en el calendario)
-        DatePicker dpFecha = new DatePicker(LocalDate.now());
-        dpFecha.setMaxWidth(Double.MAX_VALUE);
-
-        ComboBox<String> cbTurnos = new ComboBox<>(FXCollections.observableArrayList("Mañana", "Tarde", "Noche"));
-        cbTurnos.setPromptText("Seleccionar tipo de turno");
-        cbTurnos.setMaxWidth(Double.MAX_VALUE);
-
-        // 4. Layout del contenido organizado con Labels
-        VBox content = new VBox(10);
-        content.setPadding(new Insets(20));
-        content.getChildren().addAll(
-                new Label("Trabajador:"), cbEmpleados,
-                new Label("Fecha del turno:"), dpFecha,
-                new Label("Franja horaria:"), cbTurnos
-        );
-        dialog.getDialogPane().setContent(content);
-
-        // 5. Procesar resultado e insertar en Base de Datos
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == btnGuardar) {
-            Usuario sel = cbEmpleados.getValue();
-            String tipo = cbTurnos.getValue();
-            LocalDate fecha = dpFecha.getValue();
-
-            if (sel != null && tipo != null && fecha != null) {
-                // LLAMADA REAL AL DAO
-                boolean insertado = turnoDAO.insertarTurno(sel.getId(), tipo, fecha);
-
-                if (insertado) {
-                    // Si se guardó, refrescamos el dibujo del calendario
-                    dibujarCalendario();
-                } else {
-                    // Alerta en caso de fallo en la BD
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setContentText("No se pudo guardar el turno en la base de datos.");
-                    alert.showAndWait();
-                }
-            } else {
-                // Alerta si faltan campos
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Campos incompletos");
-                alert.setContentText("Por favor, rellene todos los campos del formulario.");
-                alert.showAndWait();
-            }
-        }
+        cb.setButtonCell(cb.getCellFactory().call(null));
+        return cb;
     }
 }

@@ -11,22 +11,20 @@ import org.chronosync.proyecto.dao.NegocioDAO;
 import org.chronosync.proyecto.dao.UsuarioDAO;
 import org.chronosync.proyecto.modelo.Negocio;
 import org.chronosync.proyecto.modelo.Usuario;
+import org.chronosync.proyecto.util.AlertaUtil;
 import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.SesionUtil;
 
 public class MenuConfiguracionControlador {
-    @FXML private Button btnPanelPrincipal;
-    @FXML private Button btnEmpleados;
-    @FXML private Button btnTurnos;
-    @FXML private Button btnIncidencias;
-    @FXML private Button btnExportaciones;
-    @FXML private Button btnCerrarSesion;
-
+    // Botones de navegación lateral
+    @FXML private Button btnPanelPrincipal, btnEmpleados, btnTurnos, btnIncidencias, btnExportaciones, btnCerrarSesion;
     @FXML private Label txtNombre, txtRol;
 
+    // Campos de texto para la Configuración de Empresa
     @FXML private TextField txtFieldNombreEmpresa, txtFieldCodigoUnion, txtFieldDireccion, txtFieldTelefono, txtFieldEmail;
     @FXML private Button btnGuardar;
 
+    // Campos de texto para el Perfil de Usuario
     @FXML private TextField txtFieldNombre, txtFieldApellidos;
     @FXML private Button btnGuardar2;
 
@@ -34,16 +32,13 @@ public class MenuConfiguracionControlador {
     private Negocio negocioActual;
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
+    /**
+     * Método que se ejecuta al abrir la pantalla
+     */
     @FXML
     public void initialize() {
-        btnPanelPrincipal.setOnMouseClicked(this::navegar);
-        btnEmpleados.setOnMouseClicked(this::navegar);
-        btnTurnos.setOnMouseClicked(this::navegar);
-        btnIncidencias.setOnMouseClicked(this::navegar);
-        btnExportaciones.setOnMouseClicked(this::navegar);
-        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
-
         mostrarDatosUsuario();
+        configurarNavegacion();
 
         Usuario usuarioLogueado = SesionUtil.getUsuario();
 
@@ -57,7 +52,7 @@ public class MenuConfiguracionControlador {
             mapearDatosAFormulario();
         }
 
-        // 3. SEGURIDAD: Solo Admin (Rol 1) puede editar
+        // 3. Solo Admin (Rol 1) puede editar
         if (usuarioLogueado.getRolId() != 1) {
             bloquearAccesoSoloAdmin();
         }
@@ -69,6 +64,23 @@ public class MenuConfiguracionControlador {
         btnGuardar2.setOnAction(e -> accionGuardarPerfil());
     }
 
+    /**
+     * Método que muestra los datos del usuario por pantalla
+     */
+    private void mostrarDatosUsuario() {
+        txtNombre.setText(SesionUtil.getUsuario().getNombre());
+        if (SesionUtil.getUsuario().getRolId().equals(1)) {
+            txtRol.setText("Administrador");
+        } else if (SesionUtil.getUsuario().getRolId().equals(2)) {
+            txtRol.setText("Empleado");
+        }
+    }
+
+    /**
+     * Método que cambia la escena en función del botón pulsado
+     *
+     * @param e evento del ratón
+     */
     private void navegar(MouseEvent e) {
         Button btn = (Button) e.getSource();
 
@@ -91,20 +103,31 @@ public class MenuConfiguracionControlador {
         CargadorUtil.cambiarEscena(stage, fxmlRuta);
     }
 
-    private void mostrarDatosUsuario() {
-        txtNombre.setText(SesionUtil.getUsuario().getNombre());
-        if (SesionUtil.getUsuario().getRolId().equals(1)) {
-            txtRol.setText("Administrador");
-        } else if (SesionUtil.getUsuario().getRolId().equals(2)) {
-            txtRol.setText("Empleado");
-        }
-    }
-
+    /**
+     * Método que cierra las sesión actual del usuario
+     *
+     * @param e evento del ratón
+     */
     private void cerrarSesion(MouseEvent e) {
         Stage stage = (Stage) btnCerrarSesion.getScene().getWindow();
         SesionUtil.cerrarSesion(stage);
     }
 
+    /**
+     * Método que configura los botones de navegación
+     */
+    private void configurarNavegacion() {
+        btnPanelPrincipal.setOnMouseClicked(this::navegar);
+        btnEmpleados.setOnMouseClicked(this::navegar);
+        btnTurnos.setOnMouseClicked(this::navegar);
+        btnIncidencias.setOnMouseClicked(this::navegar);
+        btnExportaciones.setOnMouseClicked(this::navegar);
+        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
+    }
+
+    /**
+     * Método que configura los datos del formulario en función del usuario
+     */
     private void mapearDatosAFormulario() {
         txtFieldNombreEmpresa.setText(negocioActual.getNombre());
         txtFieldDireccion.setText(negocioActual.getDireccion());
@@ -114,6 +137,9 @@ public class MenuConfiguracionControlador {
         txtFieldCodigoUnion.setEditable(false);
     }
 
+    /**
+     * Método que bloquea la edición de algunos campos a los empleados
+     */
     private void bloquearAccesoSoloAdmin() {
         txtFieldNombreEmpresa.setDisable(true);
         txtFieldDireccion.setDisable(true);
@@ -122,6 +148,9 @@ public class MenuConfiguracionControlador {
         btnGuardar.setVisible(false);
     }
 
+    /**
+     * Método que configura la acción del botón guardar
+     */
     private void accionGuardar() {
         negocioActual.setNombre(txtFieldNombreEmpresa.getText());
         negocioActual.setDireccion(txtFieldDireccion.getText());
@@ -129,20 +158,15 @@ public class MenuConfiguracionControlador {
         negocioActual.setEmail(txtFieldEmail.getText());
 
         if (negocioDAO.actualizar(negocioActual)) {
-            mostrarAlerta("Éxito", "Configuración actualizada correctamente.", Alert.AlertType.INFORMATION);
+            AlertaUtil.mostrarInfo("Éxito", "Configuración actualizada correctamente.");
         } else {
-            mostrarAlerta("Error", "No se pudieron guardar los cambios.", Alert.AlertType.ERROR);
+            AlertaUtil.mostrarError("Error", "No se pudieron guardar los cambios.");
         }
     }
 
-    private void mostrarAlerta(String titulo, String contenido, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(contenido);
-        alert.showAndWait();
-    }
-
+    /**
+     * Método que carga los datos del perfil del usuario
+     */
     private void cargarDatosPerfil() {
         Usuario usuarioActual = SesionUtil.getUsuario();
         if (usuarioActual != null) {
@@ -151,12 +175,15 @@ public class MenuConfiguracionControlador {
         }
     }
 
+    /**
+     * Método que actualiza los datos de un usuario a los escritos en el formulario
+     */
     private void accionGuardarPerfil() {
         Usuario usuarioActual = SesionUtil.getUsuario();
 
         // Validar que no estén vacíos
         if (txtFieldNombre.getText().isEmpty() || txtFieldApellidos.getText().isEmpty()) {
-            mostrarAlerta("Error", "El nombre y apellidos no pueden estar vacíos.", Alert.AlertType.WARNING);
+            AlertaUtil.mostrarError("Error", "El nombre y apellidos no pueden estar vacíos.");
             return;
         }
 
@@ -165,12 +192,11 @@ public class MenuConfiguracionControlador {
 
         // Llamamos al usuarioDAO que ya deberías tener para actualizar
         if (usuarioDAO.actualizar(usuarioActual)) {
-            // Actualizamos también los labels de la barra lateral (opcional)
             txtNombre.setText(usuarioActual.getNombre());
 
-            mostrarAlerta("Éxito", "Tus datos personales se han actualizado.", Alert.AlertType.INFORMATION);
+            AlertaUtil.mostrarError("Éxito", "Tus datos personales se han actualizado.");
         } else {
-            mostrarAlerta("Error", "No se pudo actualizar el perfil.", Alert.AlertType.ERROR);
+            AlertaUtil.mostrarError("Error", "No se pudo actualizar el perfil.");
         }
     }
 }

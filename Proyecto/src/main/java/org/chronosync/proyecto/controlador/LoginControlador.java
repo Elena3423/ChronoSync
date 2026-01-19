@@ -7,12 +7,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.chronosync.proyecto.dao.UsuarioDAO;
 import org.chronosync.proyecto.modelo.Usuario;
+import org.chronosync.proyecto.util.AlertaUtil;
 import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.HashUtil;
 import org.chronosync.proyecto.util.SesionUtil;
 
 public class LoginControlador {
 
+    // Conectamos los elementos del FXML
     @FXML private TextField fieldEmail;
     @FXML private PasswordField fieldPassword;
     @FXML private Label txtCuentaNoExiste;
@@ -20,6 +22,9 @@ public class LoginControlador {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
+    /**
+     * Método que se ejecuta al abrir la pantalla
+     */
     @FXML
     public void initialize() {
         // Al pulsar enter, intentar loguearse
@@ -29,34 +34,37 @@ public class LoginControlador {
             }
         });
 
-        // Al hacer clic en el texto "No estás registrado", te lleva al registro
+        // Al hacer clic en el texto te lleva al registro
         txtCuentaNoExiste.setOnMouseClicked(this::irRegistro);
 
-        // Al hacer clic en el boton de iniciar sesion, te lleva el menu principal
+        // Al hacer clic en el botÓn de iniciar sesión te lleva el menu principal
         btnIniciarSesion.setOnMouseClicked(e -> intentarLogin());
     }
 
+    /**
+     * Lógica que comprueba si un usuario puede pasar o no
+     */
     private void intentarLogin() {
         String email = fieldEmail.getText();
         String password = fieldPassword.getText();
 
         // Si los campos del email y la contraseña están vacíos, se muestra una alerta
         if (email.isEmpty() || password.isEmpty()) {
-            verAlerta("Campos vacíos", "Rellena todos los campos");
+            AlertaUtil.mostrarAdvertencia("Campos vacíos", "Rellena todos los campos");
             return;
         }
 
         // Si el email no existe en ningún usuario, se muestra una alerta
         Usuario u = usuarioDAO.obtenerPorEmail(email);
         if (u == null) {
-            verAlerta("Error", "Email incorrecto");
+            AlertaUtil.mostrarError("Error", "Email incorrecto");
             return;
         }
 
         // Si la contraseña no coincide con la contraseña guardada, se muestra una alerta
         String hash = HashUtil.sha256(password);
         if (!hash.equals(u.getPassword())) {
-            verAlerta("Error", "Contraseña incorrecta");
+            AlertaUtil.mostrarError("Error", "Contraseña incorrecta");
             return;
         }
 
@@ -64,7 +72,7 @@ public class LoginControlador {
         SesionUtil.obtenerInstancia().setUsuario(u);
 
         // Redirigimos (provisional)
-        verAlerta("Éxito", "Inicio de sesión correcto");
+        AlertaUtil.mostrarInfo("Éxito", "Inicio de sesión correcto");
 
         Stage stage = (Stage) fieldEmail.getScene().getWindow();
 
@@ -78,17 +86,13 @@ public class LoginControlador {
 
     }
 
+    /**
+     * Método que envia al usuario al registro
+     * @param event evento del ratón
+     */
     private void irRegistro(MouseEvent event) {
         Stage stage = (Stage) txtCuentaNoExiste.getScene().getWindow();
         CargadorUtil.cambiarEscena(stage, "/fxml/register.fxml");
-    }
-
-    private void verAlerta(String titulo, String mensaje) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(titulo);
-        a.setHeaderText(null);
-        a.setContentText(mensaje);
-        a.showAndWait();
     }
 
 }

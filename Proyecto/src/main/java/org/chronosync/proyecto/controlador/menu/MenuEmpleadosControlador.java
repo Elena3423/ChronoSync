@@ -1,6 +1,7 @@
 package org.chronosync.proyecto.controlador.menu;
 
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,19 +13,18 @@ import org.chronosync.proyecto.modelo.Usuario;
 import org.chronosync.proyecto.util.CargadorUtil;
 import org.chronosync.proyecto.util.SesionUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MenuEmpleadosControlador {
-    @FXML private Button btnPanelPrincipal;
-    @FXML private Button btnTurnos;
-    @FXML private Button btnIncidencias;
-    @FXML private Button btnExportaciones;
-    @FXML private Button btnConfiguracion;
-    @FXML private Button btnCerrarSesion;
+    // Botones del menú lateral
+    @FXML private Button btnPanelPrincipal, btnTurnos, btnIncidencias, btnExportaciones, btnConfiguracion, btnCerrarSesion;
 
-    @FXML private Label txtNombre;
-    @FXML private Label txtRol;
+    // Etiquetas de perfil de usuario
+    @FXML private Label txtNombre, txtRol;
 
+    // Componentes de la tabla
     @FXML private TableView<Usuario> tabla;
     @FXML private TableColumn<Usuario, String> colNombre;
     @FXML private TableColumn<Usuario, Integer> colPuesto;
@@ -34,29 +34,28 @@ public class MenuEmpleadosControlador {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private TurnoDAO turnoDAO = new TurnoDAO();
 
+    private Map<Integer, Integer> cacheTurnos = new HashMap<>();
+
+    /**
+     * Método que se ejecuta al abrir la pantalla
+     */
     @FXML
     public void initialize() {
-        configurarNavegacion();
         mostrarDatosUsuario();
+        configurarNavegacion();
 
-        tabla.getStyleClass().add("");
-
-        // Configuración de las columnas básicas
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colPuesto.setCellValueFactory(new PropertyValueFactory<>("rolId"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("activo"));
         colTurnos.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        // Formatear columna puesto
         colPuesto.setCellFactory(column -> new TableCell<Usuario, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
-                getStyleClass().remove("table-cell"); // Limpiar para evitar duplicados
-                getStyleClass().add("table-cell");
-
                 if (empty || item == null) {
                     setText(null);
+                    setStyle("");
                 } else {
                     if (item == 1) {
                         setText("Administrador");
@@ -69,15 +68,13 @@ public class MenuEmpleadosControlador {
             }
         });
 
-        // Formatear columna estado
         colEstado.setCellFactory(column -> new TableCell<Usuario, Boolean>() {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
                 super.updateItem(item, empty);
-                getStyleClass().add("table-cell");
-
                 if (empty || item == null) {
                     setText(null);
+                    setStyle("");
                 } else {
                     if (item) {
                         setText("Activo");
@@ -90,18 +87,15 @@ public class MenuEmpleadosControlador {
             }
         });
 
-        // Formatear columna turnos
         colTurnos.setCellFactory(column -> new TableCell<Usuario, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
-                getStyleClass().add("table-cell");
-
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    int totalTurnos = turnoDAO.contarTurnosMesUsuario(item);
-                    setText(totalTurnos + " turnos");
+                    Integer total = cacheTurnos.getOrDefault(item, 0);
+                    setText(total + " turnos");
                     setStyle("-fx-text-fill: #333333;");
                 }
             }
@@ -110,11 +104,51 @@ public class MenuEmpleadosControlador {
         actualizarTabla();
     }
 
+    /**
+     * Método que actualiza la tabla
+     */
     private void actualizarTabla() {
-        List<Usuario> lista = usuarioDAO.obtenerTodos();
-        tabla.setItems(FXCollections.observableArrayList(lista));
+        // Añadimos el icono de carga como placeholder de la tabla
+        ProgressIndicator cargando = new ProgressIndicator();
+        cargando.setMaxSize(50, 50);
+        tabla.setPlaceholder(cargando);
+
+        // Creamos la tarea para no bloquear la interfaz
+        Task<List<Usuario>> tarea = new Task<>() {
+            @Override
+            protected List<Usuario> call() throws Exception {
+                List<Usuario> lista = usuarioDAO.obtenerTodos();
+                // Llenamos el caché en segundo plano
+                for (Usuario u : lista) {
+                    int conteo = turnoDAO.contarTurnosMesUsuario(u.getId());
+                    cacheTurnos.put(u.getId(), conteo);
+                }
+                return lista;
+            }
+        };
+
+        // Cuando termina, cargamos los datos en la tabla
+        tarea.setOnSucceeded(e -> {
+            List<Usuario> lista = tarea.getValue();
+            tabla.setItems(FXCollections.observableArrayList(lista));
+
+            // Si la lista está vacía después de la carga, mostramos un mensaje
+            if (lista.isEmpty()) {
+                tabla.setPlaceholder(new Label("No hay empleados registrados."));
+            }
+        });
+
+        // En caso de fallo, informamos al usuario en la tabla
+        tarea.setOnFailed(e -> {
+            tabla.setPlaceholder(new Label("Error al cargar los datos de empleados."));
+        });
+
+        new Thread(tarea).start();
     }
 
+    /**
+     * Método que muestra los datos del usuario por pantalla
+     */
     private void mostrarDatosUsuario() {
         txtNombre.setText(SesionUtil.getUsuario().getNombre());
         if (SesionUtil.getUsuario().getRolId().equals(1)) {
@@ -124,15 +158,11 @@ public class MenuEmpleadosControlador {
         }
     }
 
-    private void configurarNavegacion() {
-        btnPanelPrincipal.setOnMouseClicked(this::navegar);
-        btnTurnos.setOnMouseClicked(this::navegar);
-        btnIncidencias.setOnMouseClicked(this::navegar);
-        btnExportaciones.setOnMouseClicked(this::navegar);
-        btnConfiguracion.setOnMouseClicked(this::navegar);
-        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
-    }
-
+    /**
+     * Método que cambia la escena en función del botón pulsado
+     *
+     * @param e evento del ratón
+     */
     private void navegar(MouseEvent e) {
         Button btn = (Button) e.getSource();
 
@@ -155,8 +185,25 @@ public class MenuEmpleadosControlador {
         CargadorUtil.cambiarEscena(stage, fxmlRuta);
     }
 
+    /**
+     * Método que cierra las sesión actual del usuario
+     *
+     * @param e evento del ratón
+     */
     private void cerrarSesion(MouseEvent e) {
         Stage stage = (Stage) btnCerrarSesion.getScene().getWindow();
         SesionUtil.cerrarSesion(stage);
+    }
+
+    /**
+     * Método que configura los botones de navegación
+     */
+    private void configurarNavegacion() {
+        btnPanelPrincipal.setOnMouseClicked(this::navegar);
+        btnTurnos.setOnMouseClicked(this::navegar);
+        btnIncidencias.setOnMouseClicked(this::navegar);
+        btnExportaciones.setOnMouseClicked(this::navegar);
+        btnConfiguracion.setOnMouseClicked(this::navegar);
+        btnCerrarSesion.setOnMouseClicked(this::cerrarSesion);
     }
 }

@@ -63,7 +63,7 @@
 
 .subtitulo {
     -fx-font-family: Roboto;
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 16;
 }
 
@@ -88,7 +88,7 @@
 
 .titulo-tarjeta {
     -fx-font-family: Roboto;
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 12;
 }
 
@@ -101,7 +101,7 @@
 
 .subdato-tarjeta {
     -fx-font-family: Roboto;
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 10;
     -fx-text-fill: #23282B;
 }
@@ -115,7 +115,7 @@
 
 .subtitulo-caja {
     -fx-font-family: Roboto;
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 16;
     -fx-text-fill: #333333;
 }

@@ -3,18 +3,13 @@ package org.chronosync.proyecto.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Clase de utilidad para generar hashes
- * Se utiliza para hashear contraseñas antes de almacenarlas,
- * lo cual es una práctica de seguridad estandar
- */
 public class HashUtil {
 
     /**
-     * Método que genera un hash SHA-256 para la contraseña
+     * Método que convierte cualquier texto en una huella digital única usando SHA-256
      *
-     * @param input texto plano a cifrar
-     * @return hash 256 en formato hexadecimal
+     * @param input texto a cifrar
+     * @return cadena de 64 caracteres hexadecimales (hash)
      */
     public static String sha256(String input) {
         try {
@@ -26,7 +21,7 @@ public class HashUtil {
             // md.digest() calcula el hash SHA-256 de esos bytes
             byte[] hashBytes = md.digest(input.getBytes());
 
-            // Convertimos el array de bytes del hash a una cadena hexadecimal legible
+            // Convertimos el array de bytes del hash a una cadena hexadecimal que se pueda leer
             StringBuilder sb = new StringBuilder();
             for (byte b : hashBytes) {
                 // Indicamos el formato hexadecimal (x)
@@ -38,8 +33,7 @@ public class HashUtil {
             return sb.toString();
 
         } catch (NoSuchAlgorithmException e) {
-            // Esta excepción sucede si Java no soporta SHA-256, ya que no se suele usar en entornos modernos
-            throw new RuntimeException("Error al generar SHA-256", e);
+            throw new RuntimeException("Error al generar SHA-256: ", e);
         }
     }
 
