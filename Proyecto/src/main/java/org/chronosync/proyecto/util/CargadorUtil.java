@@ -15,11 +15,19 @@ public class CargadorUtil {
     // Bloque estático para cargar las fuentes al inicar la clase
     static {
         try {
-            Font.loadFont(CargadorUtil.class.getResourceAsStream("fonts/Roboto-Regular.ttf"), 10);
-            Font.loadFont(CargadorUtil.class.getResourceAsStream("fonts/Roboto-Bold.ttf"), 10);
-            Font.loadFont(CargadorUtil.class.getResourceAsStream("fonts/Roboto-Italic.ttf"), 10);
+            String[] fuentes = {"Roboto-Regular.ttf", "Roboto-Bold.ttf", "Roboto-Italic.ttf"};
+            for (String f : fuentes) {
+                URL fontUrl = CargadorUtil.class.getResource("fonts/" + f);
+                if (fontUrl == null) {
+                    System.err.println("Error al encontrar las fuentes: " + f);
+                } else {
+                    Font cargada = Font.loadFont(fontUrl.toExternalForm(), 10);
+                    if (cargada == null) System.err.println("Error de renderizado: " + f);
+                    else System.out.println("Fuente cargada: " + cargada.getFamily());
+                }
+            }
         } catch (Exception e) {
-            System.err.println("Error al cargar las fuentes Roboto");
+            System.err.println("Error crítico al cargar fuentes");
         }
     }
 
@@ -40,7 +48,9 @@ public class CargadorUtil {
             }
 
             // Cargamos la nueva vista
-            Parent root = FXMLLoader.load(localizacion);
+            FXMLLoader loader = new FXMLLoader(localizacion);
+            loader.setCharset(java.nio.charset.StandardCharsets.UTF_8);
+            Parent root = loader.load();
 
             // Si el FXML es una región (como AnchorPane o VBox), le decimos que ocupe todo el espacio
             if (root instanceof javafx.scene.layout.Region) {
