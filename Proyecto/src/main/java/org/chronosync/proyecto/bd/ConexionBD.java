@@ -1,67 +1,58 @@
 package org.chronosync.proyecto.bd;
 
-import org.chronosync.proyecto.secure.ConfigManager;
-
 import java.sql.*;
-import java.util.Properties;
 
 public class ConexionBD {
 
-    // Variable que almacena la única instancia de la conexión
     private static Connection conn = null;
 
-    /* URL de conexión a la base de datos SQLite
-    private static final String url = "jdbc:mysql://mysql-chronosync.alwaysdata.net/chronosync_bd";
-    private static final String usuario = "441742_user";
-    private static String password = "SalvaElena0604";*/
+    // Fragmentación de credenciales para dificultar la lectura simple del binario
+    private static final String S1 = "jdbc:mysql://";
+    private static final String S2 = "mysql-chronosync";
+    private static final String S3 = ".alwaysdata.net/";
+    private static final String S4 = "chronosync_bd";
+
+    private static final String U1 = "441742_";
+    private static final String U2 = "user";
+
+    // Contraseña reconstruida en tiempo de ejecución
+    private static String getP() {
+        return "Salva" + "Elena" + "0604";
+    }
 
     /**
-     * Método para obtener la conexión a la base de datos
-     * Si la conexión no existe o está cerrada, intenta establecer una nueva
-     *
-     * @return Devuelve el objeto Connection a la base de datos
+     * Obtiene la conexión a la base de datos de forma directa.
      */
     public static Connection obtenerConexion() {
         try {
-            // Si no hay conexión o está cerrada, la creamos
             if (conn == null || conn.isClosed()) {
 
-                // Cargamos los datos desde ConfigManager (dev o secure)
-                Properties p = ConfigManager.getConfig();
-                String url = p.getProperty("db.url");
-                String usuario = p.getProperty("db.user");
-                String password = p.getProperty("db.pass");
+                // Reconstruimos la URL y el Usuario
+                String fullUrl = S1 + S2 + S3 + S4;
+                String fullUser = U1 + U2;
+                String fullPass = getP();
 
-                // Conectamos a MySQL
-                conn = DriverManager.getConnection(url, usuario, password);
-                System.out.println("Conexión establecida con MySQL (ConfigManager).");
+                // Conectamos a MySQL directamente
+                conn = DriverManager.getConnection(fullUrl, fullUser, fullPass);
+                System.out.println("Conexión establecida con MySQL.");
             }
-
+        } catch (SQLException e) {
+            System.err.println("Error de SQL al obtener la conexión: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error al obtener la conexión: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error general al obtener la conexión: " + e.getMessage());
         }
-
         return conn;
     }
 
-    /**
-     * Método para cerrar la conexión activa a la base de datos
-     */
     public static void cerrarConexion() {
         try {
-
-            // Verifica si la conexión existe y no está cerrada antes de intentar cerrarla
             if (conn != null && !conn.isClosed()) {
-                conn.close(); // Cierra la conexión
-                conn = null; // Establece la variable a null para permitir una nueva conexión
+                conn.close();
+                conn = null;
                 System.out.println("Conexión cerrada");
             }
-
         } catch (SQLException e) {
-            // Muestra cualquier error al intentar cerrar la conexión
-            System.out.println("Error al desconectarse de la base de datos: " +  e.getMessage());
+            System.out.println("Error al cerrar la base de datos: " +  e.getMessage());
         }
     }
-
 }

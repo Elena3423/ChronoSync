@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.menu.MenuIncidenciasControlador">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.chronosync.proyecto.controlador.menu.MenuIncidenciasControlador">
    <left>
 
               <VBox prefWidth="250.0" BorderPane.alignment="CENTER">
