@@ -395,7 +395,7 @@
                           <VBox alignment="TOP_CENTER" spacing="8.0" styleClass="tarjeta" HBox.hgrow="ALWAYS">
                               <children>
                                   <Label styleClass="titulo-caja" text="Documentación" />
-                                  <Label text="Descarga tus reportes mensuales en PDF para tu control personal de nómina." textAlignment="CENTER" wrapText="true" />
+                                  <Label text="Descarga tus reportes mensuales en PDF o EXCEL para tu control personal de nómina." textAlignment="CENTER" wrapText="true" />
                               </children>
                           </VBox>
                       </children>

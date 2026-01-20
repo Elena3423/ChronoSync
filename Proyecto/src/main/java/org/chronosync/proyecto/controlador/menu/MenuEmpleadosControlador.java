@@ -105,7 +105,7 @@ public class MenuEmpleadosControlador {
     }
 
     /**
-     * Método que actualiza la tabla
+     * Método que actualiza la tabla filtrando por el negocio del usuario actual
      */
     private void actualizarTabla() {
         // Añadimos el icono de carga como placeholder de la tabla
@@ -113,11 +113,16 @@ public class MenuEmpleadosControlador {
         cargando.setMaxSize(50, 50);
         tabla.setPlaceholder(cargando);
 
+        // Obtenemos el ID del negocio del usuario que ha iniciado sesión
+        final int negocioId = SesionUtil.getUsuario().getNegocioId();
+
         // Creamos la tarea para no bloquear la interfaz
         Task<List<Usuario>> tarea = new Task<>() {
             @Override
             protected List<Usuario> call() throws Exception {
-                List<Usuario> lista = usuarioDAO.obtenerTodos();
+                // LLAMADA FILTRADA: Solo obtenemos usuarios de este negocio
+                List<Usuario> lista = usuarioDAO.obtenerPorNegocio(negocioId);
+
                 // Llenamos el caché en segundo plano
                 for (Usuario u : lista) {
                     int conteo = turnoDAO.contarTurnosMesUsuario(u.getId());
@@ -134,7 +139,7 @@ public class MenuEmpleadosControlador {
 
             // Si la lista está vacía después de la carga, mostramos un mensaje
             if (lista.isEmpty()) {
-                tabla.setPlaceholder(new Label("No hay empleados registrados."));
+                tabla.setPlaceholder(new Label("No hay empleados registrados en este negocio."));
             }
         });
 

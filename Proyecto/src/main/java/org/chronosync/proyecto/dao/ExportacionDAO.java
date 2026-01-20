@@ -21,7 +21,14 @@ public class ExportacionDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, exportacion.getTipoFormato());
-            stmt.setString(2, exportacion.getFechaGeneracion().toString());
+
+            // Ajuste técnico: Convertir LocalDateTime a Timestamp para mayor compatibilidad con SQL
+            if (exportacion.getFechaGeneracion() != null) {
+                stmt.setTimestamp(2, Timestamp.valueOf(exportacion.getFechaGeneracion()));
+            } else {
+                stmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            }
+
             stmt.setInt(3, exportacion.getUsuarioId());
             stmt.setInt(4, exportacion.getNegocioId());
 

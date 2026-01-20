@@ -230,11 +230,11 @@
             </VBox>
             <TableView fx:id="tabla" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <columns>
-                  <TableColumn fx:id="colEmpleado" prefWidth="75.0" text="Empleado" />
-                  <TableColumn fx:id="colTipo" prefWidth="75.0" text="Tipo" />
-                  <TableColumn fx:id="colDescripcion" prefWidth="117.0" text="Descripción" />
-                  <TableColumn fx:id="colEstado" prefWidth="75.0" text="Estado" />
-                  <TableColumn fx:id="colAcciones" prefWidth="75.0" text="Acciones" />
+                  <TableColumn fx:id="colEmpleado" minWidth="180.0" prefWidth="220.0" maxWidth="300" text="Empleado" />
+                  <TableColumn fx:id="colTipo" minWidth="80.0" prefWidth="100.0" maxWidth="120" text="Tipo" />
+                  <TableColumn fx:id="colDescripcion" minWidth="300.0" prefWidth="500.0" maxWidth="4000" text="Descripción" />
+                  <TableColumn fx:id="colEstado" minWidth="110.0" prefWidth="130.0" maxWidth="150" text="Estado" />
+                  <TableColumn fx:id="colAcciones" minWidth="130.0" prefWidth="150.0" maxWidth="180" text="Acciones" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

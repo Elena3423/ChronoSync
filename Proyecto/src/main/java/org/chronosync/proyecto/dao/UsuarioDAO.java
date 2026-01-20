@@ -319,4 +319,33 @@ public class UsuarioDAO {
         return 0.0;
     }
 
+    /**
+     * Método que obtiene todos los usuarios (admins y empleados) de un negocio específico.
+     *
+     * @param idNegocio ID del negocio del usuario actual
+     * @return Lista de usuarios pertenecientes a ese negocio
+     */
+    public List<Usuario> obtenerPorNegocio(int idNegocio) {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuarios WHERE negocio_id = ?";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idNegocio);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    // Reutilizamos tu método privado para construir el objeto completo
+                    lista.add(construirUsuario(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error obteniendo usuarios por negocio: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
 }

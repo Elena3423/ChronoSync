@@ -60,6 +60,8 @@ public class MenuIncidenciasControlador {
      */
     @FXML
     public void initialize() {
+        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         mostrarDatosUsuario();
         configurarNavegacion();
         configurarTabla();
@@ -140,6 +142,23 @@ public class MenuIncidenciasControlador {
                 new javafx.beans.property.SimpleStringProperty(fila.getValue().getTipo()));
         colDescripcion.setCellValueFactory(fila ->
                 new javafx.beans.property.SimpleStringProperty(fila.getValue().getComentarios()));
+
+        colDescripcion.setCellFactory(column -> {
+            return new TableCell<IncidenciaView, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item);
+                        setWrapText(true);
+                        setStyle("-fx-alignment: CENTER-LEFT; -fx-padding: 5;");
+                    }
+                }
+            };
+        });
+
         colEstado.setCellValueFactory(fila ->
                 new javafx.beans.property.SimpleStringProperty(fila.getValue().getEstado()));
 
@@ -153,18 +172,23 @@ public class MenuIncidenciasControlador {
         // Bloqueamos la tabla temporalmente para evitar clics mientras carga
         tabla.setPlaceholder(new ProgressIndicator());
 
-        Integer filtroId = null;
+        // Extraemos los datos de sesión para filtrar
+        final int negocioId = SesionUtil.getUsuario().getNegocioId();
+        Integer filtroUsuarioId = null;
+
+        // Si es empleado, solo ve sus propias incidencias. Si es admin, ve todas las del negocio.
         if (SesionUtil.getUsuario().getRolId().equals(2)) {
-            filtroId = SesionUtil.getUsuario().getId();
+            filtroUsuarioId = SesionUtil.getUsuario().getId();
         }
 
-        final Integer finalFiltroId = filtroId;
+        final Integer finalFiltroId = filtroUsuarioId;
 
         Task<ObservableList<IncidenciaView>> task = new Task<>() {
             @Override
             protected ObservableList<IncidenciaView> call() throws Exception {
                 ObservableList<IncidenciaView> datos = FXCollections.observableArrayList();
-                List<Map<String, Object>> resultados = incidenciaDAO.obtenerIncidenciasConNombre(finalFiltroId);
+
+                List<Map<String, Object>> resultados = incidenciaDAO.obtenerIncidenciasConNombre(finalFiltroId, negocioId);
 
                 for (var res : resultados) {
                     datos.add(new IncidenciaView(
@@ -179,7 +203,7 @@ public class MenuIncidenciasControlador {
         task.setOnSucceeded(e -> {
             tabla.setItems(task.getValue());
             if (task.getValue().isEmpty()) {
-                tabla.setPlaceholder(new Label("No hay incidencias registradas."));
+                tabla.setPlaceholder(new Label("No hay incidencias registradas en su negocio."));
             }
         });
 
@@ -325,7 +349,7 @@ public class MenuIncidenciasControlador {
                     if (insertTask.getValue()) {
                         cargarDatos();
                     } else {
-                        AlertaUtil.mostrarError("Error", "No se pudo guardar. Verifica que el turno_id existe en la base de datos.");
+                        AlertaUtil.mostrarError("Error", "No se pudo guardar la incidencia.");
                     }
                 });
 

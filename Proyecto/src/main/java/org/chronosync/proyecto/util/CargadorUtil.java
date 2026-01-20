@@ -15,19 +15,20 @@ public class CargadorUtil {
     // Bloque estático para cargar las fuentes al inicar la clase
     static {
         try {
-            String[] fuentes = {"Roboto-Regular.ttf", "Roboto-Bold.ttf", "Roboto-Italic.ttf"};
-            for (String f : fuentes) {
-                URL fontUrl = CargadorUtil.class.getResource("fonts/" + f);
-                if (fontUrl == null) {
-                    System.err.println("Error al encontrar las fuentes: " + f);
-                } else {
-                    Font cargada = Font.loadFont(fontUrl.toExternalForm(), 10);
-                    if (cargada == null) System.err.println("Error de renderizado: " + f);
-                    else System.out.println("Fuente cargada: " + cargada.getFamily());
-                }
+            String regularPath = "/org/chronosync/proyecto/util/fonts/Roboto-Regular.ttf";
+            String boldPath = "/org/chronosync/proyecto/util/fonts/Roboto-Bold.ttf";
+
+            URL regURL = CargadorUtil.class.getResource(regularPath);
+            URL boldURL = CargadorUtil.class.getResource(boldPath);
+
+            if (regURL != null) {
+                Font.loadFont(regURL.toExternalForm(), 12);
+            }
+            if (boldURL != null) {
+                Font.loadFont(boldURL.toExternalForm(), 12);
             }
         } catch (Exception e) {
-            System.err.println("Error crítico al cargar fuentes");
+            System.err.println("Error al cargar fuentes: " + e.getMessage());
         }
     }
 

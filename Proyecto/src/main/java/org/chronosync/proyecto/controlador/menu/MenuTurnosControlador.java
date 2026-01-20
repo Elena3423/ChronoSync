@@ -369,8 +369,10 @@ public class MenuTurnosControlador {
      * Método que crea y configura el ComboBox de empleados de forma limpia
      */
     private ComboBox<Usuario> crearComboBoxEmpleados() {
-        // Obtenemos todos los empleados
-        ComboBox<Usuario> cb = new ComboBox<>(FXCollections.observableArrayList(usuarioDAO.obtenerTodos()));
+        // Obtenemos los usuarios filtrados por el negocio del administrador actual
+        int negocioId = SesionUtil.getUsuario().getNegocioId();
+        ComboBox<Usuario> cb = new ComboBox<>(FXCollections.observableArrayList(usuarioDAO.obtenerPorNegocio(negocioId)));
+
         cb.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Usuario u, boolean empty) {
                 super.updateItem(u, empty);

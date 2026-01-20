@@ -128,8 +128,8 @@ public class MenuExportacionesControlador {
         Usuario usuarioLogueado = SesionUtil.getUsuario();
 
         if (usuarioLogueado.getRolId() == 1) { // ADMIN
-            // Cargamos todos los empleados en el choice
-            List<Usuario> empleados = usuarioDAO.obtenerTodosLosEmpleados();
+            // CORRECCIÓN: Filtrar empleados por negocio
+            List<Usuario> empleados = usuarioDAO.obtenerPorNegocio(usuarioLogueado.getNegocioId());
             if (empleados != null && !empleados.isEmpty()) {
                 choiceEmpleado1.setItems(FXCollections.observableArrayList(empleados));
             }
@@ -178,7 +178,7 @@ public class MenuExportacionesControlador {
         choiceEmpleado3.setConverter(new javafx.util.StringConverter<Usuario>() {
             @Override
             public String toString(Usuario u) {
-                return (u == null) ? "" : u.getNombre(); // O u.getNombre() + " " + u.getApellidos()
+                return (u == null) ? "" : u.getNombre() + " " + u.getApellidos();
             }
             @Override
             public Usuario fromString(String string) { return null; }
@@ -188,7 +188,8 @@ public class MenuExportacionesControlador {
         Usuario usuarioLogueado = SesionUtil.getUsuario();
 
         if (usuarioLogueado.getRolId() == 1) { // ADMIN
-            List<Usuario> empleados = usuarioDAO.obtenerTodosLosEmpleados();
+            // CORRECCIÓN: Filtrar empleados por negocio
+            List<Usuario> empleados = usuarioDAO.obtenerPorNegocio(usuarioLogueado.getNegocioId());
             if (empleados != null && !empleados.isEmpty()) {
                 choiceEmpleado3.setItems(FXCollections.observableArrayList(empleados));
             }
@@ -238,6 +239,8 @@ public class MenuExportacionesControlador {
                         ? choiceEmpleado1.getValue()
                         : SesionUtil.getUsuario();
 
+                if (emp == null) return;
+
                 // Obtenemos los datos del DAO
                 List<Turno> lista = turnoDAO.obtenerTurnosPorFiltro(emp.getId(), choicePeriodo1.getValue());
 
@@ -256,8 +259,6 @@ public class MenuExportacionesControlador {
                 exp.setNegocioId(SesionUtil.getUsuario().getNegocioId());
 
                 exportacionDAO.insertar(exp);
-
-                System.out.println("Exportación completada con éxito.");
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -282,31 +283,35 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                Usuario usuarioActual = SesionUtil.getUsuario();
+                // CORRECCIÓN: El Admin debe poder elegir de quién es el informe.
+                // Usamos el empleado del primer selector para ser consistentes.
+                Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
+                        ? choiceEmpleado1.getValue()
+                        : SesionUtil.getUsuario();
+
+                if (emp == null) return;
 
                 // Consultamos los datos del DAO
                 List<Incidencia> lista = incidenciaDAO.obtenerIncidenciasPorFiltro(
-                        usuarioActual.getId(),
+                        emp.getId(),
                         choicePeriodo2.getValue(),
                         choiceEstado2.getValue()
                 );
 
                 // Generamos según el formato
                 if (formato.equalsIgnoreCase("PDF")) {
-                    ExportadorPDF.generarInformeIncidencias(destino, choicePeriodo2.getValue(), usuarioActual.getNombre(), lista);
+                    ExportadorPDF.generarInformeIncidencias(destino, choicePeriodo2.getValue(), emp.getNombre(), lista);
                 } else {
-                    ExportadorExcel.generarExcelIncidencias(destino, choicePeriodo2.getValue(), usuarioActual.getNombre(), lista);
+                    ExportadorExcel.generarExcelIncidencias(destino, choicePeriodo2.getValue(), emp.getNombre(), lista);
                 }
 
-                // Inserción en la BD
+                // Inserción en la BD (quien genera el reporte)
                 Exportacion reg = new Exportacion();
                 reg.setTipoFormato(formato);
                 reg.setFechaGeneracion(LocalDateTime.now());
-                reg.setUsuarioId(usuarioActual.getId());
-                reg.setNegocioId(usuarioActual.getNegocioId());
+                reg.setUsuarioId(SesionUtil.getUsuario().getId());
+                reg.setNegocioId(SesionUtil.getUsuario().getNegocioId());
                 exportacionDAO.insertar(reg);
-
-                System.out.println("Exportación de incidencias realizada con éxito.");
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -331,31 +336,27 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                // Obtenemos el empleado (Admin elige de la lista, Empleado es él mismo)
                 Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
                         ? choiceEmpleado3.getValue()
                         : SesionUtil.getUsuario();
 
-                // Obtenemos los datos del DAO
+                if (emp == null) return;
+
                 List<Turno> datos = turnoDAO.obtenerResumenHoras(emp.getId(), choicePeriodo3.getValue());
 
-                // Exportación
                 if (formato.equalsIgnoreCase("PDF")) {
                     ExportadorPDF.generarInformeHoras(destino, choicePeriodo3.getValue(), emp.getNombre(), datos);
                 } else {
                     ExportadorExcel.generarExcelHoras(destino, choicePeriodo3.getValue(), emp.getNombre(), datos);
                 }
 
-                // Inserción en la BD
                 Exportacion reg = new Exportacion();
                 reg.setTipoFormato(formato);
                 reg.setFechaGeneracion(LocalDateTime.now());
-                reg.setUsuarioId(SesionUtil.getUsuario().getId()); // ID del que pulsa el botón
+                reg.setUsuarioId(SesionUtil.getUsuario().getId());
                 reg.setNegocioId(SesionUtil.getUsuario().getNegocioId());
 
                 exportacionDAO.insertar(reg);
-
-                System.out.println("Exportación de horas completada.");
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -378,29 +379,33 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                Usuario usuario = SesionUtil.getUsuario();
+                // CORRECCIÓN: El Admin también debe poder elegir empleado aquí
+                Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
+                        ? choiceEmpleado1.getValue()
+                        : SesionUtil.getUsuario();
+
+                if (emp == null) return;
+
                 String periodo = choicePeriodo4.getValue();
 
-                // Recopilamos los datos
-                List<Turno> turnos = turnoDAO.obtenerTurnosPorFiltro(usuario.getId(), periodo);
-                List<Incidencia> incidencias = incidenciaDAO.obtenerIncidenciasPorFiltro(usuario.getId(), periodo, "Todos");
+                // Recopilamos los datos del empleado seleccionado
+                List<Turno> turnos = turnoDAO.obtenerTurnosPorFiltro(emp.getId(), periodo);
+                List<Incidencia> incidencias = incidenciaDAO.obtenerIncidenciasPorFiltro(emp.getId(), periodo, "Todos");
 
                 // Exportamos según el formato
                 if (formato.equalsIgnoreCase("PDF")) {
-                    ExportadorPDF.generarInformeCompleto(destino, periodo, usuario.getNombre(), turnos, incidencias);
+                    ExportadorPDF.generarInformeCompleto(destino, periodo, emp.getNombre(), turnos, incidencias);
                 } else {
-                    ExportadorExcel.generarExcelCompleto(destino, periodo, usuario.getNombre(), turnos, incidencias);
+                    ExportadorExcel.generarExcelCompleto(destino, periodo, emp.getNombre(), turnos, incidencias);
                 }
 
                 // Inserción en la BD
                 Exportacion reg = new Exportacion();
                 reg.setTipoFormato(formato + "_COMPLETO");
                 reg.setFechaGeneracion(LocalDateTime.now());
-                reg.setUsuarioId(usuario.getId());
-                reg.setNegocioId(usuario.getNegocioId());
+                reg.setUsuarioId(SesionUtil.getUsuario().getId());
+                reg.setNegocioId(SesionUtil.getUsuario().getNegocioId());
                 exportacionDAO.insertar(reg);
-
-                System.out.println("Informe consolidado generado con éxito.");
 
             } catch (Exception ex) {
                 ex.printStackTrace();
