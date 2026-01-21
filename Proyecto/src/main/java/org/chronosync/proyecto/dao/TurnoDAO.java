@@ -132,12 +132,12 @@ public class TurnoDAO {
      *
      * @param ym año y mes del turno
      * @param usuarioId id del usuario al que pertenece el turno
-     * @return
+     * @return devuelve el mapa con la lista de turnos de un mes
      */
     public Map<LocalDate, List<String>> obtenerTurnosDelMes(YearMonth ym, Integer usuarioId) {
         Map<LocalDate, List<String>> mapa = new HashMap<>();
 
-        String sql = "SELECT t.fecha_inicio, t.tipo, u.nombre " +
+        String sql = "SELECT t.id, t.fecha_inicio, t.tipo, u.nombre " +
                 "FROM turno t " +
                 "JOIN usuarios u ON t.usuario_id = u.id " +
                 "WHERE MONTH(t.fecha_inicio) = ? AND YEAR(t.fecha_inicio) = ? " +
@@ -155,7 +155,7 @@ public class TurnoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDate fecha = rs.getDate("fecha_inicio").toLocalDate();
-                String info = rs.getString("nombre") + " - " + rs.getString("tipo");
+                String info = rs.getInt("id") + "#" + rs.getString("nombre") + " - " + rs.getString("tipo");
                 mapa.computeIfAbsent(fecha, k -> new ArrayList<>()).add(info);
             }
 
@@ -295,6 +295,51 @@ public class TurnoDAO {
         }
 
         return total;
+    }
+
+    /**
+     * Actualiza la franja horaria de un turno existente recalculando las horas de inicio y fin.
+     */
+    public boolean actualizarTipoTurno(int idTurno, String nuevoTipo) {
+        // Primero necesitamos saber la fecha original para mantenerla
+        String sqlSelect = "SELECT fecha_inicio FROM turno WHERE id = ?";
+        String sqlUpdate = "UPDATE turno SET tipo = ?, fecha_inicio = ?, fecha_fin = ? WHERE id = ?";
+
+        try (Connection conn = ConexionBD.obtenerConexion()) {
+            LocalDate fechaOriginal;
+            try (PreparedStatement psSel = conn.prepareStatement(sqlSelect)) {
+                psSel.setInt(1, idTurno);
+                ResultSet rs = psSel.executeQuery();
+                if (rs.next()) {
+                    fechaOriginal = rs.getTimestamp("fecha_inicio").toLocalDateTime().toLocalDate();
+                } else {
+                    return false;
+                }
+            }
+
+            // Calculamos nuevas horas
+            int horaInicio = switch (nuevoTipo.toLowerCase()) {
+                case "mañana" -> 6;
+                case "tarde" -> 14;
+                case "noche" -> 22;
+                default -> 8;
+            };
+
+            java.time.LocalDateTime inicio = fechaOriginal.atTime(horaInicio, 0);
+            java.time.LocalDateTime fin = inicio.plusHours(8);
+
+            try (PreparedStatement psUpd = conn.prepareStatement(sqlUpdate)) {
+                psUpd.setString(1, nuevoTipo);
+                psUpd.setTimestamp(2, java.sql.Timestamp.valueOf(inicio));
+                psUpd.setTimestamp(3, java.sql.Timestamp.valueOf(fin));
+                psUpd.setInt(4, idTurno);
+                return psUpd.executeUpdate() > 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

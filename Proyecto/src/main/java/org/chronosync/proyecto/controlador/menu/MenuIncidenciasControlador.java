@@ -311,11 +311,36 @@ public class MenuIncidenciasControlador {
         cbTipo.setPromptText("Selecciona el tipo");
         cbTipo.setMaxWidth(Double.MAX_VALUE);
 
+        // NUEVO: ComboBox para seleccionar el turno real del empleado
+        org.chronosync.proyecto.dao.TurnoDAO turnoDAO = new org.chronosync.proyecto.dao.TurnoDAO();
+        List<org.chronosync.proyecto.modelo.Turno> turnosUsuario = turnoDAO.obtenerTurnosPorFiltro(
+                SesionUtil.getUsuario().getId(), "Mes actual"
+        );
+
+        ComboBox<org.chronosync.proyecto.modelo.Turno> cbTurnos = new ComboBox<>(FXCollections.observableArrayList(turnosUsuario));
+        cbTurnos.setPromptText("Selecciona el turno afectado");
+        cbTurnos.setMaxWidth(Double.MAX_VALUE);
+
+        // Configurar cómo se ve el turno en el ComboBox (Fecha y Tipo)
+        cbTurnos.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(org.chronosync.proyecto.modelo.Turno t, boolean empty) {
+                super.updateItem(t, empty);
+                if (empty || t == null) setText(null);
+                else setText(t.getFechaInicio().toLocalDate() + " - " + t.getTipo());
+            }
+        });
+        cbTurnos.setButtonCell(cbTurnos.getCellFactory().call(null));
+
         TextArea txtComentarios = new TextArea();
         txtComentarios.setPromptText("Escribe aquí los detalles...");
         txtComentarios.setPrefRowCount(4);
 
-        VBox layout = new VBox(10, new Label("Tipo:"), cbTipo, new Label("Comentarios:"), txtComentarios);
+        // Añadimos el nuevo ComboBox al layout
+        VBox layout = new VBox(10,
+                new Label("Turno afectado:"), cbTurnos,
+                new Label("Tipo de incidencia:"), cbTipo,
+                new Label("Comentarios:"), txtComentarios);
         layout.setPadding(new javafx.geometry.Insets(20));
         dialog.getDialogPane().setContent(layout);
 
@@ -324,9 +349,11 @@ public class MenuIncidenciasControlador {
             if (response == btnGuardar) {
                 String tipo = cbTipo.getValue();
                 String comentarios = txtComentarios.getText();
+                org.chronosync.proyecto.modelo.Turno turnoSeleccionado = cbTurnos.getValue();
 
-                if (tipo == null || comentarios.trim().isEmpty()) {
-                    AlertaUtil.mostrarError("Error", "Debes rellenar todos los campos.");
+                // Validamos que el turno no sea nulo para evitar el error de Foreign Key
+                if (tipo == null || comentarios.trim().isEmpty() || turnoSeleccionado == null) {
+                    AlertaUtil.mostrarError("Error", "Debes rellenar todos los campos, incluido el turno.");
                     return;
                 }
 
@@ -335,7 +362,8 @@ public class MenuIncidenciasControlador {
                 nueva.setEstado("Pendiente");
                 nueva.setComentarios(comentarios);
                 nueva.setUsuarioId(SesionUtil.getUsuario().getId());
-                nueva.setTurnoId(1);
+                // Asignamos el ID real del turno seleccionado
+                nueva.setTurnoId(turnoSeleccionado.getId());
 
                 // Operación de inserción en hilo secundario
                 Task<Boolean> insertTask = new Task<>() {
@@ -349,7 +377,7 @@ public class MenuIncidenciasControlador {
                     if (insertTask.getValue()) {
                         cargarDatos();
                     } else {
-                        AlertaUtil.mostrarError("Error", "No se pudo guardar la incidencia.");
+                        AlertaUtil.mostrarError("Error", "No se pudo guardar la incidencia. Verifique la conexión.");
                     }
                 });
 

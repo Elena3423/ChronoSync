@@ -235,8 +235,11 @@ public class MenuTurnosControlador {
         celda.getChildren().add(lblDia);
 
         // Añadimos una etiqueta de color por cada turno que haya ese día
-        for (String tipo : turnos) {
-            celda.getChildren().add(crearEtiquetaTurno(tipo));
+        for (String data : turnos) {
+            String[] partesData = data.split("#");
+            int idTurno = Integer.parseInt(partesData[0]);
+            String infoVisual = partesData[1];
+            celda.getChildren().add(crearEtiquetaTurno(infoVisual, idTurno));
         }
 
         return celda;
@@ -248,7 +251,7 @@ public class MenuTurnosControlador {
      * @param info información del turno
      * @return
      */
-    private Label crearEtiquetaTurno(String info) {
+    private Label crearEtiquetaTurno(String info, int idTurno) {
         String[] partes = info.split(" - ");
         String nombre = partes[0];
         String tipo = partes[1];
@@ -266,7 +269,41 @@ public class MenuTurnosControlador {
         };
 
         etiqueta.setStyle(String.format("-fx-background-color: %s; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 10;", color));
+
+        if (SesionUtil.getUsuario().getRolId() == 1) {
+            etiqueta.setCursor(javafx.scene.Cursor.HAND);
+            etiqueta.setOnMouseClicked(e -> gestionarTurnoExistente(idTurno, nombre, tipo));
+        }
+
         return etiqueta;
+    }
+
+    /**
+     * Abre un diálogo para modificar o eliminar un turno seleccionado
+     */
+    private void gestionarTurnoExistente(int idTurno, String nombreEmpleado, String tipoActual) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Gestionar Turno: " + nombreEmpleado);
+
+        ButtonType btnGuardar = new ButtonType("Actualizar", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnEliminar = new ButtonType("Eliminar", ButtonBar.ButtonData.OTHER);
+        dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, btnEliminar, ButtonType.CANCEL);
+
+        ComboBox<String> cbTurnos = new ComboBox<>(FXCollections.observableArrayList("Mañana", "Tarde", "Noche"));
+        cbTurnos.setValue(tipoActual);
+        cbTurnos.setMaxWidth(Double.MAX_VALUE);
+
+        VBox content = new VBox(10, new Label("Empleado: " + nombreEmpleado), new Label("Cambiar franja:"), cbTurnos);
+        content.setPadding(new Insets(20));
+        dialog.getDialogPane().setContent(content);
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == btnGuardar) {
+                ejecutarActualizacionAsync(idTurno, cbTurnos.getValue());
+            } else if (response == btnEliminar) {
+                ejecutarEliminacionAsync(idTurno);
+            }
+        });
     }
 
     /**
@@ -381,5 +418,25 @@ public class MenuTurnosControlador {
         });
         cb.setButtonCell(cb.getCellFactory().call(null));
         return cb;
+    }
+
+    private void ejecutarActualizacionAsync(int idTurno, String nuevoTipo) {
+        Task<Boolean> task = new Task<>() {
+            @Override protected Boolean call() throws Exception {
+                return turnoDAO.actualizarTipoTurno(idTurno, nuevoTipo);
+            }
+        };
+        task.setOnSucceeded(e -> { if (task.getValue()) dibujarCalendario(); });
+        new Thread(task).start();
+    }
+
+    private void ejecutarEliminacionAsync(int idTurno) {
+        Task<Boolean> task = new Task<>() {
+            @Override protected Boolean call() throws Exception {
+                return turnoDAO.eliminar(idTurno);
+            }
+        };
+        task.setOnSucceeded(e -> { if (task.getValue()) dibujarCalendario(); });
+        new Thread(task).start();
     }
 }

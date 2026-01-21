@@ -18,16 +18,15 @@ public class IncidenciaDAO {
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, incidencia.getTipo()); // 'Ausencia', 'Cambio', 'Retraso', 'Otra'
-            stmt.setString(2, incidencia.getEstado()); // 'Pendiente', 'Aceptada', 'Rechazada'
+            stmt.setString(1, incidencia.getTipo());
+            stmt.setString(2, incidencia.getEstado());
             stmt.setString(3, incidencia.getComentarios());
             stmt.setInt(4, incidencia.getUsuarioId());
-
             stmt.setInt(5, incidencia.getTurnoId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error SQL: " + e.getMessage());
+            System.err.println("Error SQL en insertar incidencia: " + e.getMessage());
             return false;
         }
     }
@@ -168,14 +167,12 @@ public class IncidenciaDAO {
     public List<Map<String, Object>> obtenerIncidenciasConNombre(Integer usuarioIdFiltro, int negocioIdFiltro) {
         List<Map<String, Object>> lista = new ArrayList<>();
 
-        // Ajustamos el SQL para filtrar siempre por negocio_id del usuario
         StringBuilder sql = new StringBuilder(
                 "SELECT i.*, u.nombre, u.apellidos FROM incidencias i " +
                         "JOIN usuarios u ON i.usuario_id = u.id " +
                         "WHERE u.negocio_id = ? "
         );
 
-        // Si viene un ID de usuario (empleado), añadimos el filtro extra
         if (usuarioIdFiltro != null) {
             sql.append("AND i.usuario_id = ? ");
         }
@@ -220,38 +217,31 @@ public class IncidenciaDAO {
     /**
      * Método que obtiene una lista de incidencias en función de unos filtros
      * seleccionados en el apartado de exportaciones.
-     *
-     * @param usuarioId id del usuario (empleado) del que queremos las incidencias
-     * @param periodo periodo seleccionado ("Semana actual", "Mes actual", "Mes anterior")
-     * @param estado estado de la incidencia ("Todos", "Pendiente", "Validada", "Denegada")
-     * @return Lista de objetos Incidencia que cumplen los filtros
      */
     public List<Incidencia> obtenerIncidenciasPorFiltro(int usuarioId, String periodo, String estado) {
         List<Incidencia> lista = new ArrayList<>();
 
-        // Usamos un JOIN con turnos para poder filtrar por la fecha del turno asociado
+        // AJUSTE: Cambiado 'turnos' por 'turno' y 'fecha' por 'fecha_inicio'
         StringBuilder sql = new StringBuilder(
                 "SELECT i.* FROM incidencias i " +
-                        "JOIN turnos t ON i.turno_id = t.id " +
+                        "JOIN turno t ON i.turno_id = t.id " +
                         "WHERE i.usuario_id = ?"
         );
 
-        // Filtro de estado (si no es "Todos")
         if (estado != null && !estado.equalsIgnoreCase("Todos")) {
             sql.append(" AND i.estado = ?");
         }
 
-        // Filtro de tiempo basado en la fecha del turno
         switch (periodo) {
             case "Semana actual":
-                sql.append(" AND YEARWEEK(t.fecha, 1) = YEARWEEK(CURDATE(), 1)");
+                sql.append(" AND YEARWEEK(t.fecha_inicio, 1) = YEARWEEK(CURDATE(), 1)");
                 break;
             case "Mes actual":
-                sql.append(" AND MONTH(t.fecha) = MONTH(CURDATE()) AND YEAR(t.fecha) = YEAR(CURDATE())");
+                sql.append(" AND MONTH(t.fecha_inicio) = MONTH(CURDATE()) AND YEAR(t.fecha_inicio) = YEAR(CURDATE())");
                 break;
             case "Mes anterior":
-                sql.append(" AND MONTH(t.fecha) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) " +
-                        "AND YEAR(t.fecha) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))");
+                sql.append(" AND MONTH(t.fecha_inicio) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) " +
+                        "AND YEAR(t.fecha_inicio) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))");
                 break;
         }
 
