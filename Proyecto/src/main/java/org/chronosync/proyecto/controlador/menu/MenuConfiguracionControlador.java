@@ -194,7 +194,7 @@ public class MenuConfiguracionControlador {
         if (usuarioDAO.actualizar(usuarioActual)) {
             txtNombre.setText(usuarioActual.getNombre());
 
-            AlertaUtil.mostrarError("Éxito", "Tus datos personales se han actualizado.");
+            AlertaUtil.mostrarInfo("Éxito", "Tus datos personales se han actualizado.");
         } else {
             AlertaUtil.mostrarError("Error", "No se pudo actualizar el perfil.");
         }

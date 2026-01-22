@@ -7,6 +7,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -344,7 +345,16 @@ public class MenuTurnosControlador {
         // Configuramos el diálogo
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Asignar Nuevo Turno");
+
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        try {
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/img/iconoPNG.png")));
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar el icono del diálogo.");
+        }
+
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/formularios.css").toExternalForm());
 
         ButtonType btnGuardarType = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardarType, ButtonType.CANCEL);
@@ -361,6 +371,9 @@ public class MenuTurnosControlador {
                 new Label("Fecha:"), dpFecha,
                 new Label("Franja:"), cbTurnos);
         content.setPadding(new Insets(20));
+
+        content.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-color: #AAAAAA; -fx-border-radius: 10;");
+
         dialog.getDialogPane().setContent(content);
 
         // Guardamos de forma asíncrona (hilos)

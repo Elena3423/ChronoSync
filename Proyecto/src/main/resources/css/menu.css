@@ -126,8 +126,6 @@
     -fx-font-size: 16;
 }
 
-/* --- ESTILOS PARA LA TABLA --- */
-
 .table-view {
     -fx-background-color: transparent;
     -fx-background-radius: 10;
@@ -137,7 +135,6 @@
     -fx-padding: 5;
 }
 
-/* Fondo de la cabecera (donde van los títulos de columna) */
 .table-view .column-header-background {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 10 10 0 0;
@@ -145,13 +142,11 @@
     -fx-border-width: 0 0 1 0;
 }
 
-/* Estilo de cada cabecera individual */
 .table-view .column-header {
     -fx-background-color: transparent;
-    -fx-size: 45px; /* Altura más cómoda */
+    -fx-size: 45px;
 }
 
-/* Texto de los títulos de columna */
 .table-view .column-header .label {
     -fx-font-family: "Roboto";
     -fx-font-weight: bold;
@@ -159,34 +154,29 @@
     -fx-text-fill: #333333;
 }
 
-/* Estilo de las filas */
 .table-row-cell {
     -fx-background-color: #FFFFFF;
     -fx-border-color: transparent transparent #F4F4F4 transparent;
     -fx-padding: 5;
 }
 
-/* Filas alternas para mejorar la lectura (cebreado) */
 .table-row-cell:odd {
     -fx-background-color: #FAFAFA;
 }
 
-/* Cuando se pasa el ratón por encima de una fila */
 .table-row-cell:hover {
     -fx-background-color: #F0F7FF;
 }
 
-/* Cuando se selecciona una fila */
 .table-row-cell:selected {
-    -fx-background-color: #E8F1FA; /* Azul muy suave */
+    -fx-background-color: #E8F1FA;
 }
 
 .table-row-cell:selected .table-cell {
-    -fx-text-fill: #3A7BD5; /* Texto en azul al seleccionar */
+    -fx-text-fill: #3A7BD5;
     -fx-font-weight: bold;
 }
 
-/* Celdas de datos */
 .table-cell {
     -fx-font-family: "Roboto";
     -fx-font-size: 13px;
@@ -195,13 +185,11 @@
     -fx-text-fill: #333333;
 }
 
-/* Eliminar el borde de enfoque azul por defecto de JavaFX */
 .table-view:focused {
     -fx-background-color: transparent, -fx-box-border, -fx-control-inner-background;
     -fx-background-insets: -1.4, 0, 1;
 }
 
-/* Personalización de la barra de desplazamiento (Scrollbar) */
 .table-view .virtual-flow .scroll-bar:vertical,
 .table-view .virtual-flow .scroll-bar:horizontal {
     -fx-background-color: transparent;
@@ -212,17 +200,14 @@
     -fx-background-radius: 10;
 }
 
-/* --- ESTILO PARA CHECKBOX --- */
-
 .check-box {
     -fx-font-family: "Roboto";
     -fx-font-size: 14px;
     -fx-text-fill: #333333;
     -fx-cursor: hand;
-    -fx-spacing: 10px; /* Espacio entre el cuadro y el texto */
+    -fx-spacing: 10px;
 }
 
-/* El cuadro exterior */
 .check-box .box {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #AAAAAA;
@@ -236,31 +221,26 @@
     -fx-border-color: #3A7BD5;
 }
 
-/* Cuando está marcado (Selected) */
 .check-box:selected .box {
     -fx-background-color: #3A7BD5;
     -fx-border-color: #3A7BD5;
 }
 
-/* El símbolo del "Check" (el tic) */
 .check-box .mark {
-    -fx-background-color: transparent; /* Invisible cuando no está seleccionado */
+    -fx-background-color: transparent;
     -fx-shape: "M1.73,12.91L8.1,19.28L22.79,4.59L20.67,2.47L8.1,15.04L3.85,10.79L1.73,12.91Z";
     -fx-scale-x: 0.8;
     -fx-scale-y: 0.8;
 }
 
 .check-box:selected .mark {
-    -fx-background-color: #FFFFFF; /* Tic blanco sobre fondo azul */
+    -fx-background-color: #FFFFFF;
 }
 
-/* Quitar el anillo de enfoque azul de JavaFX */
 .check-box:focused .box {
     -fx-border-color: #3A7BD5;
     -fx-border-width: 2px;
 }
-
-/* --- ESTILO PARA CHOICEBOX --- */
 
 .choice-box {
     -fx-background-color: #FFFFFF;
@@ -275,21 +255,19 @@
 }
 
 .choice-box:hover {
-    -fx-border-color: #3A7BD5; /* Azul de tu paleta */
+    -fx-border-color: #3A7BD5;
     -fx-background-color: #F9F9F9;
 }
 
 .choice-box:showing {
     -fx-border-color: #3A7BD5;
-    -fx-border-width: 2px; /* Resalte al estar abierto */
+    -fx-border-width: 2px;
 }
 
-/* Texto dentro del ChoiceBox */
 .choice-box .label {
     -fx-text-fill: #333333;
 }
 
-/* Estilo del menú desplegable (Context Menu) */
 .choice-box .context-menu {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 8;
@@ -298,9 +276,8 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
 }
 
-/* Cada ítem dentro del menú desplegable */
 .choice-box .menu-item:focused {
-    -fx-background-color: #E8F1FA; /* Color de selección de tu tabla */
+    -fx-background-color: #E8F1FA;
 }
 
 .choice-box .menu-item > .label {
@@ -313,35 +290,30 @@
     -fx-font-weight: bold;
 }
 
-/* --- ESTILO PARA TEXTFIELD --- */
-
 .text-field {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 8;
     -fx-border-color: #AAAAAA;
     -fx-border-radius: 8;
     -fx-border-width: 1px;
-    -fx-padding: 8 12 8 12; /* Un poco más de padding para que el texto respire */
+    -fx-padding: 8 12 8 12;
     -fx-font-family: "Roboto";
     -fx-font-size: 14px;
     -fx-text-fill: #333333;
-    -fx-prompt-text-fill: #999999; /* Color gris suave para el placeholder */
+    -fx-prompt-text-fill: #999999;
 }
 
-/* Efecto al pasar el ratón */
 .text-field:hover {
     -fx-border-color: #888888;
 }
 
-/* Estado de enfoque (cuando el usuario hace clic para escribir) */
 .text-field:focused {
     -fx-background-color: #FFFFFF;
-    -fx-border-color: #3A7BD5; /* Tu azul principal */
-    -fx-border-width: 2px;     /* Borde más grueso al estar activo */
-    -fx-background-insets: 0;  /* Elimina el halo azul por defecto de JavaFX */
+    -fx-border-color: #3A7BD5;
+    -fx-border-width: 2px;
+    -fx-background-insets: 0;
 }
 
-/* Estilo para campos deshabilitados (opcional) */
 .text-field:disabled {
     -fx-background-color: #EEEEEE;
     -fx-opacity: 0.7;
@@ -349,8 +321,6 @@
     -fx-cursor: default;
 }
 
-/* Si usas PasswordField, suele heredar de text-field,
-   pero puedes forzarlo así para asegurar consistencia */
 .password-field {
     -fx-background-radius: 8;
     -fx-border-radius: 8;

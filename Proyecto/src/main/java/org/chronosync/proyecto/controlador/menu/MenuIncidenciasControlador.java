@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -300,6 +301,15 @@ public class MenuIncidenciasControlador {
         dialog.setTitle("Crear Nueva Incidencia");
         dialog.setHeaderText("Describe el motivo de la incidencia o solicitud");
 
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        try {
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/img/iconoPNG.png")));
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar el icono del diálogo.");
+        }
+
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/formularios.css").toExternalForm());
+
         // 2. Botones del Diálogo
         ButtonType btnGuardar = new ButtonType("Enviar", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
@@ -342,6 +352,9 @@ public class MenuIncidenciasControlador {
                 new Label("Tipo de incidencia:"), cbTipo,
                 new Label("Comentarios:"), txtComentarios);
         layout.setPadding(new javafx.geometry.Insets(20));
+
+        layout.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-color: #AAAAAA; -fx-border-radius: 10;");
+
         dialog.getDialogPane().setContent(layout);
 
         // 4. Mostrar y Procesar
