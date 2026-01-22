@@ -1,0 +1,45 @@
+.dialog-pane .content.label {
+    -fx-font-size: 16px;
+}
+/* Barra de botones */
+.dialog-pane .button-bar {
+    -fx-background-color: #F4F4F4;
+    -fx-padding: 10 20 20 20;
+}
+
+/* Botones */
+.dialog-pane .button {
+    -fx-font-family: "Roboto";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 22;
+}
+
+/* Botón principal */
+.dialog-pane .button:default {
+    -fx-background-color: #3A7BD5;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: transparent;
+}
+
+.dialog-pane .button:default:hover {
+    -fx-background-color: #2D62AB;
+}
+
+/* Botón cancelar */
+.dialog-pane .button:cancel {
+    -fx-background-color: transparent;
+    -fx-border-color: #AAAAAA;
+    -fx-border-width: 1px;
+    -fx-text-fill: #333333;
+}
+
+.dialog-pane .button:cancel:hover {
+    -fx-background-color: #E0E0E0;
+}
+
+
+
