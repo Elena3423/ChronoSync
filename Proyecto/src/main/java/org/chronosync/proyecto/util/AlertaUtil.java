@@ -2,6 +2,7 @@ package org.chronosync.proyecto.util;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
@@ -45,6 +46,8 @@ public class AlertaUtil {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
 
+        DialogPane dialogPane = alerta.getDialogPane();
+        dialogPane.getStylesheets().add(AlertaUtil.class.getResource("/css/alerta.css").toExternalForm());
         // Intentamos ponerle el icono de la app a la ventana de la alerta
         try {
             Stage stage = (Stage) alerta.getDialogPane().getScene().getWindow();
