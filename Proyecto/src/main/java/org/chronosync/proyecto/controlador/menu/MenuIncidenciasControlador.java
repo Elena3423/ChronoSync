@@ -235,6 +235,8 @@ public class MenuIncidenciasControlador {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+
+                // Muestra el botón solo si el usuario es Admin y la incidencia está "Pendiente"
                 if (empty || !SesionUtil.getUsuario().getRolId().equals(1)) {
                     setGraphic(null);
                 } else {
@@ -258,7 +260,12 @@ public class MenuIncidenciasControlador {
     private void procesarEstado(IncidenciaView view, String nuevoEstado) {
         if (view == null) return;
 
-        String estadoDB = nuevoEstado.equals("Aprobada") ? "Aceptada" : "Rechazada";
+        String estadoDB;
+        if ("Aprobada".equals(nuevoEstado)) {
+            estadoDB = "Aceptada";
+        } else {
+            estadoDB = "Rechazada";
+        }
 
         Task<Boolean> task = new Task<>() {
             @Override
@@ -321,7 +328,7 @@ public class MenuIncidenciasControlador {
         cbTipo.setPromptText("Selecciona el tipo");
         cbTipo.setMaxWidth(Double.MAX_VALUE);
 
-        // NUEVO: ComboBox para seleccionar el turno real del empleado
+        // ComboBox para seleccionar el turno real del empleado
         org.chronosync.proyecto.dao.TurnoDAO turnoDAO = new org.chronosync.proyecto.dao.TurnoDAO();
         List<org.chronosync.proyecto.modelo.Turno> turnosUsuario = turnoDAO.obtenerTurnosPorFiltro(
                 SesionUtil.getUsuario().getId(), "Mes actual"

@@ -188,7 +188,6 @@ public class MenuExportacionesControlador {
         Usuario usuarioLogueado = SesionUtil.getUsuario();
 
         if (usuarioLogueado.getRolId() == 1) { // ADMIN
-            // CORRECCIÓN: Filtrar empleados por negocio
             List<Usuario> empleados = usuarioDAO.obtenerPorNegocio(usuarioLogueado.getNegocioId());
             if (empleados != null && !empleados.isEmpty()) {
                 choiceEmpleado3.setItems(FXCollections.observableArrayList(empleados));
@@ -235,9 +234,14 @@ public class MenuExportacionesControlador {
         if (destino != null) {
             try {
                 // Obtenemos el empleado
-                Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
-                        ? choiceEmpleado1.getValue()
-                        : SesionUtil.getUsuario();
+                Usuario usuarioLogueado = SesionUtil.getUsuario();
+                Usuario emp;
+
+                if (usuarioLogueado.getRolId() == 1) {
+                    emp = choiceEmpleado1.getValue();
+                } else {
+                    emp = usuarioLogueado;
+                }
 
                 if (emp == null) return;
 
@@ -283,11 +287,15 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                // CORRECCIÓN: El Admin debe poder elegir de quién es el informe.
                 // Usamos el empleado del primer selector para ser consistentes.
-                Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
-                        ? choiceEmpleado1.getValue()
-                        : SesionUtil.getUsuario();
+                Usuario usuarioActual = SesionUtil.getUsuario();
+                Usuario emp;
+
+                if (usuarioActual.getRolId() == 1) {
+                    emp = choiceEmpleado1.getValue();
+                } else {
+                    emp = usuarioActual;
+                }
 
                 if (emp == null) return;
 
@@ -336,9 +344,14 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
-                        ? choiceEmpleado3.getValue()
-                        : SesionUtil.getUsuario();
+                Usuario usuarioSesion = SesionUtil.getUsuario();
+                Usuario emp;
+
+                if (usuarioSesion.getRolId() == 1) {
+                    emp = choiceEmpleado3.getValue();
+                } else {
+                    emp = usuarioSesion;
+                }
 
                 if (emp == null) return;
 
@@ -379,10 +392,14 @@ public class MenuExportacionesControlador {
 
         if (destino != null) {
             try {
-                // CORRECCIÓN: El Admin también debe poder elegir empleado aquí
-                Usuario emp = (SesionUtil.getUsuario().getRolId() == 1)
-                        ? choiceEmpleado1.getValue()
-                        : SesionUtil.getUsuario();
+                Usuario usuarioSesion = SesionUtil.getUsuario();
+                Usuario emp;
+
+                if (usuarioSesion.getRolId() == 1) {
+                    emp = choiceEmpleado1.getValue();
+                } else {
+                    emp = usuarioSesion;
+                }
 
                 if (emp == null) return;
 

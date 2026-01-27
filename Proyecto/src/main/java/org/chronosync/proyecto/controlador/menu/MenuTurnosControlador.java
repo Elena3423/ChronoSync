@@ -406,7 +406,7 @@ public class MenuTurnosControlador {
 
         saveTask.setOnSucceeded(e -> {
             if (saveTask.getValue()) {
-                dibujarCalendario(); // Refresca la UI
+                dibujarCalendario();
             } else {
                 AlertaUtil.mostrarError("Error", "No se pudo guardar en la base de datos.");
             }
